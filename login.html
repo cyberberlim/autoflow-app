@@ -29,19 +29,27 @@ const supabase = window.supabase.createClient(
   "https://sosutpvrosylcabjyaga.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvc3V0cHZyb3N5bGNhYmp5YWdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNzg5NjQsImV4cCI6MjA4Nzk1NDk2NH0.qxitAaDVDluzY92wSBrGesb2pYDUCynTcZodZWShZM0"
 );
+
 async function login() {
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
+  const email = document.getElementById("email").value.trim();
+  const senha = document.getElementById("senha").value.trim();
+
+  console.log("Tentando login com:", { email, senha });
 
   const { data, error } = await supabase.auth.signInWithPassword({
-    email: email,
-    password: senha,
+    email,
+    password: senha
   });
+
+  console.log("Resposta do Supabase:", { data, error });
 
   if (error) {
     alert("Erro no login: " + error.message);
-  } else {
+  } else if (data?.user) {
+    // Login bem-sucedido
     window.location.href = "dashboard.html";
+  } else {
+    alert("Login falhou: verifique seu email e senha ou se a conta está confirmada.");
   }
 }
 </script>
