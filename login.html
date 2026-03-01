@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Login - AUTOFLOW</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body class="bg-gradient-to-br from-black via-zinc-900 to-black text-white flex items-center justify-center h-screen">
@@ -27,36 +26,20 @@ Entrar
 </div>
 
 <script>
-const supabase = supabase.createClient(
-  "https://sosutpvrosylcabjyaga.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvc3V0cHZyb3N5bGNhYmp5YWdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNzg5NjQsImV4cCI6MjA4Nzk1NDk2NH0.qxitAaDVDluzY92wSBrGesb2pYDUCynTcZodZWShZM0"
-);
+// Usuário e senha definidos aqui
+const usuarioValido = "admin@autoflow.com";
+const senhaValida = "123456";
 
-document.getElementById("btn-login").addEventListener("click", async function() {
+document.getElementById("btn-login").addEventListener("click", function() {
   const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("senha").value.trim();
   const mensagemErro = document.getElementById("mensagem-erro");
 
-  if (!email || !senha) {
-    mensagemErro.textContent = "Preencha email e senha!";
-    return;
-  }
-
-  try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: senha,
-    });
-
-    if (error) {
-      mensagemErro.textContent = "Erro no login: " + error.message;
-    } else {
-      // Login bem-sucedido, redireciona para dashboard
-      window.location.href = "dashboard.html";
-    }
-  } catch (err) {
-    console.error(err);
-    mensagemErro.textContent = "Ocorreu um erro inesperado.";
+  if (email === usuarioValido && senha === senhaValida) {
+    // Redireciona para dashboard
+    window.location.href = "dashboard.html";
+  } else {
+    mensagemErro.textContent = "Email ou senha incorretos!";
   }
 });
 </script>
