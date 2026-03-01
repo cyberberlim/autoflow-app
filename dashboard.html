@@ -2,49 +2,112 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Login - AUTOFLOW</title>
+<title>Dashboard - AUTOFLOW</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  .neon-glow {
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3), 0 0 40px rgba(0, 255, 136, 0.1);
+  }
+  .neon-text {
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3);
+  }
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 255, 136, 0.15);
+  }
+  .chart-bar {
+    animation: grow 1.5s ease-out forwards;
+    transform-origin: bottom;
+  }
+  @keyframes grow {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+  }
+</style>
 </head>
-<body class="bg-black text-white flex items-center justify-center h-screen">
 
-<div class="bg-zinc-900/80 p-10 rounded-2xl w-96">
-  <h2 class="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#00ff88] to-[#00d4ff] bg-clip-text text-transparent">AUTOFLOW</h2>
+<body class="bg-[#0a0a0a] text-white min-h-screen flex flex-col">
 
-  <input id="email" type="email" placeholder="Email" class="w-full p-3 mb-4 rounded-lg bg-zinc-800 border border-zinc-700">
-  <input id="senha" type="password" placeholder="Senha" class="w-full p-3 mb-6 rounded-lg bg-zinc-800 border border-zinc-700">
+<!-- Navbar -->
+<nav class="bg-[#111111] px-6 py-4 flex justify-between items-center border-b border-white/10">
+  <h1 class="text-2xl font-bold text-[#00ff88]">AUTOFLOW Dashboard</h1>
+  <button id="btn-logout" class="px-4 py-2 bg-gradient-to-r from-[#00ff88] to-[#00d4ff] text-black rounded-lg font-semibold">Sair</button>
+</nav>
 
-  <button onclick="login()" class="w-full py-3 rounded-lg font-bold bg-gradient-to-r from-[#00ff88] to-[#00d4ff] text-black">Entrar</button>
-</div>
+<!-- Conteúdo Principal -->
+<main class="p-6 flex-1">
+
+  <!-- Cards de Métricas -->
+  <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    <div class="card-hover bg-gradient-to-br from-[#00ff88]/10 to-transparent rounded-xl p-5 border border-[#00ff88]/20">
+      <div class="text-xs text-gray-400 mb-1">Total do Dia</div>
+      <div class="text-2xl font-bold text-[#00ff88]">R$ 2.450</div>
+      <div class="text-xs text-green-400 mt-1">↑ 12% vs ontem</div>
+    </div>
+    <div class="card-hover bg-gradient-to-br from-[#00d4ff]/10 to-transparent rounded-xl p-5 border border-[#00d4ff]/20">
+      <div class="text-xs text-gray-400 mb-1">Total da Semana</div>
+      <div class="text-2xl font-bold text-[#00d4ff]">R$ 15.780</div>
+      <div class="text-xs text-green-400 mt-1">↑ 8% vs semana ant.</div>
+    </div>
+    <div class="card-hover bg-white/5 rounded-xl p-5 border border-white/10">
+      <div class="text-xs text-gray-400 mb-1">Total do Mês</div>
+      <div class="text-2xl font-bold text-white">R$ 68.420</div>
+      <div class="text-xs text-green-400 mt-1">↑ 23% vs mês ant.</div>
+    </div>
+    <div class="card-hover bg-gradient-to-br from-[#00ff88]/10 to-[#00d4ff]/10 rounded-xl p-5 border border-[#00ff88]/20">
+      <div class="text-xs text-gray-400 mb-1">Lucro Líquido</div>
+      <div class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] to-[#00d4ff]">R$ 42.150</div>
+      <div class="text-xs text-gray-400 mt-1">Margem: 61.6%</div>
+    </div>
+  </div>
+
+  <!-- Gráfico de Receita Semanal -->
+  <div class="bg-white/5 rounded-xl p-6 border border-white/5 mb-10">
+    <div class="flex items-center justify-between mb-4">
+      <span class="font-semibold">Receita Semanal</span>
+      <span class="text-xs text-gray-400">Últimos 7 dias</span>
+    </div>
+    <div class="flex items-end gap-2 h-32">
+      <div class="flex-1 bg-gradient-to-t from-[#00ff88]/80 to-[#00ff88]/20 rounded-t chart-bar" style="height: 60%;"></div>
+      <div class="flex-1 bg-gradient-to-t from-[#00ff88]/80 to-[#00ff88]/20 rounded-t chart-bar" style="height: 80%; animation-delay: 0.1s;"></div>
+      <div class="flex-1 bg-gradient-to-t from-[#00ff88]/80 to-[#00ff88]/20 rounded-t chart-bar" style="height: 45%; animation-delay: 0.2s;"></div>
+      <div class="flex-1 bg-gradient-to-t from-[#00ff88]/80 to-[#00ff88]/20 rounded-t chart-bar" style="height: 90%; animation-delay: 0.3s;"></div>
+      <div class="flex-1 bg-gradient-to-t from-[#00d4ff]/80 to-[#00d4ff]/20 rounded-t chart-bar" style="height: 70%; animation-delay: 0.4s;"></div>
+      <div class="flex-1 bg-gradient-to-t from-[#00d4ff]/80 to-[#00d4ff]/20 rounded-t chart-bar" style="height: 100%; animation-delay: 0.5s;"></div>
+      <div class="flex-1 bg-gradient-to-t from-[#00d4ff]/80 to-[#00d4ff]/20 rounded-t chart-bar" style="height: 85%; animation-delay: 0.6s;"></div>
+    </div>
+  </div>
+
+  <!-- Exemplo de Lista de Clientes -->
+  <div class="bg-white/5 rounded-xl p-6 border border-white/5">
+    <h3 class="font-semibold mb-4">Clientes Recentes</h3>
+    <ul class="space-y-2">
+      <li class="p-3 bg-[#111111] rounded-lg flex justify-between">
+        <span>João Silva</span>
+        <span class="text-green-400">Ativo</span>
+      </li>
+      <li class="p-3 bg-[#111111] rounded-lg flex justify-between">
+        <span>Maria Oliveira</span>
+        <span class="text-green-400">Ativo</span>
+      </li>
+      <li class="p-3 bg-[#111111] rounded-lg flex justify-between">
+        <span>Pedro Santos</span>
+        <span class="text-red-500">Inativo</span>
+      </li>
+    </ul>
+  </div>
+
+</main>
 
 <script>
-const supabase = window.supabase.createClient(
-  "https://sosutpvrosylcabjyaga.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvc3V0cHZyb3N5bGNhYmp5YWdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNzg5NjQsImV4cCI6MjA4Nzk1NDk2NH0.qxitAaDVDluzY92wSBrGesb2pYDUCynTcZodZWShZM0"
-);
-
-async function login() {
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
-
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: email,
-    password: senha,
-  });
-
-  console.log("data:", data);
-  console.log("error:", error);
-
-  if (error) {
-    alert("Erro no login: " + error.message);
-  } else if (data.user) {
-    alert("Login bem-sucedido!");
-    window.location.href = "dashboard.html";
-  } else {
-    alert("Algo deu errado. Confira o console.");
-  }
-}
+// Botão de logout volta para o login
+document.getElementById("btn-logout").addEventListener("click", function() {
+  window.location.href = "login.html";
+});
 </script>
 
 </body>
-</html>
+                                                                                                                                               </html>
