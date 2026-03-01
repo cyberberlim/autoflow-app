@@ -2,42 +2,49 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard - AUTOFLOW</title>
+<title>Login - AUTOFLOW</title>
+<script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-black text-white flex items-center justify-center h-screen">
+
+<div class="bg-zinc-900/80 p-10 rounded-2xl w-96">
+  <h2 class="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#00ff88] to-[#00d4ff] bg-clip-text text-transparent">AUTOFLOW</h2>
+
+  <input id="email" type="email" placeholder="Email" class="w-full p-3 mb-4 rounded-lg bg-zinc-800 border border-zinc-700">
+  <input id="senha" type="password" placeholder="Senha" class="w-full p-3 mb-6 rounded-lg bg-zinc-800 border border-zinc-700">
+
+  <button onclick="login()" class="w-full py-3 rounded-lg font-bold bg-gradient-to-r from-[#00ff88] to-[#00d4ff] text-black">Entrar</button>
+</div>
+
 <script>
 const supabase = window.supabase.createClient(
   "https://sosutpvrosylcabjyaga.supabase.co",
-  "SUA_ANON_KEY_AQUI"
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvc3V0cHZyb3N5bGNhYmp5YWdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNzg5NjQsImV4cCI6MjA4Nzk1NDk2NH0.qxitAaDVDluzY92wSBrGesb2pYDUCynTcZodZWShZM0"
 );
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const { data: { user } } = await supabase.auth.getUser();
+async function login() {
+  const email = document.getElementById("email").value;
+  const senha = document.getElementById("senha").value;
 
-  if (!user) {
-    window.location.href = "login.html";
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: senha,
+  });
+
+  console.log("data:", data);
+  console.log("error:", error);
+
+  if (error) {
+    alert("Erro no login: " + error.message);
+  } else if (data.user) {
+    alert("Login bem-sucedido!");
+    window.location.href = "dashboard.html";
   } else {
-    document.getElementById("email").innerText = user.email;
+    alert("Algo deu errado. Confira o console.");
   }
-});
-
-async function logout() {
-  await supabase.auth.signOut();
-  window.location.href = "login.html";
 }
 </script>
-<script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="bg-black text-white flex items-center justify-center h-screen">
-
-<div class="bg-zinc-900 p-10 rounded-xl">
-  <h1 class="text-2xl mb-4">Bem-vindo 👋</h1>
-  <p id="email" class="mb-6 text-green-400"></p>
-
-  <button onclick="logout()" class="bg-red-500 px-4 py-2 rounded">
-    Sair
-  </button>
-</div>
 
 </body>
-  </html>
+</html>
