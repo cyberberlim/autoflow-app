@@ -26,10 +26,9 @@ Entrar
 
 <script>
 const supabase = window.supabase.createClient(
-  "COLE_AQUI_SUA_PROJECT_URL",
-  "COLE_AQUI_SUA_ANON_KEY"
+  "https://sosutpvrosylcabjyaga.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvc3V0cHZyb3N5bGNhYmp5YWdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNzg5NjQsImV4cCI6MjA4Nzk1NDk2NH0.qxitAaDVDluzY92wSBrGesb2pYDUCynTcZodZWShZM0"
 );
-
 async function login() {
   const email = document.getElementById("email").value;
   const senha = document.getElementById("senha").value;
