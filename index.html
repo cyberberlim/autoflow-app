@@ -1,5 +1,28 @@
 <!doctype html>
 <html lang="pt-BR" class="h-full">
+<script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  const navBtn = document.getElementById("cta-nav");
+  const heroBtn = document.getElementById("cta-hero");
+
+  if (navBtn) {
+    navBtn.addEventListener("click", function() {
+      window.location.href = "login.html";
+    });
+  }
+
+  if (heroBtn) {
+    heroBtn.addEventListener("click", function() {
+      window.location.href = "login.html";
+    });
+  }
+
+});
+</script>
+
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
