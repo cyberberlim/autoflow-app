@@ -1,113 +1,160 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="h-full">
+
 <head>
-<meta charset="UTF-8">
-<title>Dashboard - AUTOFLOW</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-  .neon-glow {
-    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3), 0 0 40px rgba(0, 255, 136, 0.1);
-  }
-  .neon-text {
-    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3);
-  }
-  .card-hover {
-    transition: all 0.3s ease;
-  }
-  .card-hover:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 255, 136, 0.15);
-  }
-  .chart-bar {
-    animation: grow 1.5s ease-out forwards;
-    transform-origin: bottom;
-  }
-  @keyframes grow {
-    from { transform: scaleY(0); }
-    to { transform: scaleY(1); }
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - AUTOFLOW</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .sidebar a.active {
+      background: linear-gradient(to right, #00ff88, #00d4ff);
+      color: #0a0a0a;
+    }
+
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 255, 136, 0.15);
+    }
+
+    .chart-bar {
+      animation: grow 1.5s ease-out forwards;
+      transform-origin: bottom;
+    }
+
+    @keyframes grow {
+      from {
+        transform: scaleY(0);
+      }
+
+      to {
+        transform: scaleY(1);
+      }
+    }
+
+    .scroll-smooth {
+      scroll-behavior: smooth;
+    }
+  </style>
 </head>
 
-<body class="bg-[#0a0a0a] text-white min-h-screen flex flex-col">
+<body class="h-full bg-[#0a0a0a] text-white flex">
 
-<!-- Navbar -->
-<nav class="bg-[#111111] px-6 py-4 flex justify-between items-center border-b border-white/10">
-  <h1 class="text-2xl font-bold text-[#00ff88]">AUTOFLOW Dashboard</h1>
-  <button id="btn-logout" class="px-4 py-2 bg-gradient-to-r from-[#00ff88] to-[#00d4ff] text-black rounded-lg font-semibold">Sair</button>
-</nav>
+  <!-- Sidebar -->
+  <aside class="sidebar w-64 bg-[#111111] p-6 flex flex-col">
+    <h2 class="text-2xl font-bold mb-8 text-[#00ff88]">AUTOFLOW</h2>
+    <nav class="flex flex-col gap-2">
+      <a href="#dashboard" class="active px-4 py-2 rounded-lg">Dashboard</a>
+      <a href="#clientes" class="px-4 py-2 rounded-lg hover:bg-white/10">Clientes</a>
+      <a href="#servicos" class="px-4 py-2 rounded-lg hover:bg-white/10">Serviços</a>
+      <a href="#financeiro" class="px-4 py-2 rounded-lg hover:bg-white/10">Financeiro</a>
+      <a href="#configuracoes" class="px-4 py-2 rounded-lg hover:bg-white/10">Configurações</a>
+      <button onclick="logout()" class="mt-6 px-4 py-2 bg-gradient-to-r from-[#00ff88] to-[#00d4ff] text-black font-bold rounded-lg">Logout</button>
+    </nav>
+  </aside>
 
-<!-- Conteúdo Principal -->
-<main class="p-6 flex-1">
+  <!-- Main Content -->
+  <main class="flex-1 p-10 overflow-auto scroll-smooth">
 
-  <!-- Cards de Métricas -->
-  <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-    <div class="card-hover bg-gradient-to-br from-[#00ff88]/10 to-transparent rounded-xl p-5 border border-[#00ff88]/20">
-      <div class="text-xs text-gray-400 mb-1">Total do Dia</div>
-      <div class="text-2xl font-bold text-[#00ff88]">R$ 2.450</div>
-      <div class="text-xs text-green-400 mt-1">↑ 12% vs ontem</div>
+    <!-- Dashboard Header -->
+    <div class="flex items-center justify-between mb-10">
+      <h1 class="text-4xl font-bold">Dashboard</h1>
+      <div class="flex gap-4 items-center">
+        <div class="text-gray-400">Usuário: Admin</div>
+      </div>
     </div>
-    <div class="card-hover bg-gradient-to-br from-[#00d4ff]/10 to-transparent rounded-xl p-5 border border-[#00d4ff]/20">
-      <div class="text-xs text-gray-400 mb-1">Total da Semana</div>
-      <div class="text-2xl font-bold text-[#00d4ff]">R$ 15.780</div>
-      <div class="text-xs text-green-400 mt-1">↑ 8% vs semana ant.</div>
-    </div>
-    <div class="card-hover bg-white/5 rounded-xl p-5 border border-white/10">
-      <div class="text-xs text-gray-400 mb-1">Total do Mês</div>
-      <div class="text-2xl font-bold text-white">R$ 68.420</div>
-      <div class="text-xs text-green-400 mt-1">↑ 23% vs mês ant.</div>
-    </div>
-    <div class="card-hover bg-gradient-to-br from-[#00ff88]/10 to-[#00d4ff]/10 rounded-xl p-5 border border-[#00ff88]/20">
-      <div class="text-xs text-gray-400 mb-1">Lucro Líquido</div>
-      <div class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] to-[#00d4ff]">R$ 42.150</div>
-      <div class="text-xs text-gray-400 mt-1">Margem: 61.6%</div>
-    </div>
-  </div>
 
-  <!-- Gráfico de Receita Semanal -->
-  <div class="bg-white/5 rounded-xl p-6 border border-white/5 mb-10">
-    <div class="flex items-center justify-between mb-4">
-      <span class="font-semibold">Receita Semanal</span>
-      <span class="text-xs text-gray-400">Últimos 7 dias</span>
+    <!-- Cards Row -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+      <div class="card-hover bg-white/5 rounded-xl p-6 border border-white/10">
+        <h3 class="text-sm text-gray-400 mb-2">Total do Dia</h3>
+        <p class="text-2xl font-bold text-[#00ff88]" id="total-dia">R$ 2.450</p>
+      </div>
+      <div class="card-hover bg-white/5 rounded-xl p-6 border border-white/10">
+        <h3 class="text-sm text-gray-400 mb-2">Total da Semana</h3>
+        <p class="text-2xl font-bold text-[#00d4ff]" id="total-semana">R$ 15.780</p>
+      </div>
+      <div class="card-hover bg-white/5 rounded-xl p-6 border border-white/10">
+        <h3 class="text-sm text-gray-400 mb-2">Total do Mês</h3>
+        <p class="text-2xl font-bold text-white" id="total-mes">R$ 68.420</p>
+      </div>
+      <div class="card-hover bg-white/5 rounded-xl p-6 border border-white/10">
+        <h3 class="text-sm text-gray-400 mb-2">Lucro Líquido</h3>
+        <p class="text-2xl font-bold text-[#00ff88]" id="lucro-liquido">R$ 42.150</p>
+      </div>
     </div>
-    <div class="flex items-end gap-2 h-32">
-      <div class="flex-1 bg-gradient-to-t from-[#00ff88]/80 to-[#00ff88]/20 rounded-t chart-bar" style="height: 60%;"></div>
-      <div class="flex-1 bg-gradient-to-t from-[#00ff88]/80 to-[#00ff88]/20 rounded-t chart-bar" style="height: 80%; animation-delay: 0.1s;"></div>
-      <div class="flex-1 bg-gradient-to-t from-[#00ff88]/80 to-[#00ff88]/20 rounded-t chart-bar" style="height: 45%; animation-delay: 0.2s;"></div>
-      <div class="flex-1 bg-gradient-to-t from-[#00ff88]/80 to-[#00ff88]/20 rounded-t chart-bar" style="height: 90%; animation-delay: 0.3s;"></div>
-      <div class="flex-1 bg-gradient-to-t from-[#00d4ff]/80 to-[#00d4ff]/20 rounded-t chart-bar" style="height: 70%; animation-delay: 0.4s;"></div>
-      <div class="flex-1 bg-gradient-to-t from-[#00d4ff]/80 to-[#00d4ff]/20 rounded-t chart-bar" style="height: 100%; animation-delay: 0.5s;"></div>
-      <div class="flex-1 bg-gradient-to-t from-[#00d4ff]/80 to-[#00d4ff]/20 rounded-t chart-bar" style="height: 85%; animation-delay: 0.6s;"></div>
-    </div>
-  </div>
 
-  <!-- Exemplo de Lista de Clientes -->
-  <div class="bg-white/5 rounded-xl p-6 border border-white/5">
-    <h3 class="font-semibold mb-4">Clientes Recentes</h3>
-    <ul class="space-y-2">
-      <li class="p-3 bg-[#111111] rounded-lg flex justify-between">
-        <span>João Silva</span>
-        <span class="text-green-400">Ativo</span>
-      </li>
-      <li class="p-3 bg-[#111111] rounded-lg flex justify-between">
-        <span>Maria Oliveira</span>
-        <span class="text-green-400">Ativo</span>
-      </li>
-      <li class="p-3 bg-[#111111] rounded-lg flex justify-between">
-        <span>Pedro Santos</span>
-        <span class="text-red-500">Inativo</span>
-      </li>
-    </ul>
-  </div>
+    <!-- Charts Row -->
+    <section class="mb-10">
+      <h2 class="text-2xl font-bold mb-4">Receita Semanal</h2>
+      <div class="flex items-end gap-2 h-48">
+        <div class="flex-1 bg-[#00ff88]/70 rounded-t chart-bar" style="height:60%;"></div>
+        <div class="flex-1 bg-[#00ff88]/70 rounded-t chart-bar" style="height:80%; animation-delay:0.1s;"></div>
+        <div class="flex-1 bg-[#00ff88]/70 rounded-t chart-bar" style="height:45%; animation-delay:0.2s;"></div>
+        <div class="flex-1 bg-[#00ff88]/70 rounded-t chart-bar" style="height:90%; animation-delay:0.3s;"></div>
+        <div class="flex-1 bg-[#00d4ff]/70 rounded-t chart-bar" style="height:70%; animation-delay:0.4s;"></div>
+        <div class="flex-1 bg-[#00d4ff]/70 rounded-t chart-bar" style="height:100%; animation-delay:0.5s;"></div>
+        <div class="flex-1 bg-[#00d4ff]/70 rounded-t chart-bar" style="height:85%; animation-delay:0.6s;"></div>
+      </div>
+    </section>
 
-</main>
+    <!-- Clientes Recentes -->
+    <section id="clientes" class="mb-10">
+      <h2 class="text-2xl font-bold mb-4">Clientes Recentes</h2>
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr>
+            <th class="border-b border-white/20 p-2">Nome</th>
+            <th class="border-b border-white/20 p-2">Email</th>
+            <th class="border-b border-white/20 p-2">Serviço</th>
+          </tr>
+        </thead>
+        <tbody contenteditable="true">
+          <tr>
+            <td class="p-2">João Silva</td>
+            <td class="p-2">joao@email.com</td>
+            <td class="p-2">Polimento</td>
+          </tr>
+          <tr>
+            <td class="p-2">Maria Souza</td>
+            <td class="p-2">maria@email.com</td>
+            <td class="p-2">Lavagem</td>
+          </tr>
+          <tr>
+            <td class="p-2">Carlos Lima</td>
+            <td class="p-2">carlos@email.com</td>
+            <td class="p-2">Detalhamento</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
-<script>
-// Botão de logout volta para o login
-document.getElementById("btn-logout").addEventListener("click", function() {
-  window.location.href = "login.html";
-});
-</script>
+    <!-- Serviços Recentes -->
+    <section id="servicos" class="mb-10">
+      <h2 class="text-2xl font-bold mb-4">Serviços Recentes</h2>
+      <ul class="list-disc pl-5 space-y-2">
+        <li>Polimento - João Silva - R$ 350</li>
+        <li>Lavagem - Maria Souza - R$ 120</li>
+        <li>Detalhamento - Carlos Lima - R$ 600</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <script>
+    function logout() {
+      window.location.href = "login.html";
+    }
+  </script>
 
 </body>
-                                                                                                                                               </html>
+
+  </html>
