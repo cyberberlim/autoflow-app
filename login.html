@@ -18,40 +18,47 @@ AUTOFLOW
 <input id="email" type="email" placeholder="Email" class="w-full p-3 mb-4 rounded-lg bg-zinc-800 border border-zinc-700">
 <input id="senha" type="password" placeholder="Senha" class="w-full p-3 mb-6 rounded-lg bg-zinc-800 border border-zinc-700">
 
-<button onclick="login()" class="w-full py-3 rounded-lg font-bold bg-gradient-to-r from-[#00ff88] to-[#00d4ff] text-black">
+<button id="btn-login" class="w-full py-3 rounded-lg font-bold bg-gradient-to-r from-[#00ff88] to-[#00d4ff] text-black">
 Entrar
 </button>
+
+<div id="mensagem-erro" class="text-red-500 text-sm mt-4 text-center"></div>
 
 </div>
 
 <script>
-const supabase = window.supabase.createClient(
+const supabase = supabase.createClient(
   "https://sosutpvrosylcabjyaga.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvc3V0cHZyb3N5bGNhYmp5YWdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNzg5NjQsImV4cCI6MjA4Nzk1NDk2NH0.qxitAaDVDluzY92wSBrGesb2pYDUCynTcZodZWShZM0"
 );
 
-async function login() {
+document.getElementById("btn-login").addEventListener("click", async function() {
   const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("senha").value.trim();
+  const mensagemErro = document.getElementById("mensagem-erro");
 
-  console.log("Tentando login com:", { email, senha });
-
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password: senha
-  });
-
-  console.log("Resposta do Supabase:", { data, error });
-
-  if (error) {
-    alert("Erro no login: " + error.message);
-  } else if (data?.user) {
-    // Login bem-sucedido
-    window.location.href = "dashboard.html";
-  } else {
-    alert("Login falhou: verifique seu email e senha ou se a conta está confirmada.");
+  if (!email || !senha) {
+    mensagemErro.textContent = "Preencha email e senha!";
+    return;
   }
-}
+
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: senha,
+    });
+
+    if (error) {
+      mensagemErro.textContent = "Erro no login: " + error.message;
+    } else {
+      // Login bem-sucedido, redireciona para dashboard
+      window.location.href = "dashboard.html";
+    }
+  } catch (err) {
+    console.error(err);
+    mensagemErro.textContent = "Ocorreu um erro inesperado.";
+  }
+});
 </script>
 
 </body>
