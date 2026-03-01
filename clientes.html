@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Clientes - AUTOFLOW</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-black text-white p-10">
+
+<h1 class="text-3xl font-bold mb-6">Cadastro de Clientes</h1>
+
+<div class="mb-6">
+<input id="nome" placeholder="Nome do Cliente" class="p-3 bg-zinc-800 rounded w-full mb-3">
+<input id="veiculo" placeholder="Veículo" class="p-3 bg-zinc-800 rounded w-full mb-3">
+<button onclick="salvarCliente()" class="bg-green-400 text-black px-6 py-3 rounded font-bold">
+Salvar Cliente
+</button>
+</div>
+
+<ul id="listaClientes" class="space-y-2"></ul>
+
+<script>
+function salvarCliente(){
+let nome = document.getElementById("nome").value;
+let veiculo = document.getElementById("veiculo").value;
+
+let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+
+clientes.push({nome, veiculo});
+
+localStorage.setItem("clientes", JSON.stringify(clientes));
+
+mostrarClientes();
+}
+
+function mostrarClientes(){
+let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+let lista = document.getElementById("listaClientes");
+lista.innerHTML = "";
+
+clientes.forEach(cliente=>{
+lista.innerHTML += `<li class="bg-zinc-900 p-3 rounded">${cliente.nome} - ${cliente.veiculo}</li>`;
+});
+}
+
+mostrarClientes();
+</script>
+
+</body>
+</html>
