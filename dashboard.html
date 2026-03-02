@@ -1,166 +1,329 @@
- ---  
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AUTOFLOW - Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
       background: linear-gradient(180deg, #0a0a0a, #111111);
       color: #e0e0e0;
-      font-family: 'Poppins', sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
     }
-    .neon-green { color: #00ff88; }
-    .neon-blue { color: #00d4ff; }
-    .bg-neon-gradient {
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background-color: #111111;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px 0;
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #00ff88;
+      margin-bottom: 40px;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 0 20px;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      color: #ccc;
+    }
+
+    .menu-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+
+    .menu-item.active {
       background: linear-gradient(90deg, #00ff88, #00d4ff);
+      color: #000;
+      font-weight: bold;
     }
-    .glass {
+
+    .logout {
+      margin: 20px;
+      padding: 12px;
+      text-align: center;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #00ff88, #00d4ff);
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .logout:hover {
+      opacity: 0.8;
+    }
+
+    /* Área principal */
+    .main {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
+
+    .header {
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 2em;
+      margin: 0;
+      color: #fff;
+    }
+
+    .header p {
+      color: #aaa;
+      margin: 5px 0 0;
+    }
+
+    /* Cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .card {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
       backdrop-filter: blur(10px);
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1em;
+      color: #ccc;
+    }
+
+    .card p {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    .green { color: #00ff88; }
+    .blue { color: #00d4ff; }
+    .white { color: #fff; }
+
+    /* Gráfico */
+    .chart {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 40px;
+      height: 250px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+    }
+
+    .bar {
+      width: 30px;
+      border-radius: 6px;
+      animation: grow 1.5s ease-in-out infinite alternate;
+    }
+
+    .bar:nth-child(odd) {
+      background: #00ff88;
+    }
+
+    .bar:nth-child(even) {
+      background: #00d4ff;
+    }
+
+    @keyframes grow {
+      from { height: 40px; }
+      to { height: 180px; }
+    }
+
+    /* Tabelas */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      color: #e0e0e0;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.1);
+      color: #00d4ff;
+    }
+
+    tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Responsividade */
+    @media (max-width: 900px) {
+      .sidebar {
+        width: 200px;
+      }
+      .cards {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .sidebar {
+        display: none;
+      }
+      .cards {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
-<body class="flex h-screen overflow-hidden">
-
-  <!-- Sidebar -->
-  <aside class="w-64 bg-[#111111] flex flex-col justify-between fixed h-full">
+<body>
+  <div class="sidebar">
     <div>
-      <div class="text-center text-2xl font-bold neon-green py-6">AUTOFLOW</div>
-      <nav class="flex flex-col space-y-2 px-4">
-        <a href="index.html" class="flex items-center px-4 py-2 rounded-md bg-neon-gradient text-black font-semibold">Dashboard</a>
-        <a href="clientes.html" class="flex items-center px-4 py-2 rounded-md hover:bg-white/10 transition">Clientes</a>
-        <a href="agendamento.html" class="flex items-center px-4 py-2 rounded-md hover:bg-white/10 transition">Agendamentos</a>
-        <a href="caixa.html" class="flex items-center px-4 py-2 rounded-md hover:bg-white/10 transition">Financeiro</a>
-        <a href="produtos.html" class="flex items-center px-4 py-2 rounded-md hover:bg-white/10 transition">Produtos</a>
-        <a href="estoque.html" class="flex items-center px-4 py-2 rounded-md hover:bg-white/10 transition">Estoque</a>
-        <a href="relatorios.html" class="flex items-center px-4 py-2 rounded-md hover:bg-white/10 transition">Relatórios</a>
-        <a href="configuracoes.html" class="flex items-center px-4 py-2 rounded-md hover:bg-white/10 transition">Configurações</a>
-      </nav>
+      <div class="logo">AUTOFLOW</div>
+      <div class="menu">
+        <div class="menu-item active">Dashboard</div>
+        <div class="menu-item">Clientes</div>
+        <div class="menu-item">Agendamentos</div>
+        <div class="menu-item">Financeiro</div>
+        <div class="menu-item">Produtos / Estoque</div>
+        <div class="menu-item">Relatórios</div>
+        <div class="menu-item">Configurações</div>
+      </div>
     </div>
-    <div class="m-4">
-      <button class="w-full py-2 rounded-md bg-neon-gradient text-black font-semibold">Logout</button>
+    <div class="logout">Logout</div>
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <h1>Dashboard</h1>
+      <p>Usuário: Admin</p>
     </div>
-  </aside>
 
-  <!-- Main Content -->
-  <main class="flex-1 ml-64 p-8 overflow-y-auto">
-    <header class="mb-8">
-      <h1 class="text-3xl font-bold text-white">Dashboard</h1>
-      <p class="text-gray-400">Usuário: Admin</p>
-    </header>
-
-    <!-- Cards -->
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-      <div class="glass p-6 rounded-xl shadow-lg">
-        <h3 class="text-gray-400 text-sm mb-2">Total do Dia</h3>
-        <p class="text-2xl font-bold text-[#00ff88]">R$ 1.250,00</p>
+    <div class="cards">
+      <div class="card">
+        <h3>Total do Dia</h3>
+        <p class="green">R$ 1.250,00</p>
       </div>
-      <div class="glass p-6 rounded-xl shadow-lg">
-        <h3 class="text-gray-400 text-sm mb-2">Total da Semana</h3>
-        <p class="text-2xl font-bold text-[#00d4ff]">R$ 8.430,00</p>
+      <div class="card">
+        <h3>Total da Semana</h3>
+        <p class="blue">R$ 8.430,00</p>
       </div>
-      <div class="glass p-6 rounded-xl shadow-lg">
-        <h3 class="text-gray-400 text-sm mb-2">Total do Mês</h3>
-        <p class="text-2xl font-bold text-white">R$ 32.890,00</p>
+      <div class="card">
+        <h3>Total do Mês</h3>
+        <p class="white">R$ 32.890,00</p>
       </div>
-      <div class="glass p-6 rounded-xl shadow-lg">
-        <h3 class="text-gray-400 text-sm mb-2">Lucro Líquido</h3>
-        <p class="text-2xl font-bold text-[#00ff88]">R$ 12.540,00</p>
+      <div class="card">
+        <h3>Lucro Líquido</h3>
+        <p class="green">R$ 12.540,00</p>
       </div>
-    </section>
+    </div>
 
-    <!-- Gráfico -->
-    <section class="glass p-6 rounded-xl mb-10">
-      <h2 class="text-xl font-semibold mb-4 text-white">Receita Semanal</h2>
-      <div class="flex items-end justify-between h-48">
-        <div class="w-6 bg-[#00ff88] rounded-md h-24"></div>
-        <div class="w-6 bg-[#00d4ff] rounded-md h-32"></div>
-        <div class="w-6 bg-[#00ff88] rounded-md h-20"></div>
-        <div class="w-6 bg-[#00d4ff] rounded-md h-40"></div>
-        <div class="w-6 bg-[#00ff88] rounded-md h-28"></div>
-        <div class="w-6 bg-[#00d4ff] rounded-md h-44"></div>
-        <div class="w-6 bg-[#00ff88] rounded-md h-30"></div>
-      </div>
-    </section>
+    <div class="chart">
+      <div class="bar" style="height: 100px;"></div>
+      <div class="bar" style="height: 140px;"></div>
+      <div class="bar" style="height: 80px;"></div>
+      <div class="bar" style="height: 160px;"></div>
+      <div class="bar" style="height: 120px;"></div>
+      <div class="bar" style="height: 180px;"></div>
+      <div class="bar" style="height: 90px;"></div>
+    </div>
 
-    <!-- Clientes Recentes -->
-    <section class="glass p-6 rounded-xl mb-10">
-      <h2 class="text-xl font-semibold mb-4 text-white">Clientes Recentes</h2>
-      <table class="w-full text-left text-sm">
-        <thead class="text-[#00d4ff] border-b border-white/10">
-          <tr>
-            <th class="py-2">Nome</th>
-            <th class="py-2">Serviço</th>
-            <th class="py-2">Valor</th>
-            <th class="py-2">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-white/5">
-            <td class="py-2">João Silva</td>
-            <td>Troca de óleo</td>
-            <td class="text-[#00ff88]">R$ 150,00</td>
-            <td>Concluído</td>
-          </tr>
-          <tr class="border-b border-white/5">
-            <td class="py-2">Maria Souza</td>
-            <td>Revisão completa</td>
-            <td class="text-[#00ff88]">R$ 850,00</td>
-            <td>Em andamento</td>
-          </tr>
-          <tr>
-            <td class="py-2">Pedro Lima</td>
-            <td>Alinhamento</td>
-            <td class="text-[#00ff88]">R$ 120,00</td>
-            <td>Pendente</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+    <h2>Clientes Recentes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Serviço</th>
+          <th>Valor</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>João Silva</td>
+          <td>Troca de óleo</td>
+          <td class="green">R$ 150,00</td>
+          <td>Concluído</td>
+        </tr>
+        <tr>
+          <td>Maria Souza</td>
+          <td>Revisão completa</td>
+          <td class="green">R$ 850,00</td>
+          <td>Em andamento</td>
+        </tr>
+        <tr>
+          <td>Pedro Lima</td>
+          <td>Alinhamento</td>
+          <td class="green">R$ 120,00</td>
+          <td>Pendente</td>
+        </tr>
+      </tbody>
+    </table>
 
-    <!-- Serviços Recentes -->
-    <section class="glass p-6 rounded-xl">
-      <h2 class="text-xl font-semibold mb-4 text-white">Serviços Recentes</h2>
-      <table class="w-full text-left text-sm">
-        <thead class="text-[#00d4ff] border-b border-white/10">
-          <tr>
-            <th class="py-2">Serviço</th>
-            <th class="py-2">Cliente</th>
-            <th class="py-2">Valor</th>
-            <th class="py-2">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-white/5">
-            <td class="py-2">Balanceamento</td>
-            <td>Lucas Pereira</td>
-            <td class="text-[#00ff88]">R$ 90,00</td>
-            <td>Concluído</td>
-          </tr>
-          <tr class="border-b border-white/5">
-            <td class="py-2">Troca de pastilhas</td>
-            <td>Fernanda Alves</td>
-            <td class="text-[#00ff88]">R$ 300,00</td>
-            <td>Em andamento</td>
-          </tr>
-          <tr>
-            <td class="py-2">Revisão elétrica</td>
-            <td>Rafael Costa</td>
-            <td class="text-[#00ff88]">R$ 450,00</td>
-            <td>Pendente</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-  </main>
-
-  <script src="js/script.js"></script>
+    <h2>Serviços Recentes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Serviço</th>
+          <th>Cliente</th>
+          <th>Valor</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Balanceamento</td>
+          <td>Lucas Pereira</td>
+          <td class="green">R$ 90,00</td>
+          <td>Concluído</td>
+        </tr>
+        <tr>
+          <td>Troca de pastilhas</td>
+          <td>Fernanda Alves</td>
+          <td class="green">R$ 300,00</td>
+          <td>Em andamento</td>
+        </tr>
+        <tr>
+          <td>Revisão elétrica</td>
+          <td>Rafael Costa</td>
+          <td class="green">R$ 450,00</td>
+          <td>Pendente</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </body>
-</html>
-```  
----
+           </html>
