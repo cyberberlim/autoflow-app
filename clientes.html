@@ -6,42 +6,100 @@
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-black text-white p-10">
+<body class="bg-gradient-to-br from-black via-zinc-900 to-black text-white min-h-screen">
+
+<div class="flex">
+
+<!-- Sidebar -->
+<div class="w-64 bg-zinc-900 min-h-screen p-6">
+  <h2 class="text-2xl font-bold text-green-400 mb-10">AUTOFLOW</h2>
+
+  <div class="space-y-4">
+    <a href="dashboard.html" class="block hover:text-green-400">Dashboard</a>
+    <a href="clientes.html" class="block text-green-400 font-bold">Clientes</a>
+    <a href="agendamento.html" class="block hover:text-green-400">Agendamentos</a>
+    <a href="caixa.html" class="block hover:text-green-400">Financeiro</a>
+    <a href="produtos.html" class="block hover:text-green-400">Produtos</a>
+    <a href="relatorios.html" class="block hover:text-green-400">Relatórios</a>
+    <a href="config.html" class="block hover:text-green-400">Configurações</a>
+  </div>
+
+  <a href="index.html" class="block mt-10 bg-gradient-to-r from-green-400 to-cyan-400 text-black text-center py-2 rounded font-bold">
+    Logout
+  </a>
+</div>
+
+<!-- Conteúdo -->
+<div class="flex-1 p-10">
 
 <h1 class="text-3xl font-bold mb-6">Cadastro de Clientes</h1>
 
-<div class="mb-6">
-<input id="nome" placeholder="Nome do Cliente" class="p-3 bg-zinc-800 rounded w-full mb-3">
-<input id="veiculo" placeholder="Veículo" class="p-3 bg-zinc-800 rounded w-full mb-3">
-<button onclick="salvarCliente()" class="bg-green-400 text-black px-6 py-3 rounded font-bold">
-Salvar Cliente
-</button>
+<div class="bg-zinc-900 p-6 rounded mb-6 space-y-4">
+  <input id="nome" placeholder="Nome do Cliente" class="p-3 bg-zinc-800 rounded w-full">
+  <input id="veiculo" placeholder="Veículo" class="p-3 bg-zinc-800 rounded w-full">
+  <button onclick="salvarCliente()" class="bg-green-400 text-black px-6 py-3 rounded font-bold w-full">
+    Salvar Cliente
+  </button>
 </div>
 
-<ul id="listaClientes" class="space-y-2"></ul>
+<h2 class="text-xl font-bold mb-4">Lista de Clientes</h2>
+
+<ul id="listaClientes" class="space-y-3"></ul>
+
+</div>
+</div>
 
 <script>
 function salvarCliente(){
-let nome = document.getElementById("nome").value;
-let veiculo = document.getElementById("veiculo").value;
+  let nome = document.getElementById("nome").value;
+  let veiculo = document.getElementById("veiculo").value;
 
-let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+  if(!nome || !veiculo){
+    alert("Preencha todos os campos");
+    return;
+  }
 
-clientes.push({nome, veiculo});
+  let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
 
-localStorage.setItem("clientes", JSON.stringify(clientes));
+  clientes.push({nome, veiculo});
 
-mostrarClientes();
+  localStorage.setItem("clientes", JSON.stringify(clientes));
+
+  document.getElementById("nome").value = "";
+  document.getElementById("veiculo").value = "";
+
+  mostrarClientes();
+}
+
+function removerCliente(index){
+  let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+
+  clientes.splice(index, 1);
+
+  localStorage.setItem("clientes", JSON.stringify(clientes));
+
+  mostrarClientes();
 }
 
 function mostrarClientes(){
-let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-let lista = document.getElementById("listaClientes");
-lista.innerHTML = "";
+  let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+  let lista = document.getElementById("listaClientes");
+  lista.innerHTML = "";
 
-clientes.forEach(cliente=>{
-lista.innerHTML += `<li class="bg-zinc-900 p-3 rounded">${cliente.nome} - ${cliente.veiculo}</li>`;
-});
+  clientes.forEach((cliente, index)=>{
+    lista.innerHTML += `
+      <li class="bg-zinc-900 p-4 rounded flex justify-between items-center">
+        <div>
+          <p class="font-bold">${cliente.nome}</p>
+          <p class="text-zinc-400">${cliente.veiculo}</p>
+        </div>
+        <button onclick="removerCliente(${index})"
+          class="bg-red-500 px-3 py-1 rounded text-white">
+          Remover
+        </button>
+      </li>
+    `;
+  });
 }
 
 mostrarClientes();
