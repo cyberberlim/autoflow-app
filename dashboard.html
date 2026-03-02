@@ -301,6 +301,24 @@
         <div class="flex-1">  
          <p class="text-sm text-white font-medium">Higienização</p>  
          <p class="text-xs text-white/50">Corolla - Pedro</p>  
-        </div><span class="text-sm font-semibold neon-green">R$ 280</span>  
-       </div>  
-       <div class="flex items-center gap-4 p-3 rounded-xl bg-white/5 h
+        </div><span class="text-sm font-semibold neon-green">R$ 280</span> 
+        </div>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div>
+
+<script>
+function logout(){
+    localStorage.removeItem("logado");
+    window.location.href = "index.html";
+}
+
+if(localStorage.getItem("logado") !== "true"){
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
