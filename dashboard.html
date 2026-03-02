@@ -1,251 +1,329 @@
-<!DOCTYPE html>  <html lang="pt-BR">  
-<head>  
-  <meta charset="UTF-8">  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-  <title>Dashboard | AUTOFLOW</title>  
-  <style>  
-    /* ======= ESTILO GERAL ======= */  
-    body {  
-      margin: 0;  
-      font-family: 'Poppins', sans-serif;  
-      background: linear-gradient(180deg, #0a0a0a, #111111);  
-      color: #fff;  
-      display: flex;  
-      height: 100vh;  
-      overflow: hidden;  
-    }  /* ======= SIDEBAR ======= */  
-.sidebar {  
-  width: 240px;  
-  background-color: #111111;  
-  display: flex;  
-  flex-direction: column;  
-  justify-content: space-between;  
-  padding: 20px;  
-  border-right: 1px solid rgba(255, 255, 255, 0.1);  
-}  
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AUTOFLOW - Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(180deg, #0a0a0a, #111111);
+      color: #e0e0e0;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-.logo {  
-  font-size: 1.4em;  
-  font-weight: 700;  
-  color: #00ff88;  
-  text-align: center;  
-  margin-bottom: 30px;  
-}  
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background-color: #111111;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px 0;
+    }
 
-.nav-links {  
-  list-style: none;  
-  padding: 0;  
-}  
+    .logo {
+      text-align: center;
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #00ff88;
+      margin-bottom: 40px;
+    }
 
-.nav-links li {  
-  margin: 15px 0;  
-}  
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 0 20px;
+    }
 
-.nav-links a {  
-  text-decoration: none;  
-  color: #fff;  
-  padding: 10px 15px;  
-  display: block;  
-  border-radius: 8px;  
-  transition: 0.3s;  
-}  
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      color: #ccc;
+    }
 
-.nav-links a:hover,  
-.nav-links .active {  
-  background: linear-gradient(90deg, #00ff88, #00d4ff);  
-  color: #000;  
-  font-weight: 600;  
-}  
+    .menu-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
 
-.logout-btn {  
-  background: linear-gradient(90deg, #00ff88, #00d4ff);  
-  color: #000;  
-  border: none;  
-  padding: 12px;  
-  border-radius: 8px;  
-  font-weight: 600;  
-  cursor: pointer;  
-  transition: 0.3s;  
-}  
+    .menu-item.active {
+      background: linear-gradient(90deg, #00ff88, #00d4ff);
+      color: #000;
+      font-weight: bold;
+    }
 
-.logout-btn:hover {  
-  opacity: 0.9;  
-}  
+    .logout {
+      margin: 20px;
+      padding: 12px;
+      text-align: center;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #00ff88, #00d4ff);
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-/* ======= CONTEÚDO PRINCIPAL ======= */  
-.main-content {  
-  flex: 1;  
-  padding: 30px;  
-  overflow-y: auto;  
-}  
+    .logout:hover {
+      opacity: 0.8;
+    }
 
-.header {  
-  display: flex;  
-  justify-content: space-between;  
-  align-items: center;  
-  margin-bottom: 30px;  
-}  
+    /* Área principal */
+    .main {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
 
-.header h1 {  
-  font-size: 2em;  
-  color: #fff;  
-}  
+    .header {
+      margin-bottom: 30px;
+    }
 
-.header span {  
-  color: #888;  
-}  
+    .header h1 {
+      font-size: 2em;
+      margin: 0;
+      color: #fff;
+    }
 
-/* ======= CARDS DE MÉTRICAS ======= */  
-.cards {  
-  display: grid;  
-  grid-template-columns: repeat(4, 1fr);  
-  gap: 20px;  
-  margin-bottom: 40px;  
-}  
+    .header p {
+      color: #aaa;
+      margin: 5px 0 0;
+    }
 
-.card {  
-  background: rgba(255, 255, 255, 0.05);  
-  border: 1px solid rgba(255, 255, 255, 0.1);  
-  border-radius: 12px;  
-  padding: 20px;  
-  text-align: center;  
-  transition: transform 0.3s ease;  
-}  
+    /* Cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
 
-.card:hover {  
-  transform: translateY(-5px);  
-}  
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+    }
 
-.card h3 {  
-  font-size: 1em;  
-  color: #ccc;  
-  margin-bottom: 10px;  
-}  
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1em;
+      color: #ccc;
+    }
 
-.card p {  
-  font-size: 1.8em;  
-  font-weight: 700;  
-}  
+    .card p {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
 
-.verde { color: #00ff88; }  
-.azul { color: #00d4ff; }  
-.branco { color: #ffffff; }  
+    .green { color: #00ff88; }
+    .blue { color: #00d4ff; }
+    .white { color: #fff; }
 
-/* ======= GRÁFICO ======= */  
-.chart {  
-  margin-bottom: 40px;  
-}  
+    /* Gráfico */
+    .chart {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 40px;
+      height: 250px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+    }
 
-.chart h2 {  
-  color: #fff;  
-  margin-bottom: 15px;  
-}  
+    .bar {
+      width: 30px;
+      border-radius: 6px;
+      animation: grow 1.5s ease-in-out infinite alternate;
+    }
 
-.bars {  
-  display: flex;  
-  align-items: flex-end;  
-  gap: 10px;  
-  height: 150px;  
-}  
+    .bar:nth-child(odd) {
+      background: #00ff88;
+    }
 
-.bar {  
-  flex: 1;  
-  border-radius: 6px;  
-  background: linear-gradient(180deg, #00ff88, #00d4ff);  
-  animation: grow 1.5s ease-in-out;  
-}  
+    .bar:nth-child(even) {
+      background: #00d4ff;
+    }
 
-@keyframes grow {  
-  from { height: 0; }  
-  to { height: 100%; }  
-}  
+    @keyframes grow {
+      from { height: 40px; }
+      to { height: 180px; }
+    }
 
-/* ======= TABELA DE CLIENTES ======= */  
-table {  
-  width: 100%;  
-  border-collapse: collapse;  
-  margin-bottom: 40px;  
-}  
+    /* Tabelas */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
 
-th, td {  
-  padding: 12px;  
-  text-align: left;  
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);  
-}  
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      color: #e0e0e0;
+    }
 
-th {  
-  color: #00d4ff;  
-}  
+    th {
+      background: rgba(255, 255, 255, 0.1);
+      color: #00d4ff;
+    }
 
-/* ======= LISTA DE SERVIÇOS ======= */  
-.services {  
-  color: #fff;  
-}  
+    tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.03);
+    }
 
-.services ul {  
-  list-style: disc;  
-  padding-left: 20px;  
-}  
+    /* Responsividade */
+    @media (max-width: 900px) {
+      .sidebar {
+        width: 200px;
+      }
+      .cards {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
 
-.services li {  
-  margin: 8px 0;  
-}
+    @media (max-width: 600px) {
+      .sidebar {
+        display: none;
+      }
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div>
+      <div class="logo">AUTOFLOW</div>
+      <div class="menu">
+        <div class="menu-item active">Dashboard</div>
+        <div class="menu-item">Clientes</div>
+        <div class="menu-item">Agendamentos</div>
+        <div class="menu-item">Financeiro</div>
+        <div class="menu-item">Produtos / Estoque</div>
+        <div class="menu-item">Relatórios</div>
+        <div class="menu-item">Configurações</div>
+      </div>
+    </div>
+    <div class="logout">Logout</div>
+  </div>
 
-  </style>  
-</head>  
-<body>  
-  <aside class="sidebar">  
-    <div>  
-      <div class="logo">AUTOFLOW</div>  
-      <ul class="nav-links">  
-        <li><a href="#" class="active">Dashboard</a></li>  
-        <li><a href="#">Clientes</a></li>  
-        <li><a href="#">Serviços</a></li>  
-        <li><a href="#">Financeiro</a></li>  
-        <li><a href="#">Configurações</a></li>  
-      </ul>  
-    </div>  
-    <button class="logout-btn">Logout</button>  
-  </aside>    <main class="main-content">  
-    <div class="header">  
-      <h1>Dashboard</h1>  
-      <span>Usuário: Admin</span>  
-    </div>  <div class="cards">  
-  <div class="card"><h3>Total do Dia</h3><p class="verde">R$ 2.450</p></div>  
-  <div class="card"><h3>Total da Semana</h3><p class="azul">R$ 15.780</p></div>  
-  <div class="card"><h3>Total do Mês</h3><p class="branco">R$ 68.420</p></div>  
-  <div class="card"><h3>Lucro Líquido</h3><p class="verde">R$ 42.150</p></div>  
-</div>  
+  <div class="main">
+    <div class="header">
+      <h1>Dashboard</h1>
+      <p>Usuário: Admin</p>
+    </div>
 
-<div class="chart">  
-  <h2>Receita Semanal</h2>  
-  <div class="bars">  
-    <div class="bar" style="height: 60%;"></div>  
-    <div class="bar" style="height: 40%;"></div>  
-    <div class="bar" style="height: 70%;"></div>  
-    <div class="bar" style="height: 50%;"></div>  
-    <div class="bar" style="height: 80%;"></div>  
-    <div class="bar" style="height: 65%;"></div>  
-  </div>  
-</div>  
+    <div class="cards">
+      <div class="card">
+        <h3>Total do Dia</h3>
+        <p class="green">R$ 1.250,00</p>
+      </div>
+      <div class="card">
+        <h3>Total da Semana</h3>
+        <p class="blue">R$ 8.430,00</p>
+      </div>
+      <div class="card">
+        <h3>Total do Mês</h3>
+        <p class="white">R$ 32.890,00</p>
+      </div>
+      <div class="card">
+        <h3>Lucro Líquido</h3>
+        <p class="green">R$ 12.540,00</p>
+      </div>
+    </div>
 
-<h2>Clientes Recentes</h2>  
-<table>  
-  <tr><th>Nome</th><th>Email</th><th>Serviço</th></tr>  
-  <tr><td>João Silva</td><td>joao@email.com</td><td>Polimento</td></tr>  
-  <tr><td>Maria Souza</td><td>maria@email.com</td><td>Lavagem</td></tr>  
-  <tr><td>Carlos Lima</td><td>carlos@email.com</td><td>Detalhamento</td></tr>  
-</table>  
+    <div class="chart">
+      <div class="bar" style="height: 100px;"></div>
+      <div class="bar" style="height: 140px;"></div>
+      <div class="bar" style="height: 80px;"></div>
+      <div class="bar" style="height: 160px;"></div>
+      <div class="bar" style="height: 120px;"></div>
+      <div class="bar" style="height: 180px;"></div>
+      <div class="bar" style="height: 90px;"></div>
+    </div>
 
-<div class="services">  
-  <h2>Serviços Recentes</h2>  
-  <ul>  
-    <li>Polimento - João Silva - R$ 350</li>  
-    <li>Lavagem - Maria Souza - R$ 120</li>  
-    <li>Detalhamento - Carlos Lima - R$ 600</li>  
-  </ul>  
-</div>
+    <h2>Clientes Recentes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Serviço</th>
+          <th>Valor</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>João Silva</td>
+          <td>Troca de óleo</td>
+          <td class="green">R$ 150,00</td>
+          <td>Concluído</td>
+        </tr>
+        <tr>
+          <td>Maria Souza</td>
+          <td>Revisão completa</td>
+          <td class="green">R$ 850,00</td>
+          <td>Em andamento</td>
+        </tr>
+        <tr>
+          <td>Pedro Lima</td>
+          <td>Alinhamento</td>
+          <td class="green">R$ 120,00</td>
+          <td>Pendente</td>
+        </tr>
+      </tbody>
+    </table>
 
-  </main>  
-</body>  
+    <h2>Serviços Recentes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Serviço</th>
+          <th>Cliente</th>
+          <th>Valor</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Balanceamento</td>
+          <td>Lucas Pereira</td>
+          <td class="green">R$ 90,00</td>
+          <td>Concluído</td>
+        </tr>
+        <tr>
+          <td>Troca de pastilhas</td>
+          <td>Fernanda Alves</td>
+          <td class="green">R$ 300,00</td>
+          <td>Em andamento</td>
+        </tr>
+        <tr>
+          <td>Revisão elétrica</td>
+          <td>Rafael Costa</td>
+          <td class="green">R$ 450,00</td>
+          <td>Pendente</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
 </html>
