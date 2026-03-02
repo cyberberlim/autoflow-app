@@ -1,5 +1,3 @@
----  
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -28,22 +26,38 @@
 <body class="flex h-screen overflow-hidden">
 
   <!-- Sidebar -->
-  <aside class="w-64 bg-[#111111] flex flex-col justify-between fixed h-full">
+  <aside class="w-64 bg-[#111111] flex flex-col justify-between fixed h-full shadow-lg">
     <div>
-      <div class="text-center text-2xl font-bold neon-green py-6">AUTOFLOW</div>
+      <div class="flex items-center justify-center py-6">
+        <span class="text-2xl font-bold neon-green">⚡ AUTOFLOW</span>
+      </div>
       <nav class="flex flex-col space-y-2 px-4">
-        <a href="index.html" class="flex items-center px-4 py-2 rounded-md bg-neon-gradient text-black font-semibold">Dashboard</a>
-        <a href="clientes.html" class="flex items-center px-4 py-2 rounded-md hover:bg-white/10 transition">Clientes</a>
-        <a href="agendamento.html" class="flex items-center px-4 py-2 rounded-md hover:bg-white/10 transition">Agendamentos</a>
-        <a href="caixa.html" class="flex items-center px-4 py-2 rounded-md hover:bg-white/10 transition">Financeiro</a>
-        <a href="produtos.html" class="flex items-center px-4 py-2 rounded-md hover:bg-white/10 transition">Produtos</a>
-        <a href="estoque.html" class="flex items-center px-4 py-2 rounded-md hover:bg-white/10 transition">Estoque</a>
-        <a href="relatorios.html" class="flex items-center px-4 py-2 rounded-md hover:bg-white/10 transition">Relatórios</a>
-        <a href="configuracoes.html" class="flex items-center px-4 py-2 rounded-md hover:bg-white/10 transition">Configurações</a>
+        <a href="index.html" class="flex items-center gap-3 px-4 py-2 rounded-md bg-neon-gradient text-black font-semibold shadow-md">
+          <span>📊</span> Dashboard
+        </a>
+        <a href="clientes.html" class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-white/10 transition">
+          <span>👥</span> Clientes
+        </a>
+        <p class="text-gray-400 text-xs uppercase mt-4 mb-1 px-4">Agendamentos</p>
+        <a href="caixa.html" class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-white/10 transition">
+          <span>💰</span> Caixa
+        </a>
+        <a href="produtos.html" class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-white/10 transition">
+          <span>🧴</span> Produtos
+        </a>
+        <a href="estoque.html" class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-white/10 transition">
+          <span>📦</span> Estoque
+        </a>
+        <a href="relatorios.html" class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-white/10 transition">
+          <span>📈</span> Relatórios
+        </a>
+        <a href="configuracoes.html" class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-white/10 transition">
+          <span>⚙️</span> Configurações
+        </a>
       </nav>
     </div>
     <div class="m-4">
-      <button class="w-full py-2 rounded-md bg-neon-gradient text-black font-semibold">Logout</button>
+      <button class="w-full py-2 rounded-md bg-neon-gradient text-black font-semibold shadow-md">Logout</button>
     </div>
   </aside>
 
@@ -161,6 +175,4 @@
 
   <script src="js/script.js"></script>
 </body>
-</html>
-```  
----
+  </html>
