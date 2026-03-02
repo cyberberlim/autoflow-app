@@ -1,96 +1,308 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<title>Dashboard - AUTOFLOW</title>
-<script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="bg-black text-white">
-
-<div class="flex min-h-screen">
-
-<!-- SIDEBAR -->
-<div class="w-64 bg-zinc-900 p-6 flex flex-col justify-between">
-
-<div>
-<h1 class="text-2xl font-bold mb-10 text-green-400">AUTOFLOW</h1>
-
-<nav class="space-y-3">
-
-<a href="dashboard.html" class="block px-4 py-3 rounded-xl bg-green-400 text-black font-bold">
-Dashboard
-</a>
-
-<a href="clientes.html" class="block px-4 py-3 rounded-xl hover:bg-zinc-800">
-Clientes
-</a>
-
-<a href="agendamento.html" class="block px-4 py-3 rounded-xl hover:bg-zinc-800">
-Agendamentos
-</a>
-
-<a href="caixa.html" class="block px-4 py-3 rounded-xl hover:bg-zinc-800">
-Caixa
-</a>
-
-<a href="produtos.html" class="block px-4 py-3 rounded-xl hover:bg-zinc-800">
-Produtos
-</a>
-
-<a href="estoque.html" class="block px-4 py-3 rounded-xl hover:bg-zinc-800">
-Estoque
-</a>
-
-<a href="relatorios.html" class="block px-4 py-3 rounded-xl hover:bg-zinc-800">
-Relatórios
-</a>
-
-<a href="config.html" class="block px-4 py-3 rounded-xl hover:bg-zinc-800">
-Configurações
-</a>
-
-</nav>
+<!doctype html>
+<html lang="pt-BR" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AUTOFLOW - Sistema de Estética Automotiva</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #111111 50%, #0d0d0d 100%);
+      color: #ffffff;
+    }
+    
+    .font-display { font-family: 'Space Grotesk', sans-serif; }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .neon-green { color: #00ff88; }
+    .neon-blue { color: #00d4ff; }
+    
+    .gradient-neon {
+      background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .sidebar-item {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .sidebar-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateX(4px);
+    }
+    
+    .sidebar-item.active {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 212, 255, 0.15) 100%);
+      border-left: 3px solid #00ff88;
+    }
+    
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1), 0 0 30px rgba(0, 212, 255, 0.05);
+      border-color: rgba(0, 255, 136, 0.3);
+    }
+    
+    .btn-neon {
+      background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+      color: #000;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+    }
+    
+    .btn-neon:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 255, 136, 0.5);
+    }
+    
+    .chart-bar {
+      animation: growUp 1s ease-out forwards;
+      transform-origin: bottom;
+    }
+    
+    @keyframes growUp {
+      from { transform: scaleY(0); }
+      to { transform: scaleY(1); }
+    }
+    
+    .table-row {
+      transition: all 0.2s ease;
+    }
+    
+    .table-row:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    
+    .glow-green {
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+    }
+    
+    .glow-blue {
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+    }
+    
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 255, 136, 0.3);
+      border-radius: 3px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 255, 136, 0.5);
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full overflow-auto">
+  <div class="flex h-full w-full min-h-full"><!-- Sidebar -->
+   <aside class="w-64 glass fixed left-0 top-0 h-full flex flex-col z-50"><!-- Logo -->
+    <div class="p-6 border-b border-white/10">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl gradient-neon flex items-center justify-center">
+       <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+       </svg>
+      </div><span class="font-display text-2xl font-bold gradient-text">AUTOFLOW</span>
+     </div>
+    </div><!-- Navigation -->
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto"><a href="#" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-xl text-white/90">
+      <svg class="w-5 h-5 neon-green" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+      </svg><span class="font-medium">Dashboard</span> </a> <a href="dashboard.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-xl text-white/90">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg><span>Clientes</span> </a> <a href="#" class="sidebar-item flex items-center gap-3 ...
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg><span>Agendamentos</span> </a> <a href="agendamentos.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white/90">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg><span>Caixa</span> </a> <a href="caixa.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white/90">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+      </svg><span>Produtos</span> </a> <a href="caixa.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white/90">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+      </svg><span>Estoque</span> </a> <a href="estoque.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white/90">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      </svg><span>Relatórios</span> </a> <a href="relatorios.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white/90">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg><span>Configurações</span> </a> <a href="configuracoes.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white/90">
+    </nav><!-- Logout -->
+    <div class="p-4 border-t border-white/10"><button class="btn-neon w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-display">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+      </svg><span>Logout</span> <button onclick="logout()" class="btn-neon w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-display">
+    </div>
+   </aside><!-- Main Content -->
+   <main class="flex-1 ml-64 p-8 overflow-auto"><!-- Header -->
+    <header class="flex items-center justify-between mb-8">
+     <div>
+      <h1 id="page-title" class="font-display text-3xl font-bold text-white mb-1">Dashboard</h1>
+      <p class="text-white/50">Bem-vindo de volta, <span id="user-name" class="neon-green">Carlos Silva</span></p>
+     </div><button class="btn-neon px-6 py-3 rounded-xl flex items-center gap-2 font-display">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg><span>Novo Cliente</span> <button onclick="window.location.href='clientes.html'" class="btn-neon px-6 py-3 rounded-xl flex items-center gap-2 font-display">
+    </header><!-- Metrics Cards -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"><!-- Total do Dia -->
+     <div class="glass-card card-hover rounded-2xl p-6">
+      <div class="flex items-center justify-between mb-4">
+       <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center glow-green">
+        <svg class="w-6 h-6 neon-green" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+       </div><span class="text-xs text-white/40 bg-white/5 px-2 py-1 rounded-full">Hoje</span>
+      </div>
+      <p class="text-white/50 text-sm mb-1">Total do Dia</p>
+      <p class="font-display text-3xl font-bold neon-green">R$ 2.450</p>
+      <p class="text-xs text-emerald-400 mt-2 flex items-center gap-1">
+       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+       </svg> +12% vs ontem</p>
+     </div><!-- Total da Semana -->
+     <div class="glass-card card-hover rounded-2xl p-6">
+      <div class="flex items-center justify-between mb-4">
+       <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 flex items-center justify-center glow-blue">
+        <svg class="w-6 h-6 neon-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+       </div><span class="text-xs text-white/40 bg-white/5 px-2 py-1 rounded-full">Semana</span>
+      </div>
+      <p class="text-white/50 text-sm mb-1">Total da Semana</p>
+      <p class="font-display text-3xl font-bold neon-blue">R$ 14.890</p>
+      <p class="text-xs text-cyan-400 mt-2 flex items-center gap-1">
+       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+       </svg> +8% vs semana anterior</p>
+     </div><!-- Total do Mês -->
+     <div class="glass-card card-hover rounded-2xl p-6">
+      <div class="flex items-center justify-between mb-4">
+       <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center glow-green">
+        <svg class="w-6 h-6 neon-green" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+       </div><span class="text-xs text-white/40 bg-white/5 px-2 py-1 rounded-full">Mês</span>
+      </div>
+      <p class="text-white/50 text-sm mb-1">Total do Mês</p>
+      <p class="font-display text-3xl font-bold neon-green">R$ 58.320</p>
+      <p class="text-xs text-emerald-400 mt-2 flex items-center gap-1">
+       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+       </svg> +23% vs mês anterior</p>
+     </div><!-- Lucro Líquido -->
+     <div class="glass-card card-hover rounded-2xl p-6">
+      <div class="flex items-center justify-between mb-4">
+       <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 flex items-center justify-center glow-blue">
+        <svg class="w-6 h-6 neon-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        </svg>
+       </div><span class="text-xs text-white/40 bg-white/5 px-2 py-1 rounded-full">Líquido</span>
+      </div>
+      <p class="text-white/50 text-sm mb-1">Lucro Líquido</p>
+      <p class="font-display text-3xl font-bold neon-blue">R$ 32.450</p>
+      <p class="text-xs text-cyan-400 mt-2 flex items-center gap-1">
+       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+       </svg> Margem de 55.6%</p>
+     </div>
+    </section><!-- Chart and Recent Activity -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8"><!-- Chart -->
+     <div class="lg:col-span-2 glass-card rounded-2xl p-6">
+      <div class="flex items-center justify-between mb-6">
+       <div>
+        <h2 class="font-display text-xl font-semibold text-white">Faturamento Semanal</h2>
+        <p class="text-white/50 text-sm">Últimos 7 dias</p>
+       </div>
+       <div class="flex gap-2"><button class="px-4 py-2 rounded-lg bg-white/5 text-white/60 text-sm hover:bg-white/10 transition-colors">Dia</button> <button class="px-4 py-2 rounded-lg gradient-neon text-black text-sm font-medium">Semana</button> <button class="px-4 py-2 rounded-lg bg-white/5 text-white/60 text-sm hover:bg-white/10 transition-colors">Mês</button>
+       </div>
+      </div><!-- Chart Container -->
+      <div class="h-64 flex items-end justify-between gap-4 px-4">
+       <div class="flex-1 flex flex-col items-center gap-2">
+        <div class="chart-bar w-full rounded-t-lg gradient-neon" style="height: 45%; animation-delay: 0s;"></div><span class="text-xs text-white/50">Seg</span>
+       </div>
+       <div class="flex-1 flex flex-col items-center gap-2">
+        <div class="chart-bar w-full rounded-t-lg bg-cyan-400" style="height: 72%; animation-delay: 0.1s;"></div><span class="text-xs text-white/50">Ter</span>
+       </div>
+       <div class="flex-1 flex flex-col items-center gap-2">
+        <div class="chart-bar w-full rounded-t-lg gradient-neon" style="height: 58%; animation-delay: 0.2s;"></div><span class="text-xs text-white/50">Qua</span>
+       </div>
+       <div class="flex-1 flex flex-col items-center gap-2">
+        <div class="chart-bar w-full rounded-t-lg bg-cyan-400" style="height: 89%; animation-delay: 0.3s;"></div><span class="text-xs text-white/50">Qui</span>
+       </div>
+       <div class="flex-1 flex flex-col items-center gap-2">
+        <div class="chart-bar w-full rounded-t-lg gradient-neon" style="height: 95%; animation-delay: 0.4s;"></div><span class="text-xs text-white/50">Sex</span>
+       </div>
+       <div class="flex-1 flex flex-col items-center gap-2">
+        <div class="chart-bar w-full rounded-t-lg bg-cyan-400" style="height: 78%; animation-delay: 0.5s;"></div><span class="text-xs text-white/50">Sáb</span>
+       </div>
+       <div class="flex-1 flex flex-col items-center gap-2">
+        <div class="chart-bar w-full rounded-t-lg gradient-neon" style="height: 35%; animation-delay: 0.6s;"></div><span class="text-xs text-white/50">Dom</span>
+       </div>
+      </div>
+     </div><!-- Recent Activity -->
+     <div class="glass-card rounded-2xl p-6">
+      <h2 class="font-display text-xl font-semibold text-white mb-6">Atividade Recente</h2>
+      <div class="space-y-4">
+       <div class="flex items-center gap-4 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
+        <div class="w-10 h-10 rounded-full gradient-neon flex items-center justify-center">
+         <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+        </div>
+        <div class="flex-1">
+         <p class="text-sm text-white font-medium">Polimento Completo</p>
+         <p class="text-xs text-white/50">Honda Civic - João</p>
+        </div><span class="text-sm font-semibold neon-green">R$ 450</span>
+       </div>
+       <div class="flex items-center gap-4 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
+        <div class="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center">
+         <svg class="w-5 h-5 neon-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+        </div>
+        <div class="flex-1">
+         <p class="text-sm text-white font-medium">Vitrificação</p>
+         <p class="text-xs text-white/50">BMW X5 - Maria</p>
+        </div><span class="text-sm font-semibold neon-blue">R$ 1.200</span>
+       </div>
+       <div class="flex items-center gap-4 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
+        <div class="w-10 h-10 rounded-full gradient-neon flex items-center justify-center">
+         <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+        </div>
+        <div class="flex-1">
+         <p class="text-sm text-white font-medium">Higienização</p>
+         <p class="text-xs text-white/50">Corolla - Pedro</p>
+        </div><span class="text-sm font-semibold neon-green">R$ 280</span>
+       </div>
+       <div class="flex items-center gap-4 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
+        <div class="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center">
+         <svg class="w-5 h-5
+           </svg>
 </div>
-
-<button onclick="logout()" class="bg-red-500 mt-10 py-3 rounded-xl font-bold hover:bg-red-600 transition">
-Sair
-</button>
-
 </div>
-
-<!-- CONTEÚDO -->
-<div class="flex-1 p-10">
-
-<h2 class="text-3xl font-bold mb-8">Visão Geral</h2>
-
-<div class="grid grid-cols-3 gap-6">
-
-<div class="bg-zinc-900 p-6 rounded-xl">
-<h3 class="text-zinc-400">Clientes</h3>
-<p class="text-2xl font-bold mt-2">0</p>
-</div>
-
-<div class="bg-zinc-900 p-6 rounded-xl">
-<h3 class="text-zinc-400">Agendamentos Hoje</h3>
-<p class="text-2xl font-bold mt-2">0</p>
-</div>
-
-<div class="bg-zinc-900 p-6 rounded-xl">
-<h3 class="text-zinc-400">Saldo em Caixa</h3>
-<p class="text-2xl font-bold mt-2">R$ 0,00</p>
-</div>
-
-</div>
-
-<div class="mt-10">
-<button onclick="window.location.href='clientes.html'" class="bg-green-400 text-black px-6 py-3 rounded-xl font-bold hover:scale-105 transition">
-Novo Cliente
-</button>
-</div>
-
-</div>
-
 </div>
 
 <script>
@@ -101,4 +313,4 @@ window.location.href = "index.html";
 </script>
 
 </body>
-</html>
+         </html>
