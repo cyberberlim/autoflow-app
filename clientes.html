@@ -449,93 +449,52 @@
      </div>  
     </div>  
    </main>  
-  </div><!-- Modal Novo Cliente -->  
-  <div id="modalNovoCliente" class="modal-overlay">  
-   <div class="modal-content">  
-    <div class="flex items-center justify-between mb-6">  
-     <h2 class="font-display text-xl font-bold">Novo Atendimento</h2><button id="closeModal" class="p-2 rounded-lg hover:bg-white/10 transition-colors">  
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
-       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />  
-      </svg></button>  
-    </div>  
-    <form id="formNovoCliente" class="space-y-4">  
-     <div>  
-      <label for="clientName" class="block text-sm text-white/60 mb-2">Nome do Cliente</label> <input type="text" id="clientName" class="form-input" placeholder="Digite o nome do cliente" required>  
-     </div>  
-     <div>  
-      <label for="clientService" class="block text-sm text-white/60 mb-2">Serviço Realizado</label> <select id="clientService" class="form-select" required> <option value="">Selecione o serviço</option> <option value="Lavagem Simples" data-value="50">Lavagem Simples - R$ 50</option> <option value="Lavagem Detalhada" data-value="80">Lavagem Detalhada - R$ 80</option> <option value="Lavagem Completa" data-value="120">Lavagem Completa - R$ 120</option> <option value="Polimento" data-value="200">Polimento - R$ 200</option> <option value="Vitrificação" data-value="400">Vitrificação - R$ 400</option> <option value="Restauração de Farol" data-value="100">Restauração de Farol - R$ 100</option> <option value="Restauração de Plástico" data-value="80">Restauração de Plástico - R$ 80</option> <option value="Proteção de Motor" data-value="60">Proteção de Motor - R$ 60</option> <option value="Polimento de Rodas" data-value="150">Polimento de Rodas - R$ 150</option> </select>  
-     </div>  
-     <div>  
-      <label for="clientDate" class="block text-sm text-white/60 mb-2">Data do Atendimento</label> <input type="date" id="clientDate" class="form-input" required>  
-     <div class="glass-card p-6 rounded-xl">
-     </div>
-       
-<script>
-  // === ABRIR / FECHAR MODAL ===
-  const btnNovoCliente = document.getElementById('btnNovoCliente');
-  const modalNovoCliente = document.getElementById('modalNovoCliente');
-  const closeModal = document.getElementById('closeModal');
+          <!-- Modal Novo Cliente -->
+<div id="modalNovoCliente" class="modal-overlay">
+  <div class="modal-content">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="font-display text-xl font-bold">Novo Atendimento</h2>
+      <button id="closeModal" class="p-2 rounded-lg hover:bg-white/10 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
 
-  btnNovoCliente.addEventListener('click', () => {
-    modalNovoCliente.classList.add('active');
-  });
+    <form id="formNovoCliente" class="space-y-4">
+      <div>
+        <label for="clientName" class="block text-sm text-white/60 mb-2">Nome do Cliente</label>
+        <input type="text" id="clientName" class="form-input" placeholder="Digite o nome do cliente" required>
+      </div>
 
-  closeModal.addEventListener('click', () => {
-    modalNovoCliente.classList.remove('active');
-  });
+      <div>
+        <label for="clientService" class="block text-sm text-white/60 mb-2">Serviço Realizado</label>
+        <select id="clientService" class="form-select" required>
+          <option value="">Selecione o serviço</option>
+          <option value="Lavagem Simples" data-value="50">Lavagem Simples - R$ 50</option>
+          <option value="Lavagem Detalhada" data-value="80">Lavagem Detalhada - R$ 80</option>
+          <option value="Lavagem Completa" data-value="120">Lavagem Completa - R$ 120</option>
+          <option value="Polimento" data-value="200">Polimento - R$ 200</option>
+          <option value="Vitrificação" data-value="400">Vitrificação - R$ 400</option>
+          <option value="Restauração de Farol" data-value="100">Restauração de Farol - R$ 100</option>
+          <option value="Restauração de Plástico" data-value="80">Restauração de Plástico - R$ 80</option>
+          <option value="Proteção de Motor" data-value="60">Proteção de Motor - R$ 60</option>
+          <option value="Polimento de Rodas" data-value="150">Polimento de Rodas - R$ 150</option>
+        </select>
+      </div>
 
-  // Fecha clicando fora do modal
-  modalNovoCliente.addEventListener('click', (e) => {
-    if(e.target === modalNovoCliente) {
-      modalNovoCliente.classList.remove('active');
-    }
-  });
+      <div>
+        <label for="clientDate" class="block text-sm text-white/60 mb-2">Data do Atendimento</label>
+        <input type="date" id="clientDate" class="form-input" required>
+      </div>
 
-  // === FORMULÁRIO ===
-  const formNovoCliente = document.getElementById('formNovoCliente');
-  const clientsContainer = document.getElementById('clientsContainer');
-  const emptyState = document.getElementById('emptyState');
-  const totalClientes = document.getElementById('totalClientes');
-
-  let clientes = [];
-
-  formNovoCliente.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const nome = document.getElementById('clientName').value;
-    const servicoSelect = document.getElementById('clientService');
-    const servico = servicoSelect.value;
-    const data = document.getElementById('clientDate').value;
-
-    const novoCliente = { nome, servico, data };
-    clientes.push(novoCliente);
-
-    atualizarClientes();
-    modalNovoCliente.classList.remove('active');
-    formNovoCliente.reset();
-  });
-
-  // === ATUALIZAR LISTA ===
-  function atualizarClientes() {
-    totalClientes.textContent = clientes.length;
-
-    clientsContainer.innerHTML = '';
-
-    if(clientes.length === 0){
-      clientsContainer.appendChild(emptyState);
-    } else {
-      clientes.forEach(cliente => {
-        const card = document.createElement('div');
-        card.className = 'glass-card p-4 rounded-xl';
-        card.innerHTML = `
-          <h3 class="font-bold">${cliente.nome}</h3>
-          <p>${cliente.servico}</p>
-          <p class="text-sm text-white/50">${cliente.data}</p>
-        `;
-        clientsContainer.appendChild(card);
-      });
-    }
-  }
-</script>
-</body>
-     </html>
+      <!-- Botão dentro do form -->
+      <button type="submit" class="btn-neon px-6 py-3 rounded-xl flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Cadastrar Cliente
+      </button>
+    </form>
+  </div>
+</div>
