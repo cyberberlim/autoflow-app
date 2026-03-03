@@ -1,109 +1,195 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Clientes - AUTOFLOW</title>
-<script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AUTOFLOW | Clientes</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(145deg, #000000, #0a0a0f);
+      color: #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 40px;
+    }
+
+    h1 {
+      font-weight: 600;
+      font-size: 2rem;
+      color: #00ff99;
+      letter-spacing: 1px;
+      margin-bottom: 30px;
+    }
+
+    .card-cadastro {
+      background: rgba(20, 20, 25, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      padding: 30px;
+      width: 100%;
+      max-width: 600px;
+      backdrop-filter: blur(10px);
+      margin-bottom: 50px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card-cadastro:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 25px rgba(0, 255, 153, 0.15);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-bottom: 6px;
+    }
+
+    input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 0.95rem;
+      transition: border 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #00ff99;
+    }
+
+    .btn {
+      background: #00ff99;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #00e68a;
+      transform: scale(1.03);
+    }
+
+    .clientes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .cliente-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(12px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cliente-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 25px rgba(0, 255, 153, 0.15);
+    }
+
+    .cliente-nome {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .cliente-info {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-bottom: 6px;
+    }
+
+    .cliente-valor {
+      color: #00ff99;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .cliente-card {
+      animation: fadeIn 0.6s ease forwards;
+    }
+  </style>
 </head>
+<body>
+  <h1>AUTOFLOW — Clientes</h1>
 
-<body class="bg-gradient-to-br from-black via-zinc-900 to-black text-white min-h-screen">
-
-<div class="flex">
-
-<!-- Sidebar -->
-<div class="w-64 bg-zinc-900 min-h-screen p-6">
-  <h2 class="text-2xl font-bold text-green-400 mb-10">AUTOFLOW</h2>
-
-  <div class="space-y-4">
-    <a href="dashboard.html" class="block hover:text-green-400">Dashboard</a>
-    <a href="clientes.html" class="block text-green-400 font-bold">Clientes</a>
-    <a href="agendamento.html" class="block hover:text-green-400">Agendamentos</a>
-    <a href="caixa.html" class="block hover:text-green-400">Financeiro</a>
-    <a href="produtos.html" class="block hover:text-green-400">Produtos</a>
-    <a href="relatorios.html" class="block hover:text-green-400">Relatórios</a>
-    <a href="config.html" class="block hover:text-green-400">Configurações</a>
+  <div class="card-cadastro">
+    <div class="form-group">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" placeholder="Digite o nome do cliente">
+    </div>
+    <div class="form-group">
+      <label for="veiculo">Veículo</label>
+      <input type="text" id="veiculo" placeholder="Ex: Honda Civic 2022">
+    </div>
+    <div class="form-group">
+      <label for="servico">Serviço</label>
+      <input type="text" id="servico" placeholder="Ex: Polimento técnico">
+    </div>
+    <div class="form-group">
+      <label for="valor">Valor</label>
+      <input type="text" id="valor" placeholder="Ex: R$ 450,00">
+    </div>
+    <div class="form-group">
+      <label for="data">Data</label>
+      <input type="date" id="data">
+    </div>
+    <button class="btn">Cadastrar Cliente</button>
   </div>
 
-  <a href="index.html" class="block mt-10 bg-gradient-to-r from-green-400 to-cyan-400 text-black text-center py-2 rounded font-bold">
-    Logout
-  </a>
-</div>
+  <div class="clientes-grid">
+    <div class="cliente-card">
+      <div class="cliente-nome">João Silva</div>
+      <div class="cliente-info">Veículo: BMW X1</div>
+      <div class="cliente-info">Serviço: Higienização interna</div>
+      <div class="cliente-valor">Valor: R$ 350,00</div>
+      <div class="cliente-info">Último atendimento: 15/02/2026</div>
+    </div>
 
-<!-- Conteúdo -->
-<div class="flex-1 p-10">
+    <div class="cliente-card">
+      <div class="cliente-nome">Maria Oliveira</div>
+      <div class="cliente-info">Veículo: Audi A3</div>
+      <div class="cliente-info">Serviço: Vitrificação</div>
+      <div class="cliente-valor">Valor: R$ 800,00</div>
+      <div class="cliente-info">Último atendimento: 10/02/2026</div>
+    </div>
 
-<h1 class="text-3xl font-bold mb-6">Cadastro de Clientes</h1>
-
-<div class="bg-zinc-900 p-6 rounded mb-6 space-y-4">
-  <input id="nome" placeholder="Nome do Cliente" class="p-3 bg-zinc-800 rounded w-full">
-  <input id="veiculo" placeholder="Veículo" class="p-3 bg-zinc-800 rounded w-full">
-  <button onclick="salvarCliente()" class="bg-green-400 text-black px-6 py-3 rounded font-bold w-full">
-    Salvar Cliente
-  </button>
-</div>
-
-<h2 class="text-xl font-bold mb-4">Lista de Clientes</h2>
-
-<ul id="listaClientes" class="space-y-3"></ul>
-
-</div>
-</div>
-
-<script>
-function salvarCliente(){
-  let nome = document.getElementById("nome").value;
-  let veiculo = document.getElementById("veiculo").value;
-
-  if(!nome || !veiculo){
-    alert("Preencha todos os campos");
-    return;
-  }
-
-  let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-
-  clientes.push({nome, veiculo});
-
-  localStorage.setItem("clientes", JSON.stringify(clientes));
-
-  document.getElementById("nome").value = "";
-  document.getElementById("veiculo").value = "";
-
-  mostrarClientes();
-}
-
-function removerCliente(index){
-  let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-
-  clientes.splice(index, 1);
-
-  localStorage.setItem("clientes", JSON.stringify(clientes));
-
-  mostrarClientes();
-}
-
-function mostrarClientes(){
-  let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-  let lista = document.getElementById("listaClientes");
-  lista.innerHTML = "";
-
-  clientes.forEach((cliente, index)=>{
-    lista.innerHTML += `
-      <li class="bg-zinc-900 p-4 rounded flex justify-between items-center">
-        <div>
-          <p class="font-bold">${cliente.nome}</p>
-          <p class="text-zinc-400">${cliente.veiculo}</p>
-        </div>
-        <button onclick="removerCliente(${index})"
-          class="bg-red-500 px-3 py-1 rounded text-white">
-          Remover
-        </button>
-      </li>
-    `;
-  });
-}
-
-mostrarClientes();
-</script>
-
+    <div class="cliente-card">
+      <div class="cliente-nome">Carlos Mendes</div>
+      <div class="cliente-info">Veículo: Toyota Corolla</div>
+      <div class="cliente-info">Serviço: Polimento técnico</div>
+      <div class="cliente-valor">Valor: R$ 500,00</div>
+      <div class="cliente-info">Último atendimento: 20/01/2026</div>
+    </div>
+  </div>
 </body>
 </html>
+```  
+---
