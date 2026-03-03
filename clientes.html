@@ -1,488 +1,175 @@
 <!doctype html>
-<html lang="pt-BR" class="h-full">
- <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clientes - AUTOFLOW</title>
-  <script src="/_sdk/element_sdk.js"></script>
-  <script src="/_sdk/data_sdk.js"></script>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0a0a0a 0%, #111111 50%, #0d0d0d 100%);
-      color: #fff;
-      overflow-x: hidden;
-    }
-    .font-display { font-family: 'Space Grotesk', sans-serif; }
-    
-    .gradient-text {
-      background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-    
-    .logo-container {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-    
-    .logo-text {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .logo-subtitle {
-      font-size: 0.625rem;
-      letter-spacing: 1px;
-      color: rgba(0, 255, 136, 0.6);
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-    
-    .glass {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    
-    .glass-card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .glass-card:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(0, 255, 136, 0.3);
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 255, 136, 0.1);
-    }
-    
-    .btn-neon {
-      background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
-      color: #000;
-      font-weight: 600;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .btn-neon::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.2);
-      transition: left 0.4s ease;
-    }
-    
-    .btn-neon:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 212, 255, 0.3);
-    }
-    
-    .btn-neon:hover::before {
-      left: 100%;
-    }
-    
-    .btn-neon:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 15px rgba(0, 255, 136, 0.4);
-    }
-    
-    .btn-neon:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-    
-    .sidebar-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.875rem 1rem;
-      border-radius: 0.75rem;
-      color: rgba(255, 255, 255, 0.6);
-      transition: all 0.2s ease;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    
-    .sidebar-item:hover {
-      background: rgba(255, 255, 255, 0.05);
-      color: #fff;
-    }
-    
-    .sidebar-item.active {
-      background: rgba(0, 255, 136, 0.1);
-      color: #00ff88;
-      border: 1px solid rgba(0, 255, 136, 0.2);
-    }
-    
-    .neon-icon {
-      color: #00ff88;
-      filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.5));
-    }
-    
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(8px);
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-    }
-    
-    .modal-overlay.active {
-      display: flex;
-    }
-    
-    .modal-content {
-      background: linear-gradient(135deg, #1a1a1a 0%, #111111 100%);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 1.5rem;
-      padding: 2rem;
-      max-width: 500px;
-      width: 90%;
-      max-height: 90%;
-      overflow-y: auto;
-      animation: modalSlideIn 0.3s ease;
-    }
-    
-    @keyframes modalSlideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-20px) scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-    
-    .form-input {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 0.75rem;
-      padding: 0.875rem 1rem;
-      color: #fff;
-      font-size: 0.95rem;
-      transition: all 0.2s ease;
-    }
-    
-    .form-input:focus {
-      outline: none;
-      border-color: rgba(0, 255, 136, 0.5);
-      box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
-    }
-    
-    .form-select {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 0.75rem;
-      padding: 0.875rem 1rem;
-      color: #fff;
-      font-size: 0.95rem;
-      cursor: pointer;
-    }
-    
-    .form-select option {
-      background: #1a1a1a;
-      color: #fff;
-    }
-    
-    .delete-btn {
-      background: rgba(255, 59, 48, 0.1);
-      border: 1px solid rgba(255, 59, 48, 0.3);
-      color: #ff3b30;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    .delete-btn:hover {
-      background: rgba(255, 59, 48, 0.2);
-    }
-    
-    .delete-btn.confirm {
-      background: #ff3b30;
-      color: #fff;
-    }
-    
-    .service-badge {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      background: rgba(0, 212, 255, 0.15);
-      color: #00d4ff;
-      border: 1px solid rgba(0, 212, 255, 0.3);
-    }
-    
-    .value-display {
-      color: #00ff88;
-      font-weight: 700;
-      font-size: 1.25rem;
-      text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
-    }
-    
-    .empty-state {
-      text-align: center;
-      padding: 4rem 2rem;
-      color: rgba(255, 255, 255, 0.4);
-    }
-    
-    .loading-spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(0, 0, 0, 0.3);
-      border-radius: 50%;
-      border-top-color: #000;
-      animation: spin 0.8s linear infinite;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    
-    .toast {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      padding: 1rem 1.5rem;
-      border-radius: 0.75rem;
-      background: rgba(255, 59, 48, 0.9);
-      color: #fff;
-      font-weight: 500;
-      z-index: 200;
-      animation: toastSlide 0.3s ease;
-    }
-    
-    .toast.success {
-      background: rgba(0, 255, 136, 0.9);
-      color: #000;
-    }
-    
-    @keyframes toastSlide {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .sidebar {
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-      }
-      .sidebar.open {
-        transform: translateX(0);
-      }
-      .main-content {
-        margin-left: 0 !important;
-      }
-      .mobile-menu-btn {
-        display: flex !important;
-      }
-    }
+<html lang="pt-BR" class="h-full">    
+<head>    
+  <meta charset="UTF-8">    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+  <title>Clientes - AUTOFLOW</title>    
+  <script src="/_sdk/element_sdk.js"></script>    
+  <script src="/_sdk/data_sdk.js"></script>    
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>    
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">    
+  <style>    
+    * { box-sizing: border-box; }    
+    html, body { height: 100%; margin: 0; padding: 0; }    
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0a0a0a 0%, #111111 50%, #0d0d0d 100%); color: #fff; overflow-x: hidden; }    
+    .font-display { font-family: 'Space Grotesk', sans-serif; }  
+    .gradient-text { background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 800; letter-spacing: -0.5px; }  
+    .logo-container { display: flex; flex-direction: column; gap: 0.25rem; }  
+    .logo-text { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }  
+    .logo-subtitle { font-size: 0.625rem; letter-spacing: 1px; color: rgba(0, 255, 136, 0.6); text-transform: uppercase; font-weight: 600; }  
+    .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }  
+    .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }  
+    .glass-card:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(0, 255, 136, 0.3); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 255, 136, 0.1); }  
+    .btn-neon { background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%); color: #000; font-weight: 600; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3); position: relative; overflow: hidden; }  
+    .btn-neon::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.2); transition: left 0.4s ease; }  
+    .btn-neon:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 212, 255, 0.3); }  
+    .btn-neon:hover::before { left: 100%; }  
+    .btn-neon:active { transform: translateY(0); box-shadow: 0 2px 15px rgba(0, 255, 136, 0.4); }  
+    .btn-neon:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }  
+    .sidebar-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.875rem 1rem; border-radius: 0.75rem; color: rgba(255, 255, 255, 0.6); transition: all 0.2s ease; text-decoration: none; cursor: pointer; }  
+    .sidebar-item:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }  
+    .sidebar-item.active { background: rgba(0, 255, 136, 0.1); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.2); }  
+    .neon-icon { color: #00ff88; filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.5)); }  
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); justify-content: center; align-items: center; z-index: 100; }  
+    .modal-overlay.active { display: flex; }  
+    .modal-content { background: linear-gradient(135deg, #1a1a1a 0%, #111111 100%); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.5rem; padding: 2rem; max-width: 500px; width: 90%; max-height: 90%; overflow-y: auto; animation: modalSlideIn 0.3s ease; }  
+    @keyframes modalSlideIn { from { opacity: 0; transform: translateY(-20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }  
+    .form-input { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.75rem; padding: 0.875rem 1rem; color: #fff; font-size: 0.95rem; transition: all 0.2s ease; }  
+    .form-input:focus { outline: none; border-color: rgba(0, 255, 136, 0.5); box-shadow: 0 0 20px rgba(0, 255, 136, 0.1); }  
+    .form-select { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.75rem; padding: 0.875rem 1rem; color: #fff; font-size: 0.95rem; cursor: pointer; }  
+    .form-select option { background: #1a1a1a; color: #fff; }  
+    .empty-state { text-align: center; padding: 4rem 2rem; color: rgba(255, 255, 255, 0.4); }  
   </style>
-  <style>body { box-sizing: border-box; }</style>
- </head>
- <body class="h-full">
+</head>
+<body class="h-full">
   <div class="flex h-full w-full">
-   <!-- Sidebar -->
-   <aside class="sidebar w-64 glass fixed left-0 top-0 h-full flex flex-col z-50">
-    <div class="p-6 border-b border-white/5">
-     <div class="logo-container">
-      <div class="logo-text">
-       AUTOFLOW
+    <!-- Sidebar -->
+    <!-- [SEU HTML DA SIDEBAR AQUI] -->
+    <!-- Main Content -->
+    <main class="main-content flex-1 ml-64 p-8 overflow-y-auto h-full">
+      <!-- Header e Cards -->
+      <!-- [SEU HTML DOS CARDS E HISTÓRICO AQUI] -->
+
+      <!-- Clients Grid -->
+      <div id="clientsContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div id="emptyState" class="col-span-full empty-state">
+          <svg class="w-16 h-16 mx-auto mb-4 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <p class="text-lg font-medium mb-2">Nenhum cliente cadastrado</p>
+          <p class="text-sm">Clique em "Novo Cliente" para adicionar o primeiro atendimento</p>
+        </div>
       </div>
-      <div class="logo-subtitle">
-       Sistema de Gestão
-      </div>
-     </div>
-    </div>
-    <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-    <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-  <a href="index.html" class="sidebar-item" data-page="dashboard">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-    </svg> Dashboard
-  </a>
-  <a href="clientes.html" class="sidebar-item active" data-page="clientes">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-    </svg> Clientes
-  </a>
-  <a href="agendamentos.html" class="sidebar-item" data-page="agendamentos">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-    </svg> Agendamentos
-  </a>
-  <a href="caixa.html" class="sidebar-item" data-page="caixa">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-    </svg> Caixa
-  </a>
-  <a href="produtos.html" class="sidebar-item" data-page="produtos">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-    </svg> Produtos
-  </a>
-  <a href="estoque.html" class="sidebar-item" data-page="estoque">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-    </svg> Estoque
-  </a>
-  <a href="relatorios.html" class="sidebar-item" data-page="relatorios">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-    </svg> Relatórios
-  </a>
-  <a href="configuracoes.html" class="sidebar-item" data-page="configuracoes">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg> Configurações
-  </a>
-    </nav>
-    <div class="p-4 border-t border-white/5">
-     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-cyan-400 flex items-center justify-center text-black font-bold">
-       A
-      </div>
-      <div>
-       <p class="text-sm font-medium">Admin</p>
-       <p class="text-xs text-white/40">Gerente</p>
-      </div>
-     </div>
-    </div>
-   </aside><!-- Mobile Menu Button --> <button class="mobile-menu-btn hidden fixed top-4 left-4 z-50 p-2 rounded-lg glass" id="mobileMenuBtn">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-    </svg></button> <!-- Main Content -->
-   <main class="main-content flex-1 ml-64 p-8 overflow-y-auto h-full">
-    <!-- Header -->
-    <header class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-     <div>
-      <h1 id="pageTitle" class="font-display text-3xl font-bold">Clientes</h1>
-      <p class="text-white/50 mt-1">Gerencie seus clientes e serviços realizados</p>
-     </div><button id="btnNovoCliente" class="btn-neon px-6 py-3 rounded-xl flex items-center gap-2">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-      </svg> Novo Cliente </button>
-    </header><!-- Stats Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-     <div class="glass-card rounded-2xl p-5">
-      <div class="flex items-center justify-between mb-3">
-       <span class="text-white/50 text-sm">Total de Clientes</span>
-       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-400/20 to-cyan-400/20 flex items-center justify-center">
-        <svg class="w-5 h-5 neon-icon" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-       </div>
-      </div>
-      <p id="totalClientes" class="text-3xl font-bold gradient-text">0</p>
-     </div>
-     <div class="glass-card rounded-2xl p-5">
-      <div class="flex items-center justify-between mb-3">
-       <span class="text-white/50 text-sm">Atendimentos Hoje</span>
-       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400/20 to-purple-400/20 flex items-center justify-center">
-        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-       </div>
-      </div>
-      <p id="atendimentosHoje" class="text-3xl font-bold text-blue-400">0</p>
-     </div>
-     <div class="glass-card rounded-2xl p-5">
-      <div class="flex items-center justify-between mb-3">
-       <span class="text-white/50 text-sm">Receita Total</span>
-       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-400/20 to-emerald-400/20 flex items-center justify-center">
-        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-       </div>
-      </div>
-      <p id="receitaTotal" class="text-3xl font-bold text-green-400">R$ 0</p>
-     </div>
-     <div class="glass-card rounded-2xl p-5">
-      <div class="flex items-center justify-between mb-3">
-       <span class="text-white/50 text-sm">Serviço Mais Popular</span>
-       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400/20 to-orange-400/20 flex items-center justify-center">
-        <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-        </svg>
-       </div>
-      </div>
-      <p id="servicoPopular" class="text-lg font-bold text-yellow-400">-</p>
-     </div>
-    </div><!-- Clients Grid -->
-    <div class="mb-4">
-     <h2 class="font-display text-xl font-semibold mb-4">Histórico de Atendimentos</h2>
-    </div>
-    <div id="clientsContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-     <!-- Empty State -->
-     <div id="emptyState" class="col-span-full empty-state">
-      <svg class="w-16 h-16 mx-auto mb-4 text-white/20" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-      <p class="text-lg font-medium mb-2">Nenhum cliente cadastrado</p>
-      <p class="text-sm">Clique em "Novo Cliente" para adicionar o primeiro atendimento</p>
-     </div>
-    </div>
-   </main>
-  </div><!-- Modal Novo Cliente -->
+    </main>
+  </div>
+
+  <!-- Modal Novo Cliente -->
   <div id="modalNovoCliente" class="modal-overlay">
-   <div class="modal-content">
-    <div class="flex items-center justify-between mb-6">
-     <h2 class="font-display text-xl font-bold">Novo Atendimento</h2><button id="closeModal" class="p-2 rounded-lg hover:bg-white/10 transition-colors">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-      </svg></button>
+    <div class="modal-content">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="font-display text-xl font-bold">Novo Atendimento</h2>
+        <button id="closeModal" class="p-2 rounded-lg hover:bg-white/10 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form id="formNovoCliente" class="space-y-4">
+        <div>
+          <label for="clientName" class="block text-sm text-white/60 mb-2">Nome do Cliente</label>
+          <input type="text" id="clientName" class="form-input" placeholder="Digite o nome do cliente" required>
+        </div>
+        <div>
+          <label for="clientService" class="block text-sm text-white/60 mb-2">Serviço Realizado</label>
+          <select id="clientService" class="form-select" required>
+            <option value="">Selecione o serviço</option>
+            <option value="Lavagem Simples" data-value="50">Lavagem Simples - R$ 50</option>
+            <option value="Lavagem Detalhada" data-value="80">Lavagem Detalhada - R$ 80</option>
+            <option value="Lavagem Completa" data-value="120">Lavagem Completa - R$ 120</option>
+            <option value="Polimento" data-value="200">Polimento - R$ 200</option>
+          </select>
+        </div>
+        <div>
+          <label for="clientDate" class="block text-sm text-white/60 mb-2">Data do Atendimento</label>
+          <input type="date" id="clientDate" class="form-input" required>
+        </div>
+        <button type="submit" class="btn-neon px-6 py-3 rounded-xl w-full">Adicionar</button>
+      </form>
     </div>
-    <form id="formNovoCliente" class="space-y-4">
-     <div>
-      <label for="clientName" class="block text-sm text-white/60 mb-2">Nome do Cliente</label> <input type="text" id="clientName" class="form-input" placeholder="Digite o nome do cliente" required>
-     </div>
-     <div>
-      <label for="clientService" class="block text-sm text-white/60 mb-2">Serviço Realizado</label> <select id="clientService" class="form-select" required> <option value="">Selecione o serviço</option> <option value="Lavagem Simples" data-value="50">Lavagem Simples - R$ 50</option> <option value="Lavagem Detalhada" data-value="80">Lavagem Detalhada - R$ 80</option> <option value="Lavagem Completa" data-value="120">Lavagem Completa - R$ 120</option> <option value="Polimento" data-value="200">Polimento - R$ 200</option> <option value="Vitrificação" data-value="400">Vitrificação - R$ 400</option> <option value="Restauração de Farol" data-value="100">Restauração de Farol - R$ 100</option> <option value="Restauração de Plástico" data-value="80">Restauração de Plástico - R$ 80</option> <option value="Proteção de Motor" data-value="60">Proteção de Motor - R$ 60</option> <option value="Polimento de Rodas" data-value="150">Polimento de Rodas - R$ 150</option> </select>
-     </div>
-     <div>
-      <label for="clientDate" class="block text-sm text-white/60 mb-2">Data do Atendimento</label> <input type="date" id="clientDate" class="form-input" required>
-     </div>
-     <div class="glass-card
+  </div>
+
+  <!-- SCRIPT FUNCIONAL -->
+  <script>
+    const btnNovoCliente = document.getElementById('btnNovoCliente');
+    const modalNovoCliente = document.getElementById('modalNovoCliente');
+    const closeModal = document.getElementById('closeModal');
+    const formNovoCliente = document.getElementById('formNovoCliente');
+    const clientsContainer = document.getElementById('clientsContainer');
+    const emptyState = document.getElementById('emptyState');
+
+    const totalClientesEl = document.getElementById('totalClientes');
+    const atendimentosHojeEl = document.getElementById('atendimentosHoje');
+    const receitaTotalEl = document.getElementById('receitaTotal');
+    const servicoPopularEl = document.getElementById('servicoPopular');
+
+    let clientes = [];
+
+    btnNovoCliente.addEventListener('click', () => modalNovoCliente.classList.add('active'));
+    closeModal.addEventListener('click', () => modalNovoCliente.classList.remove('active'));
+
+    formNovoCliente.addEventListener('submit', e => {
+      e.preventDefault();
+      const nome = document.getElementById('clientName').value;
+      const servicoSelect = document.getElementById('clientService');
+      const servico = servicoSelect.value;
+      const valor = parseFloat(servicoSelect.selectedOptions[0].dataset.value || 0);
+      const data = document.getElementById('clientDate').value;
+
+      const cliente = { nome, servico, valor, data };
+      clientes.push(cliente);
+
+      renderClientes();
+      updateStats();
+      formNovoCliente.reset();
+      modalNovoCliente.classList.remove('active');
+    });
+
+    function renderClientes() {
+      clientsContainer.innerHTML = '';
+      if (clientes.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+      }
+      emptyState.style.display = 'none';
+      clientes.forEach((c) => {
+        const card = document.createElement('div');
+        card.className = 'glass-card rounded-2xl p-5';
+        card.innerHTML = `
+          <h3 class="font-bold text-lg mb-2">${c.nome}</h3>
+          <p class="text-white/70 mb-1">Serviço: ${c.servico}</p>
+          <p class="text-white/70 mb-1">Valor: R$ ${c.valor}</p>
+          <p class="text-white/70 mb-1">Data: ${c.data}</p>
+        `;
+        clientsContainer.appendChild(card);
+      });
+    }
+
+    function updateStats() {
+      totalClientesEl.textContent = clientes.length;
+      const hoje = new Date().toISOString().slice(0,10);
+      const atendimentosHoje = clientes.filter(c => c.data === hoje).length;
+      atendimentosHojeEl.textContent = atendimentosHoje;
+      const receitaTotal = clientes.reduce((sum, c) => sum + c.valor, 0);
+      receitaTotalEl.textContent = `R$ ${receitaTotal}`;
+      const freq = {};
+      clientes.forEach(c => freq[c.servico] = (freq[c.servico] || 0) + 1);
+      let popular = '-';
+      let max = 0;
+      for (const serv in freq) {
+        if (freq[serv] > max) { max = freq[serv]; popular = serv; }
+      }
+      servicoPopularEl.textContent = popular;
+    }
+  </script>
+</body>
+</html>
