@@ -313,102 +313,144 @@
     </div>
    </div>
   </div>
- <script>
-// === Configuração ===
-let clients = [];
+<script>
+  // === Configuração inicial ===
+  let clients = [];
+  const clientsContainer = document.getElementById('clients-grid');
+  const emptyState = document.getElementById('empty-card');
+  const totalCounter = document.getElementById('total-clients');
+  const form = document.getElementById('client-form');
+  const modal = document.getElementById('modal');
+  const btnNovoCliente = document.getElementById('btn-new-client');
+  const closeModalButtons = document.querySelectorAll('[onclick="closeModal()"]');
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toast-message');
 
-// === Seleção de elementos ===
-const btnNovoCliente = document.getElementById('btn-new-client');
-const modal = document.getElementById('modal');
-const closeModalButtons = document.querySelectorAll('[onclick="closeModal()"]');
-const form = document.getElementById('client-form');
-const clientName = document.getElementById('client-name');
-const clientService = document.getElementById('client-service');
-const clientValue = document.getElementById('client-value');
-const clientDate = document.getElementById('client-date');
-const clientsContainer = document.getElementById('clients-grid');
-const emptyState = document.getElementById('empty-card');
-const toast = document.getElementById('toast');
-const toastMessage = document.getElementById('toast-message');
+  const clientName = document.getElementById('client-name');
+  const clientService = document.getElementById('client-service');
+  const clientValue = document.getElementById('client-value');
+  const clientDate = document.getElementById('client-date');
 
-// === Funções modal ===
-function openModal() { modal.classList.remove('hidden'); }
-function closeModal() { modal.classList.add('hidden'); }
+  let editingIndex = null; // controla edição de cliente
 
-btnNovoCliente.addEventListener('click', openModal);
-closeModalButtons.forEach(btn => btn.addEventListener('click', closeModal));
-modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
-
-// === Função toast ===
-function showToast(message) {
-  if(!toast || !toastMessage) return;
-  toastMessage.textContent = message;
-  toast.classList.remove('hidden');
-  setTimeout(() => toast.classList.add('hidden'), 3000);
-}
-
-// === LocalStorage ===
-function saveClients() {
-  localStorage.setItem('clients', JSON.stringify(clients));
-}
-
-function loadClients() {
-  const stored = localStorage.getItem('clients');
-  if(stored) clients = JSON.parse(stored);
-}
-
-// === Contador de clientes ===
-function atualizarContador() {
-  const contador = document.getElementById('total-clientes');
-  if (contador) contador.textContent = clients.length;
-}
-
-// === Atualizar grid de clientes ===
-function atualizarClientes() {
-  if(!clientsContainer) return;
-
-  clientsContainer.innerHTML = '';
-
-  if(clients.length === 0) {
-    if(emptyState) clientsContainer.appendChild(emptyState);
-  } else {
-    clients.forEach(c => {
-      const card = document.createElement('div');
-      card.className = 'glass-card p-6 rounded-2xl glass-card-hover cursor-pointer';
-      card.innerHTML = `
-        <h3 class="font-bold text-white text-lg">${c.nome}</h3>
-        <p class="text-white/70 mt-1">${c.servico}</p>
-        <p class="text-emerald-400 font-semibold mt-1">R$ ${parseFloat(c.valor).toFixed(2)}</p>
-        <p class="text-sm text-white/50 mt-1">${c.data}</p>
-      `;
-      clientsContainer.appendChild(card);
-    });
+  // === Modal ===
+  function openModal() { modal.classList.remove('hidden'); }
+  function closeModal() { 
+    modal.classList.add('hidden'); 
+    editingIndex = null; 
+    form.reset(); 
   }
 
-  atualizarContador(); // atualiza contador toda vez que o grid muda
-}
+  btnNovoCliente.addEventListener('click', openModal);
+  closeModalButtons.forEach(btn => btn.addEventListener('click', closeModal));
+  modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
 
-// === Cadastro de cliente ===
-form.addEventListener('submit', e => {
-  e.preventDefault();
+  // === Toast ===
+  function showToast(msg) {
+    toastMessage.textContent = msg;
+    toast.classList.remove('hidden');
+    setTimeout(() => toast.classList.add('hidden'), 3000);
+  }
 
-  const nome = clientName.value.trim();
-  const servico = clientService.value.trim();
-  const valor = clientValue.value.trim();
-  const data = clientDate.value;
+  // === LocalStorage ===
+  function saveClients() {
+    localStorage.setItem('clients', JSON.stringify(clients));
+  }
 
-  if(!nome || !servico || !valor || !data) return;
+  function loadClients() {
+    const stored = localStorage.getItem('clients');
+    if(stored) clients = JSON.parse(stored);
+  }
 
-  const newClient = { nome, servico, valor, data };
-  clients.push(newClient);
-  saveClients(); // salva no localStorage
+  // === Atualiza contador ===
+  function atualizarContador() {
+    if(totalCounter) totalCounter.textContent = clients.length;
+  }
+
+  // === Atualiza grid ===
+  function atualizarClientes() {
+    clientsContainer.innerHTML = '';
+    if(clients.length === 0) {
+      if(emptyState) clientsContainer.appendChild(emptyState);
+    } else {
+      clients.forEach((c, index) => {
+        const card = document.createElement('div');
+        card.className = 'glass-card p-6 rounded-2xl glass-card-hover cursor-pointer relative';
+        card.innerHTML = `
+          <h3 class="font-bold text-white text-lg">${c.nome}</h3>
+          <p class="text-white/70 mt-1">${c.servico}</p>
+          <p class="text-emerald-400 font-semibold mt-1">R$ ${parseFloat(c.valor).toFixed(2)}</p>
+          <p class="text-sm text-white/50 mt-1">${c.data}</p>
+          <div class="absolute top-2 right-2 flex gap-2">
+            <button data-edit="${index}" class="text-blue-400 hover:text-blue-600" title="Editar">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M16 3a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2h10z"/>
+              </svg>
+            </button>
+            <button data-delete="${index}" class="text-red-400 hover:text-red-600" title="Excluir">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3"/>
+              </svg>
+            </button>
+          </div>
+        `;
+        clientsContainer.appendChild(card);
+      });
+    }
+    atualizarContador();
+  }
+
+  // === Adicionar / Editar Cliente ===
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const nome = clientName.value.trim();
+    const servico = clientService.value;
+    const valor = clientValue.value;
+    const data = clientDate.value;
+
+    if(!nome || !servico || !valor || !data) return;
+
+    if(editingIndex !== null) {
+      // Editando cliente
+      clients[editingIndex] = { nome, servico, valor, data };
+      showToast('Cliente atualizado!');
+    } else {
+      // Novo cliente
+      clients.push({ nome, servico, valor, data });
+      showToast('Cliente cadastrado!');
+    }
+
+    saveClients();
+    atualizarClientes();
+    closeModal();
+  });
+
+  // === Eventos de editar / apagar ===
+  clientsContainer.addEventListener('click', e => {
+    const editBtn = e.target.closest('button[data-edit]');
+    const deleteBtn = e.target.closest('button[data-delete]');
+
+    if(editBtn) {
+      const idx = parseInt(editBtn.getAttribute('data-edit'));
+      editingIndex = idx;
+      const c = clients[idx];
+      clientName.value = c.nome;
+      clientService.value = c.servico;
+      clientValue.value = c.valor;
+      clientDate.value = c.data;
+      openModal();
+    }
+
+    if(deleteBtn) {
+      const idx = parseInt(deleteBtn.getAttribute('data-delete'));
+      clients.splice(idx, 1);
+      saveClients();
+      atualizarClientes();
+      showToast('Cliente removido!');
+    }
+  });
+
+  // === Inicialização ===
+  loadClients();
   atualizarClientes();
-  closeModal();
-  showToast('Cliente cadastrado!');
-  form.reset();
-});
-
-// === Inicialização ===
-loadClients(); // carrega clientes do localStorage
-atualizarClientes(); // monta grid e contador
- </script>
+</script>
