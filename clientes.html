@@ -313,7 +313,7 @@
     </div>
    </div>
   </div>
-     <script>
+ <script>
 // === Configuração ===
 let clients = [];
 
@@ -341,27 +341,36 @@ modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
 
 // === Função toast ===
 function showToast(message) {
+  if(!toast || !toastMessage) return;
   toastMessage.textContent = message;
   toast.classList.remove('hidden');
   setTimeout(() => toast.classList.add('hidden'), 3000);
 }
 
-// === Salvar clientes no localStorage ===
+// === LocalStorage ===
 function saveClients() {
   localStorage.setItem('clients', JSON.stringify(clients));
 }
 
-// === Carregar clientes do localStorage ===
 function loadClients() {
   const stored = localStorage.getItem('clients');
   if(stored) clients = JSON.parse(stored);
 }
 
+// === Contador de clientes ===
+function atualizarContador() {
+  const contador = document.getElementById('total-clientes');
+  if (contador) contador.textContent = clients.length;
+}
+
 // === Atualizar grid de clientes ===
 function atualizarClientes() {
+  if(!clientsContainer) return;
+
   clientsContainer.innerHTML = '';
+
   if(clients.length === 0) {
-    clientsContainer.appendChild(emptyState);
+    if(emptyState) clientsContainer.appendChild(emptyState);
   } else {
     clients.forEach(c => {
       const card = document.createElement('div');
@@ -375,43 +384,14 @@ function atualizarClientes() {
       clientsContainer.appendChild(card);
     });
   }
-  atualizarContador();
+
+  atualizarContador(); // atualiza contador toda vez que o grid muda
 }
 
-// === Contador de clientes ===
-function atualizarContador() {
-  const contador = document.getElementById('total-clientes');
-  if (contador) contador.textContent = clients.length;
-}
-
-// === Chamar o contador sempre que a lista mudar ===
-// Exemplo: depois de adicionar um cliente
+// === Cadastro de cliente ===
 form.addEventListener('submit', e => {
   e.preventDefault();
 
-  const nome = clientName.value.trim();
-  const servico = clientService.value;
-  const valor = clientValue.value;
-  const data = clientDate.value;
-
-  if (!nome || !servico || !valor || !data) return;
-
-  const newClient = { nome, servico, valor, data };
-  clients.push(newClient);
-
-  atualizarClientes();
-  atualizarContador(); // ✅ Atualiza o total
-  closeModal();
-  showToast('Cliente cadastrado!');
-  form.reset();
-});
-
-// Chamar ao carregar a página, caso já existam clientes
-atualizarContador();
-
-// === Formulário ===
-form.addEventListener('submit', e => {
-  e.preventDefault();
   const nome = clientName.value.trim();
   const servico = clientService.value.trim();
   const valor = clientValue.value.trim();
@@ -419,8 +399,9 @@ form.addEventListener('submit', e => {
 
   if(!nome || !servico || !valor || !data) return;
 
-  clients.push({ nome, servico, valor, data });
-  saveClients();
+  const newClient = { nome, servico, valor, data };
+  clients.push(newClient);
+  saveClients(); // salva no localStorage
   atualizarClientes();
   closeModal();
   showToast('Cliente cadastrado!');
@@ -428,7 +409,6 @@ form.addEventListener('submit', e => {
 });
 
 // === Inicialização ===
-loadClients();
-atualizarClientes();
-     </script>
-  
+loadClients(); // carrega clientes do localStorage
+atualizarClientes(); // monta grid e contador
+ </script>
