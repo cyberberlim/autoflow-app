@@ -5,48 +5,144 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AUTOFLOW | Clientes</title>
   <style>
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(145deg, #000000, #0a0a0f);
-      color: #e0e0e0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      padding: 40px;
     }
 
-    h1 {
-      font-weight: 600;
-      font-size: 2rem;
+    body {
+      display: flex;
+      background: linear-gradient(145deg, #000000, #0a0f12);
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: linear-gradient(180deg, #0d1117, #0a0f12);
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      position: fixed;
+      height: 100vh;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
       color: #00ff99;
-      letter-spacing: 1px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #aaa;
+      font-weight: 500;
+      padding: 10px 15px;
+      border-radius: 8px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .nav a:hover, .nav a.active {
+      background: rgba(0, 255, 153, 0.1);
+      color: #00ff99;
+    }
+
+    .logout {
+      margin-top: auto;
+      background: rgba(0, 255, 153, 0.1);
+      color: #00ff99;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .logout:hover {
+      background: rgba(0, 255, 153, 0.2);
+    }
+
+    /* Main content */
+    .main {
+      margin-left: 260px;
+      padding: 40px;
+      width: 100%;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 30px;
     }
 
-    .card-cadastro {
-      background: rgba(20, 20, 25, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-      padding: 30px;
-      width: 100%;
-      max-width: 600px;
-      backdrop-filter: blur(10px);
-      margin-bottom: 50px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #fff;
     }
 
-    .card-cadastro:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 25px rgba(0, 255, 153, 0.15);
+    .btn-novo {
+      background: #00ff99;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-novo:hover {
+      background: #00e68a;
+      transform: scale(1.03);
+    }
+
+    /* Formulário modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: rgba(20, 20, 25, 0.9);
+      border-radius: 16px;
+      padding: 30px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 20px rgba(0, 255, 153, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-content h2 {
+      color: #00ff99;
+      margin-bottom: 20px;
     }
 
     .form-group {
       display: flex;
       flex-direction: column;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     label {
@@ -62,7 +158,6 @@
       padding: 10px 14px;
       color: #fff;
       font-size: 0.95rem;
-      transition: border 0.3s ease;
     }
 
     input:focus {
@@ -70,28 +165,27 @@
       border-color: #00ff99;
     }
 
-    .btn {
+    .btn-salvar {
       background: #00ff99;
       color: #000;
       border: none;
       border-radius: 8px;
-      padding: 12px 20px;
+      padding: 12px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
+      width: 100%;
+      margin-top: 10px;
     }
 
-    .btn:hover {
+    .btn-salvar:hover {
       background: #00e68a;
-      transform: scale(1.03);
     }
 
+    /* Cards de clientes */
     .clientes-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 25px;
-      width: 100%;
-      max-width: 1200px;
     }
 
     .cliente-card {
@@ -127,68 +221,92 @@
       margin-top: 8px;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .cliente-card {
-      animation: fadeIn 0.6s ease forwards;
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+      }
+      .main {
+        margin-left: 220px;
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>AUTOFLOW — Clientes</h1>
+  <aside class="sidebar">
+    <div class="logo">AUTOFLOW</div>
+    <nav class="nav">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="clientes.html" class="active">Clientes</a>
+      <a href="#">Agendamentos</a>
+      <a href="#">Produtos</a>
+      <a href="#">Relatórios</a>
+      <a href="#">Configurações</a>
+    </nav>
+    <button class="logout">⏻ Logout</button>
+  </aside>
 
-  <div class="card-cadastro">
-    <div class="form-group">
-      <label for="nome">Nome</label>
-      <input type="text" id="nome" placeholder="Digite o nome do cliente">
+  <main class="main">
+    <div class="header">
+      <h1>Clientes</h1>
+      <button class="btn-novo" onclick="abrirModal()">+ Novo Cliente</button>
     </div>
-    <div class="form-group">
-      <label for="veiculo">Veículo</label>
-      <input type="text" id="veiculo" placeholder="Ex: Honda Civic 2022">
+
+    <div class="clientes-grid">
+      <div class="cliente-card">
+        <div class="cliente-nome">João Silva</div>
+        <div class="cliente-info">Veículo: BMW X1</div>
+        <div class="cliente-info">Data: 15/02/2026</div>
+        <div class="cliente-valor">R$ 350,00</div>
+      </div>
+
+      <div class="cliente-card">
+        <div class="cliente-nome">Maria Oliveira</div>
+        <div class="cliente-info">Serviço: Vitrificação</div>
+        <div class="cliente-info">Data: 10/02/2026</div>
+        <div class="cliente-valor">R$ 800,00</div>
+      </div>
+
+      <div class="cliente-card">
+        <div class="cliente-nome">Carlos Mendes</div>
+        <div class="cliente-info">Serviço: Polimento técnico</div>
+        <div class="cliente-info">Data: 20/01/2026</div>
+        <div class="cliente-valor">R$ 500,00</div>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="servico">Serviço</label>
-      <input type="text" id="servico" placeholder="Ex: Polimento técnico">
+  </main>
+
+  <div class="modal" id="modalCliente">
+    <div class="modal-content">
+      <h2>Novo Cliente</h2>
+      <div class="form-group">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" placeholder="Digite o nome do cliente">
+      </div>
+      <div class="form-group">
+        <label for="veiculo">Veículo / Serviço</label>
+        <input type="text" id="veiculo" placeholder="Ex: Honda Civic / Polimento técnico">
+      </div>
+      <div class="form-group">
+        <label for="data">Data</label>
+        <input type="date" id="data">
+      </div>
+      <div class="form-group">
+        <label for="valor">Valor</label>
+        <input type="text" id="valor" placeholder="Ex: R$ 450,00">
+      </div>
+      <button class="btn-salvar" onclick="fecharModal()">Salvar Cliente</button>
     </div>
-    <div class="form-group">
-      <label for="valor">Valor</label>
-      <input type="text" id="valor" placeholder="Ex: R$ 450,00">
-    </div>
-    <div class="form-group">
-      <label for="data">Data</label>
-      <input type="date" id="data">
-    </div>
-    <button class="btn">Cadastrar Cliente</button>
   </div>
 
-  <div class="clientes-grid">
-    <div class="cliente-card">
-      <div class="cliente-nome">João Silva</div>
-      <div class="cliente-info">Veículo: BMW X1</div>
-      <div class="cliente-info">Serviço: Higienização interna</div>
-      <div class="cliente-valor">Valor: R$ 350,00</div>
-      <div class="cliente-info">Último atendimento: 15/02/2026</div>
-    </div>
-
-    <div class="cliente-card">
-      <div class="cliente-nome">Maria Oliveira</div>
-      <div class="cliente-info">Veículo: Audi A3</div>
-      <div class="cliente-info">Serviço: Vitrificação</div>
-      <div class="cliente-valor">Valor: R$ 800,00</div>
-      <div class="cliente-info">Último atendimento: 10/02/2026</div>
-    </div>
-
-    <div class="cliente-card">
-      <div class="cliente-nome">Carlos Mendes</div>
-      <div class="cliente-info">Veículo: Toyota Corolla</div>
-      <div class="cliente-info">Serviço: Polimento técnico</div>
-      <div class="cliente-valor">Valor: R$ 500,00</div>
-      <div class="cliente-info">Último atendimento: 20/01/2026</div>
-    </div>
-  </div>
+  <script>
+    function abrirModal() {
+      document.getElementById('modalCliente').style.display = 'flex';
+    }
+    function fecharModal() {
+      document.getElementById('modalCliente').style.display = 'none';
+    }
+  </script>
 </body>
 </html>
 ```  
