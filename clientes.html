@@ -1,149 +1,356 @@
 <!doctype html>
 <html lang="pt-BR" class="h-full">
-<head>
+ <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clientes - AUTOFLOW</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <title>AUTOFLOW - Clientes</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
   <style>
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0a0a0a 0%, #111111 50%, #0d0d0d 100%); color: #fff; }
-    .font-display { font-family: 'Space Grotesk', sans-serif; }
-    .gradient-text { background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; letter-spacing: -0.5px; }
-    .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
-    .glass-card { background: rgba(255,255,255,0.05); backdrop-filter: blur(16px); border:1px solid rgba(255,255,255,0.1); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
-    .glass-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(0,255,136,0.3); transform: translateY(-4px); box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 30px rgba(0,255,136,0.1); }
-    .btn-neon { background: linear-gradient(135deg,#00ff88 0%,#00d4ff 100%); color:#000;font-weight:600;transition:all 0.3s; box-shadow:0 4px 20px rgba(0,255,136,0.3); position:relative; overflow:hidden; }
-    .btn-neon:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(0,255,136,0.5),0 0 20px rgba(0,212,255,0.3);}
-    .btn-neon:disabled { opacity:0.5; cursor:not-allowed; }
-    .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px); justify-content:center; align-items:center; z-index:100; }
-    .modal-overlay.active { display:flex; }
-    .modal-content { background: linear-gradient(135deg,#1a1a1a 0%,#111 100%); border:1px solid rgba(255,255,255,0.1); border-radius:1.5rem; padding:2rem; max-width:500px; width:90%; max-height:90%; overflow-y:auto; animation: modalSlideIn 0.3s ease; }
-    @keyframes modalSlideIn { from {opacity:0; transform:translateY(-20px) scale(0.95);} to {opacity:1; transform:translateY(0) scale(1);} }
-    .form-input, .form-select { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:0.75rem; padding:0.875rem 1rem; color:#fff; font-size:0.95rem; }
-    .form-input:focus, .form-select:focus { outline:none; border-color:rgba(0,255,136,0.5); box-shadow:0 0 20px rgba(0,255,136,0.1);}
-    .empty-state { text-align:center; padding:4rem 2rem; color: rgba(255,255,255,0.4); }
-  </style>
-</head>
-<body class="h-full">
-
-<!-- Sidebar -->
-<aside class="sidebar w-64 glass fixed left-0 top-0 h-full flex flex-col z-50">
-  <div class="p-6 border-b border-white/5">
-    <div class="logo-container">
-      <div class="logo-text">AUTOFLOW</div>
-      <div class="logo-subtitle">Sistema de Gestão</div>
-    </div>
-  </div>
-</aside>
-
-<!-- Main Content -->
-<main class="main-content flex-1 ml-64 p-8 overflow-y-auto h-full">
-  <header class="flex items-center justify-between mb-8">
-    <h1 class="font-display text-3xl font-bold">Clientes</h1>
-    <button id="btnNovoCliente" class="btn-neon px-6 py-3 rounded-xl flex items-center gap-2">
-      Novo Cliente
-    </button>
-  </header>
-
-  <div id="clientsContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-    <div id="emptyState" class="col-span-full empty-state">
-      <p class="text-lg font-medium mb-2">Nenhum cliente cadastrado</p>
-      <p class="text-sm">Clique em "Novo Cliente" para adicionar o primeiro atendimento</p>
-    </div>
-  </div>
-</main>
-
-<!-- Modal Novo Cliente -->
-<div id="modalNovoCliente" class="modal-overlay">
-  <div class="modal-content">
-    <div class="flex items-center justify-between mb-6">
-      <h2 class="font-display text-xl font-bold">Novo Atendimento</h2>
-      <button type="button" id="closeModal" class="p-2 rounded-lg hover:bg-white/10 transition-colors">
-        ✖
-      </button>
-    </div>
-
-    <form id="formNovoCliente" class="space-y-4">
-      <div>
-        <label for="clientName">Nome do Cliente</label>
-        <input type="text" id="clientName" class="form-input" placeholder="Digite o nome do cliente" required>
-      </div>
-
-      <div>
-        <label for="clientService">Serviço Realizado</label>
-        <select id="clientService" class="form-select" required>
-          <option value="">Selecione o serviço</option>
-          <option value="Lavagem Simples">Lavagem Simples - R$ 50</option>
-          <option value="Lavagem Detalhada">Lavagem Detalhada - R$ 80</option>
-          <option value="Lavagem Completa">Lavagem Completa - R$ 120</option>
-          <option value="Polimento">Polimento - R$ 200</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="clientDate">Data do Atendimento</label>
-        <input type="date" id="clientDate" class="form-input" required>
-      </div>
-
-      <button type="submit" class="btn-neon px-6 py-3 rounded-xl flex items-center gap-2">
-        Cadastrar Cliente
-      </button>
-    </form>
-  </div>
-</div>
-
-<script>
-  // ===== Modal =====
-  const btnNovoCliente = document.getElementById('btnNovoCliente');
-  const modalNovoCliente = document.getElementById('modalNovoCliente');
-  const closeModal = document.getElementById('closeModal');
-
-  btnNovoCliente.addEventListener('click', () => modalNovoCliente.classList.add('active'));
-  closeModal.addEventListener('click', () => modalNovoCliente.classList.remove('active'));
-  modalNovoCliente.addEventListener('click', (e) => { if(e.target === modalNovoCliente) modalNovoCliente.classList.remove('active'); });
-
-  // ===== Cadastro =====
-  const formNovoCliente = document.getElementById('formNovoCliente');
-  const clientsContainer = document.getElementById('clientsContainer');
-  const emptyState = document.getElementById('emptyState');
-  const totalClientes = document.createElement('p');
-  totalClientes.className = 'text-xl font-bold text-green-400';
-  let clientes = [];
-
-  formNovoCliente.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const nome = document.getElementById('clientName').value;
-    const servico = document.getElementById('clientService').value;
-    const data = document.getElementById('clientDate').value;
-
-    const novoCliente = { nome, servico, data };
-    clientes.push(novoCliente);
-
-    atualizarClientes();
-    modalNovoCliente.classList.remove('active');
-    formNovoCliente.reset();
-  });
-
-  function atualizarClientes() {
-    clientsContainer.innerHTML = '';
-    if(clientes.length === 0){
-      clientsContainer.appendChild(emptyState);
-    } else {
-      clientes.forEach(c => {
-        const card = document.createElement('div');
-        card.className = 'glass-card p-4 rounded-xl';
-        card.innerHTML = `
-          <h3 class="font-bold">${c.nome}</h3>
-          <p>${c.servico}</p>
-          <p class="text-sm text-white/50">${c.data}</p>
-        `;
-        clientsContainer.appendChild(card);
-      });
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
     }
-  }
-</script>
-
-</body>
- </html>
+    
+    .app-wrapper {
+      height: 100%;
+      width: 100%;
+      overflow: auto;
+      background: linear-gradient(135deg, #0a0a0f 0%, #0d0d14 50%, #0a0a0f 100%);
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    
+    .glass-card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .glass-card-hover:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    .neon-green {
+      color: #00ff88;
+      text-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+    }
+    
+    .neon-cyan {
+      color: #00d4ff;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+    
+    .btn-neon {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 212, 255, 0.15) 100%);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-neon:hover {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.25) 0%, rgba(0, 212, 255, 0.25) 100%);
+      border-color: rgba(0, 255, 136, 0.5);
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+    }
+    
+    .btn-green-neon {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.2) 0%, rgba(0, 200, 100, 0.2) 100%);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-green-neon:hover {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.35) 0%, rgba(0, 200, 100, 0.35) 100%);
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+    }
+    
+    .sidebar-item {
+      transition: all 0.2s ease;
+    }
+    
+    .sidebar-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .sidebar-item.active {
+      background: linear-gradient(90deg, rgba(0, 255, 136, 0.1) 0%, transparent 100%);
+      border-left: 3px solid #00ff88;
+    }
+    
+    .modal-backdrop {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+    }
+    
+    .input-field {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.2s ease;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: rgba(0, 255, 136, 0.5);
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    .animate-fadeIn {
+      animation: fadeIn 0.3s ease forwards;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-slideIn {
+      animation: slideIn 0.4s ease forwards;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper font-sans">
+   <div class="flex h-full">
+    <!-- Sidebar -->
+    <aside class="w-64 h-full bg-black/40 border-r border-white/5 flex flex-col flex-shrink-0 fixed left-0 top-0 z-50">
+     <!-- Logo -->
+     <div class="p-6 border-b border-white/5">
+      <div class="flex items-center gap-3">
+       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center border border-emerald-500/30">
+        <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+       </div>
+       <div>
+        <h1 class="text-lg font-bold text-white tracking-tight">AUTOFLOW</h1>
+        <p class="text-xs text-gray-500">Administrador</p>
+       </div>
+      </div>
+     </div><!-- Navigation -->
+     <nav class="flex-1 py-4 overflow-y-auto scrollbar-thin">
+      <ul class="space-y-1 px-3">
+       <li><a href="dashboard.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" data-page="dashboard">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+         </svg><span class="text-sm font-medium">Dashboard</span> </a></li>
+       <li><a href="clientes.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-emerald-400 transition-colors" data-page="clientes">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+         </svg><span class="text-sm font-medium">Clientes</span> </a></li>
+       <li><a href="agendamentos.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" data-page="agendamentos">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+         </svg><span class="text-sm font-medium">Agendamentos</span> </a></li>
+       <li><a href="caixa.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" data-page="caixa">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg><span class="text-sm font-medium">Caixa/Financeiro</span> </a></li>
+       <li><a href="produtos.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" data-page="produtos">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+         </svg><span class="text-sm font-medium">Produtos</span> </a></li>
+       <li><a href="estoque.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" data-page="estoque">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+         </svg><span class="text-sm font-medium">Estoque</span> </a></li>
+       <li><a href="relatorios.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" data-page="relatorios">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+         </svg><span class="text-sm font-medium">Relatórios</span> </a></li>
+       <li><a href="configuracoes.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" data-page="configuracoes">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+         </svg><span class="text-sm font-medium">Configurações</span> </a></li>
+      </ul>
+     </nav><!-- User Section -->
+     <div class="p-4 border-t border-white/5">
+      <div class="flex items-center gap-3">
+       <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500/30 to-cyan-500/30 flex items-center justify-center">
+        <span class="text-sm font-medium text-emerald-400">AD</span>
+       </div>
+       <div class="flex-1 min-w-0">
+        <p class="text-sm font-medium text-white truncate">Admin</p>
+        <p class="text-xs text-gray-500 truncate">admin@autoflow.com</p>
+       </div>
+      </div>
+     </div>
+    </aside><!-- Main Content -->
+    <main class="flex-1 overflow-auto scrollbar-thin ml-64">
+     <div class="p-8">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+       <div>
+        <h1 id="page-title" class="text-2xl font-bold text-white mb-1">Clientes</h1>
+        <p class="text-gray-500 text-sm">Gerencie todos os clientes cadastrados</p>
+       </div><button id="btn-new-client" class="btn-neon px-5 py-2.5 rounded-xl text-emerald-400 font-medium text-sm flex items-center gap-2 w-fit">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        </svg> Novo Cliente </button>
+      </div><!-- Stats Card -->
+      <div class="glass-card rounded-2xl p-6 mb-8">
+       <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center border border-emerald-500/30">
+         <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+         </svg>
+        </div>
+        <div>
+         <p class="text-gray-400 text-sm">Total de Clientes</p>
+         <p id="total-clients" class="text-3xl font-bold neon-green">0</p>
+        </div>
+       </div>
+      </div><!-- Clients Grid -->
+      <div id="clients-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+       <!-- Empty State Card -->
+       <div id="empty-card" class="glass-card glass-card-hover rounded-2xl p-6 cursor-pointer border-2 border-dashed border-white/10 flex flex-col items-center justify-center min-h-[200px]" onclick="openModal()">
+        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 flex items-center justify-center mb-4 border border-white/10">
+         <svg class="w-7 h-7 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+         </svg>
+        </div>
+        <p class="text-gray-400 font-medium">Adicionar Novo Cliente</p>
+        <p class="text-gray-600 text-sm mt-1">Clique para cadastrar</p>
+       </div>
+      </div>
+     </div>
+    </main>
+   </div><!-- Modal -->
+   <div id="modal" class="fixed inset-0 z-50 hidden">
+    <div class="modal-backdrop absolute inset-0" onclick="closeModal()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+     <div class="glass-card rounded-2xl p-8 w-full max-w-md animate-fadeIn pointer-events-auto border border-white/10">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between mb-6">
+       <h2 class="text-xl font-bold text-white">Novo Cliente</h2><button onclick="closeModal()" class="text-gray-500 hover:text-white transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+      </div><!-- Form -->
+      <form id="client-form" class="space-y-5">
+       <div>
+        <label class="block text-sm font-medium text-gray-400 mb-2">Nome do Cliente *</label> <input type="text" id="client-name" required placeholder="Digite o nome completo" class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-gray-600 text-sm">
+       </div>
+       <div>
+        <label class="block text-sm font-medium text-gray-400 mb-2">Serviço Realizado *</label> <select id="client-service" required class="input-field w-full px-4 py-3 rounded-xl text-white text-sm bg-transparent"> <option value="" class="bg-gray-900">Selecione o serviço</option> <option value="Lavagem Simples" class="bg-gray-900">Lavagem Simples</option> <option value="Lavagem Detalhada" class="bg-gray-900">Lavagem Detalhada</option> <option value="Lavagem Completa" class="bg-gray-900">Lavagem Completa</option> <option value="Polimento" class="bg-gray-900">Polimento</option> <option value="Vitrificação" class="bg-gray-900">Vitrificação</option> <option value="Restauração de Farol" class="bg-gray-900">Restauração de Farol</option> <option value="Restauração de Plástico" class="bg-gray-900">Restauração de Plástico</option> <option value="Proteção de Motor" class="bg-gray-900">Proteção de Motor</option> <option value="Polimento de Rodas" class="bg-gray-900">Polimento de Rodas</option> </select>
+       </div>
+       <div>
+        <label class="block text-sm font-medium text-gray-400 mb-2">Valor (R$) *</label> <input type="number" id="client-value" required placeholder="0,00" step="0.01" min="0" class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-gray-600 text-sm">
+       </div>
+       <div>
+        <label class="block text-sm font-medium text-gray-400 mb-2">Data de Atendimento *</label> <input type="date" id="client-date" required class="input-field w-full px-4 py-3 rounded-xl text-white text-sm">
+       </div><button type="submit" id="submit-btn" class="btn-green-neon w-full py-3.5 rounded-xl text-emerald-400 font-semibold text-sm flex items-center justify-center gap-2 mt-6">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg><span id="submit-text">Cadastrar Cliente</span> </button>
+      </form>
+     </div>
+    </div>
+   </div><!-- Toast -->
+   <div id="toast" class="fixed bottom-6 right-6 z-50 hidden">
+    <div class="glass-card rounded-xl px-5 py-3 flex items-center gap-3 animate-slideIn border border-emerald-500/30">
+     <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
+      <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+     </div><span id="toast-message" class="text-white text-sm font-medium">Cliente cadastrado!</span>
+    </div>
+   </div><!-- Delete Confirmation -->
+   <div id="delete-modal" class="fixed inset-0 z-50 hidden">
+    <div class="modal-backdrop absolute inset-0" onclick="closeDeleteModal()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+     <div class="glass-card rounded-2xl p-6 w-full max-w-sm animate-fadeIn pointer-events-auto border border-red-500/20">
+      <div class="text-center">
+       <div class="w-14 h-14 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+       </div>
+       <h3 class="text-lg font-semibold text-white mb-2">Excluir Cliente?</h3>
+       <p id="delete-client-name" class="text-gray-400 text-sm mb-6">Esta ação não pode ser desfeita.</p>
+       <div class="flex gap-3">
+        <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2.5 rounded-xl border border-white/10 text-gray-400 hover:text-white hover:border-white/20 transition-colors text-sm font-medium"> Cancelar </button> <button id="confirm-delete-btn" class="flex-1 px-4 py-2.5 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 transition-colors text-sm font-medium"> Excluir </button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    // Configuration
+    const defaultConfig = {
+      page_title: 'Clientes',
+      background_color: '#0a0a0f',
+      surface_color: '#ffffff08',
+      text_color: '#ffffff',
+      primary_color: '#00ff88',
+      secondary_color: '#6b7280'
+    };
+    
+    let config = { ...defaultConfig };
+    let clients = [];
+    let clientToDelete = null;
+    let isLoading = false;
+    
+    // Element SDK initialization
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (newConfig) => {
+          config = { ...defaultConfig, ...newConfig };
+          applyConfig();
+        },
+        mapToCapabilities: (cfg) => ({
+          recolorables: [
+            {
+              get: () => cfg.background_color || defaultConfig.background_color,
+              set: (value) => { cfg.background_color = value; window.elementSdk.setConfig({ background_color: value }); }
+            },
+            {
+              get: () => cfg.primary_color || defaultConfig.primary_color,
+              set: (value) => { cfg.primary_color = value; window.elementSdk.setConfig({ primary_color: value }); }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (cfg) => new Map([
+          
