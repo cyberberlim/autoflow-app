@@ -381,8 +381,33 @@ function atualizarClientes() {
 // === Contador de clientes ===
 function atualizarContador() {
   const contador = document.getElementById('total-clientes');
-  if(contador) contador.textContent = clients.length;
+  if (contador) contador.textContent = clients.length;
 }
+
+// === Chamar o contador sempre que a lista mudar ===
+// Exemplo: depois de adicionar um cliente
+form.addEventListener('submit', e => {
+  e.preventDefault();
+
+  const nome = clientName.value.trim();
+  const servico = clientService.value;
+  const valor = clientValue.value;
+  const data = clientDate.value;
+
+  if (!nome || !servico || !valor || !data) return;
+
+  const newClient = { nome, servico, valor, data };
+  clients.push(newClient);
+
+  atualizarClientes();
+  atualizarContador(); // ✅ Atualiza o total
+  closeModal();
+  showToast('Cliente cadastrado!');
+  form.reset();
+});
+
+// Chamar ao carregar a página, caso já existam clientes
+atualizarContador();
 
 // === Formulário ===
 form.addEventListener('submit', e => {
