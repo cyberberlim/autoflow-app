@@ -313,17 +313,21 @@
     </div>
    </div>
   </div>
-  <script>
-    // Configuration
-    const defaultConfig = {
-      page_title: 'Clientes',
-      background_color: '#0a0a0f',
-      surface_color: '#ffffff08',
-      text_color: '#ffffff',
-      primary_color: '#00ff88',
-      secondary_color: '#6b7280'
-    };
-    function applyConfig() {
+     <script>
+// === Configuração ===
+const defaultConfig = {
+  page_title: 'Clientes',
+  background_color: '#0a0a0f',
+  surface_color: '#ffffff08',
+  text_color: '#ffffff',
+  primary_color: '#00ff88',
+  secondary_color: '#6b7280'
+};
+
+let config = { ...defaultConfig };
+
+// === Função para aplicar cores/configurações ===
+function applyConfig() {
   // fundo da página
   document.body.style.backgroundColor = config.background_color;
 
@@ -332,7 +336,7 @@
     c.style.background = config.surface_color;
   });
 
-  // títulos e textos neon
+  // títulos neon
   document.querySelectorAll('.neon-green').forEach(c => {
     c.style.color = config.primary_color;
   });
@@ -341,43 +345,43 @@
   document.querySelectorAll('#toast .glass-card').forEach(t => {
     t.style.borderColor = config.primary_color + '30';
   });
-   }
-    let config = { ...defaultConfig };
-    let clients = [];
-    let clientToDelete = null;
-    let isLoading = false;
-    
-    // Element SDK initialization
-    if (window.elementSdk) {
-      window.elementSdk.init({
-        defaultConfig,
-        onConfigChange: async (newConfig) => {
-          config = { ...defaultConfig, ...newConfig };
-          applyConfig();
+}
+
+// Aplica as configurações iniciais
+applyConfig();
+
+// === Inicialização do Element SDK ===
+if (window.elementSdk) {
+  window.elementSdk.init({
+    defaultConfig,
+    onConfigChange: async (newConfig) => {
+      config = { ...defaultConfig, ...newConfig };
+      applyConfig();
+    },
+    mapToCapabilities: (cfg) => ({
+      recolorables: [
+        {
+          get: () => cfg.background_color || defaultConfig.background_color,
+          set: (value) => { cfg.background_color = value; window.elementSdk.setConfig({ background_color: value }); }
         },
-        mapToCapabilities: (cfg) => ({
-          recolorables: [
-            {
-              get: () => cfg.background_color || defaultConfig.background_color,
-              set: (value) => { cfg.background_color = value; window.elementSdk.setConfig({ background_color: value }); }
-            },
-            {
-              get: () => cfg.primary_color || defaultConfig.primary_color,
-              set: (value) => { cfg.primary_color = value; window.elementSdk.setConfig({ primary_color: value }); }
-            }
-    
-          ],
-          borderables: [],
-          fontEditable: undefined,
-          fontSizeable: undefined
-        }),
-        mapToEditPanelValues: (cfg) => new Map([
-         ['background_color', cfg.background_color],
-  ['primary_color', cfg.primary_color],
-  ['text_color', cfg.text_color]
-]) // fechar o Map e array!
-         <script>
-         // === Seleção de elementos ===
+        {
+          get: () => cfg.primary_color || defaultConfig.primary_color,
+          set: (value) => { cfg.primary_color = value; window.elementSdk.setConfig({ primary_color: value }); }
+        }
+      ],
+      borderables: [],
+      fontEditable: undefined,
+      fontSizeable: undefined
+    }),
+    mapToEditPanelValues: (cfg) => new Map([
+      ['background_color', cfg.background_color],
+      ['primary_color', cfg.primary_color],
+      ['text_color', cfg.text_color]
+    ])
+  });
+}
+
+// === Seleção de elementos ===
 const btnNovoCliente = document.getElementById('btn-new-client');
 const modal = document.getElementById('modal');
 const closeModalButtons = document.querySelectorAll('[onclick="closeModal()"]');
@@ -386,15 +390,15 @@ const clientName = document.getElementById('client-name');
 const clientService = document.getElementById('client-service');
 const clientValue = document.getElementById('client-value');
 const clientDate = document.getElementById('client-date');
-const clientsContainer = document.getElementById('clients-grid'); // grid de clientes
-const emptyState = document.getElementById('empty-card'); // card vazio "Adicionar Novo Cliente"
+const clientsContainer = document.getElementById('clients-grid');
+const emptyState = document.getElementById('empty-card');
 const toast = document.getElementById('toast');
 const toastMessage = document.getElementById('toast-message');
 
-// === Variáveis de estado ===
-let clients = []; // manter apenas uma declaração
+// === Estado ===
+let clients = [];
 
-// === Funções de abrir/fechar modal ===
+// === Funções de modal ===
 function openModal() {
   modal.classList.remove('hidden');
 }
@@ -403,19 +407,16 @@ function closeModal() {
   modal.classList.add('hidden');
 }
 
-// Evento para botão "Novo Cliente"
+// Eventos de modal
 btnNovoCliente.addEventListener('click', openModal);
-
-// Fechar modal pelos botões "X"
 closeModalButtons.forEach(btn => btn.addEventListener('click', closeModal));
-
-// Fechar modal ao clicar fora do card
 modal.addEventListener('click', e => {
   if (e.target === modal) closeModal();
 });
 
-// === Função para mostrar toast ===
+// === Função toast ===
 function showToast(message) {
+  if(!toast || !toastMessage) return;
   toastMessage.textContent = message;
   toast.classList.remove('hidden');
   setTimeout(() => toast.classList.add('hidden'), 3000);
@@ -430,33 +431,26 @@ form.addEventListener('submit', e => {
   const valor = clientValue.value;
   const data = clientDate.value;
 
-  // validação simples
   if (!nome || !servico || !valor || !data) return;
 
-  // adiciona cliente
   const newClient = { nome, servico, valor, data };
   clients.push(newClient);
 
-  // atualiza grid
   atualizarClientes();
-
-  // fecha modal e mostra toast
   closeModal();
   showToast('Cliente cadastrado!');
-
-  // reseta formulário
   form.reset();
 });
 
-// === Atualiza lista de clientes ===
+// === Atualiza grid de clientes ===
 function atualizarClientes() {
-  clientsContainer.innerHTML = ''; // limpa o grid
+  if(!clientsContainer) return;
+
+  clientsContainer.innerHTML = '';
 
   if (clients.length === 0) {
-    // mostra empty card se não houver clientes
-    clientsContainer.appendChild(emptyState);
+    if(emptyState) clientsContainer.appendChild(emptyState);
   } else {
-    // remove empty card se houver clientes
     clients.forEach(c => {
       const card = document.createElement('div');
       card.className = 'glass-card p-6 rounded-2xl glass-card-hover cursor-pointer';
@@ -471,5 +465,6 @@ function atualizarClientes() {
   }
 }
 
-// === Inicializa grid com empty card ===
+// === Inicializa grid ===
 atualizarClientes();
+     </script>
