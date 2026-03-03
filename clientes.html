@@ -347,10 +347,94 @@
               get: () => cfg.primary_color || defaultConfig.primary_color,
               set: (value) => { cfg.primary_color = value; window.elementSdk.setConfig({ primary_color: value }); }
             }
+    
           ],
           borderables: [],
           fontEditable: undefined,
           fontSizeable: undefined
         }),
         mapToEditPanelValues: (cfg) => new Map([
+         <script>
+// === Seleção de elementos ===
+const btnNovoCliente = document.getElementById('btnNovoCliente'); // se tiver um botão para abrir modal
+const modal = document.getElementById('modal');
+const closeModalButtons = document.querySelectorAll('[onclick="closeModal()"]');
+const form = document.getElementById('client-form');
+const clientName = document.getElementById('client-name');
+const clientService = document.getElementById('client-service');
+const clientValue = document.getElementById('client-value');
+const clientDate = document.getElementById('client-date');
+const clientsContainer = document.getElementById('clientsContainer'); // crie se não tiver
+const emptyState = document.getElementById('emptyState'); // crie se não tiver
+const toast = document.getElementById('toast');
+const toastMessage = document.getElementById('toast-message');
+
+let clients = [];
+
+// === Funções de abrir/fechar modal ===
+function openModal() {
+  modal.classList.remove('hidden');
+}
+function closeModal() {
+  modal.classList.add('hidden');
+}
+closeModalButtons.forEach(btn => btn.addEventListener('click', closeModal));
+modal.addEventListener('click', e => {
+  if(e.target === modal) closeModal();
+});
+
+// === Função para mostrar toast ===
+function showToast(message) {
+  toastMessage.textContent = message;
+  toast.classList.remove('hidden');
+  setTimeout(() => toast.classList.add('hidden'), 3000);
+}
+
+// === Cadastro de cliente ===
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const nome = clientName.value.trim();
+  const servico = clientService.value;
+  const valor = clientValue.value;
+  const data = clientDate.value;
+
+  if(!nome || !servico || !valor || !data) return;
+
+  const newClient = { nome, servico, valor, data };
+  clients.push(newClient);
+
+  // Atualiza lista
+  atualizarClientes();
+
+  // Fecha modal e mostra toast
+  closeModal();
+  showToast('Cliente cadastrado!');
+
+  form.reset();
+});
+
+// === Atualiza lista de clientes ===
+function atualizarClientes() {
+  if(!clientsContainer) return;
+  clientsContainer.innerHTML = '';
+  if(clients.length === 0) {
+    if(emptyState) clientsContainer.appendChild(emptyState);
+  } else {
+    clients.forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'glass-card p-4 rounded-xl';
+      card.innerHTML = `
+        <h3 class="font-bold text-white">${c.nome}</h3>
+        <p class="text-white/70">${c.servico}</p>
+        <p class="text-emerald-400 font-semibold">R$ ${parseFloat(c.valor).toFixed(2)}</p>
+        <p class="text-sm text-white/50">${c.data}</p>
+      `;
+      clientsContainer.appendChild(card);
+    });
+  }
+}
+
+// Inicializa empty state se necessário
+atualizarClientes();
+</script>
           
