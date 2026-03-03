@@ -144,45 +144,78 @@
       </div><span class="font-display text-2xl font-bold gradient-text">AUTOFLOW</span>  
      </div>  
     </div><!-- Navigation -->  
-    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+<nav class="flex-1 p-4 space-y-2 overflow-y-auto">
 
   <a href="dashboard.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-xl text-white">
+    <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M3 13h8V3H3v10zm10 8h8V11h-8v10zM3 21h8v-6H3v6zm10-10h8V3h-8v8z"/>
+    </svg>
     <span class="font-medium">Dashboard</span>
   </a>
 
   <a href="clientes.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:text-white">
+    <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M17 20h5V4H2v16h5m10 0v-2a4 4 0 00-8 0v2m8 0H9"/>
+    </svg>
     <span class="font-medium">Clientes</span>
   </a>
 
   <a href="agendamentos.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:text-white">
+    <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v11a2 2 0 002 2z"/>
+    </svg>
     <span class="font-medium">Agendamentos</span>
   </a>
 
   <a href="caixa.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:text-white">
+    <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M12 8c-1.657 0-3 1.343-3 3h6c0-1.657-1.343-3-3-3zm0 8c1.657 0 3-1.343 3-3H9c0 1.657 1.343 3 3 3z"/>
+    </svg>
     <span class="font-medium">Caixa</span>
   </a>
 
   <a href="produtos.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:text-white">
+    <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M20 13V7a2 2 0 00-2-2h-3V3H9v2H6a2 2 0 00-2 2v6m16 0v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6m16 0H4"/>
+    </svg>
     <span class="font-medium">Produtos</span>
   </a>
 
   <a href="estoque.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:text-white">
+    <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M3 7l9-4 9 4-9 4-9-4zm0 6l9 4 9-4M3 13v6l9 4 9-4v-6"/>
+    </svg>
     <span class="font-medium">Estoque</span>
   </a>
 
   <a href="relatorios.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:text-white">
+    <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M9 17v-6m4 6V7m4 10v-4M3 21h18"/>
+    </svg>
     <span class="font-medium">Relatórios</span>
   </a>
 
   <a href="configuracoes.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:text-white">
+    <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M12 6V4m0 16v-2m8-6h2M2 12H4m15.364 6.364l1.414 1.414M4.222 4.222L5.636 5.636m12.728 0l1.414-1.414M4.222 19.778l1.414-1.414"/>
+    </svg>
     <span class="font-medium">Configurações</span>
   </a>
 
-    </nav>
+</nav>
+
+   
     </nav><!-- Logout -->  
     <div class="p-4 border-t border-white/10"><button class="btn-neon w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-display">  
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />  
-      </svg><span>Logout</span> </button> <button onclick="logout()" class="btn-neon w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-display">
+      <button onclick="logout()" class="btn-neon w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-display">
   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
