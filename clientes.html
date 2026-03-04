@@ -1,272 +1,342 @@
- <!doctype html>
+<!doctype html>
 
-<html lang="pt-BR" class="h-full">    
- <head>    
-  <meta charset="UTF-8">    
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-  <title>Agendamentos - Estética Automotiva</title>    
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>    
-  <script src="/_sdk/element_sdk.js"></script>    
-  <script src="/_sdk/data_sdk.js"></script>    
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">    
-  <style>    
-    * { font-family: 'Inter', sans-serif; }  ::-webkit-scrollbar { width: 6px; height: 6px; }    
-::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 3px; }    
-::-webkit-scrollbar-thumb { background: rgba(0,255,136,0.3); border-radius: 3px; }    
-::-webkit-scrollbar-thumb:hover { background: rgba(0,255,136,0.5); }    .glass-card {
-background: rgba(255, 255, 255, 0.03);
-backdrop-filter: blur(20px);
-border: 1px solid rgba(255, 255, 255, 0.08);
-border-radius: 16px;
+<html lang="pt-BR" class="h-full">  
+ <head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>AUTOFLOW - Clientes</title>  
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>  
+  <script src="/_sdk/element_sdk.js"></script>  
+  <script src="/_sdk/data_sdk.js"></script>  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">  
+  <script>  
+    tailwind.config = {  
+      theme: {  
+        extend: {  
+          fontFamily: {  
+            sans: ['Inter', 'system-ui', 'sans-serif'],  
+          },  
+        },  
+      },  
+    };  
+  </script>  
+  <style>  
+    html, body {  
+      height: 100%;  
+      margin: 0;  
+      padding: 0;  
+    }  .app-wrapper {  
+  height: 100%;  
+  width: 100%;  
+  overflow: auto;  
+  background: linear-gradient(135deg, #0a0a0f 0%, #0d0d14 50%, #0a0a0f 100%);  
+}  
+  
+.glass-card {  
+  background: rgba(255, 255, 255, 0.03);  
+  backdrop-filter: blur(20px);  
+  border: 1px solid rgba(255, 255, 255, 0.06);  
+}  
+  
+.glass-card-hover {  
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);  
+}  
+  
+.glass-card-hover:hover {  
+  background: rgba(255, 255, 255, 0.05);  
+  border-color: rgba(255, 255, 255, 0.1);  
+  transform: translateY(-2px);  
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);  
+}  
+  
+.neon-green {  
+  color: #00ff88;  
+  text-shadow: 0 0 20px rgba(0, 255, 136, 0.4);  
+}  
+  
+.neon-cyan {  
+  color: #00d4ff;  
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);  
+}  
+  
+.btn-neon {  
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 212, 255, 0.15) 100%);  
+  border: 1px solid rgba(0, 255, 136, 0.3);  
+  transition: all 0.3s ease;  
+}  
+  
+.btn-neon:hover {  
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.25) 0%, rgba(0, 212, 255, 0.25) 100%);  
+  border-color: rgba(0, 255, 136, 0.5);  
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);  
+}  
+  
+.btn-green-neon {  
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.2) 0%, rgba(0, 200, 100, 0.2) 100%);  
+  border: 1px solid rgba(0, 255, 136, 0.4);  
+  transition: all 0.3s ease;  
+}  
+  
+.btn-green-neon:hover {  
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.35) 0%, rgba(0, 200, 100, 0.35) 100%);  
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);  
+}  
+  
+.sidebar-item {  
+  transition: all 0.2s ease;  
+}  
+  
+.sidebar-item:hover {  
+  background: rgba(255, 255, 255, 0.05);  
+}  
+  
+.sidebar-item.active {  
+  background: linear-gradient(90deg, rgba(0, 255, 136, 0.1) 0%, transparent 100%);  
+  border-left: 3px solid #00ff88;  
+}  
+  
+.modal-backdrop {  
+  background: rgba(0, 0, 0, 0.8);  
+  backdrop-filter: blur(8px);  
+}  
+  
+.input-field {  
+  background: rgba(255, 255, 255, 0.03);  
+  border: 1px solid rgba(255, 255, 255, 0.1);  
+  transition: all 0.2s ease;  
+}  
+  
+.input-field:focus {  
+  outline: none;  
+  border-color: rgba(0, 255, 136, 0.5);  
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);  
+}  
+  
+.scrollbar-thin::-webkit-scrollbar {  
+  width: 4px;  
+}  
+  
+.scrollbar-thin::-webkit-scrollbar-track {  
+  background: rgba(255, 255, 255, 0.02);  
+}  
+  
+.scrollbar-thin::-webkit-scrollbar-thumb {  
+  background: rgba(255, 255, 255, 0.1);  
+  border-radius: 2px;  
+}  
+  
+@keyframes fadeIn {  
+  from { opacity: 0; transform: scale(0.95); }  
+  to { opacity: 1; transform: scale(1); }  
+}  
+  
+.animate-fadeIn {  
+  animation: fadeIn 0.3s ease forwards;  
+}  
+  
+@keyframes slideIn {  
+  from { opacity: 0; transform: translateY(10px); }  
+  to { opacity: 1; transform: translateY(0); }  
+}  
+  
+.animate-slideIn {  
+  animation: slideIn 0.4s ease forwards;  
 }
 
-.neon-glow {
-box-shadow: 0 0 20px rgba(0, 255, 136, 0.3), 0 0 40px rgba(0, 255, 136, 0.1);
+  </style>  
+  <style>body { box-sizing: border-box; }</style>  
+ </head>  
+ <body class="h-full">  
+  <div class="app-wrapper font-sans">  
+   <div class="flex h-full">  
+    <!-- Sidebar -->  
+    <aside class="w-64 h-full bg-black/40 border-r border-white/5 flex flex-col flex-shrink-0 fixed left-0 top-0 z-50">  
+     <!-- Logo -->  
+     <div class="p-6 border-b border-white/5">  
+      <div class="flex items-center gap-3">  
+       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center border border-emerald-500/30">  
+        <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />  
+        </svg>  
+       </div>  
+       <div>  
+        <h1 class="text-lg font-bold text-white tracking-tight">AUTOFLOW</h1>  
+        <p class="text-xs text-gray-500">Administrador</p>  
+       </div>  
+      </div>  
+     </div><!-- Navigation -->  
+     <nav class="flex-1 py-4 overflow-y-auto scrollbar-thin">  
+      <ul class="space-y-1 px-3">  
+       <li><a href="dashboard.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" data-page="dashboard">  
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />  
+         </svg><span class="text-sm font-medium">Dashboard</span> </a></li>  
+       <li><a href="clientes.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-emerald-400 transition-colors" data-page="clientes">  
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />  
+         </svg><span class="text-sm font-medium">Clientes</span> </a></li>  
+       <li><a href="agendamentos.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" data-page="agendamentos">  
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />  
+         </svg><span class="text-sm font-medium">Agendamentos</span> </a></li>  
+       <li><a href="caixa.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" data-page="caixa">  
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />  
+         </svg><span class="text-sm font-medium">Caixa/Financeiro</span> </a></li>  
+       <li><a href="produtos.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" data-page="produtos">  
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />  
+         </svg><span class="text-sm font-medium">Produtos</span> </a></li>  
+       <li><a href="estoque.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" data-page="estoque">  
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />  
+         </svg><span class="text-sm font-medium">Estoque</span> </a></li>  
+       <li><a href="relatorios.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" data-page="relatorios">  
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />  
+         </svg><span class="text-sm font-medium">Relatórios</span> </a></li>  
+       <li><a href="configuracoes.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" data-page="configuracoes">  
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />  
+         </svg><span class="text-sm font-medium">Configurações</span> </a></li>  
+      </ul>  
+     </nav><!-- User Section -->  
+     <div class="p-4 border-t border-white/5">  
+      <div class="flex items-center gap-3">  
+       <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500/30 to-cyan-500/30 flex items-center justify-center">  
+        <span class="text-sm font-medium text-emerald-400">AD</span>  
+       </div>  
+       <div class="flex-1 min-w-0">  
+        <p class="text-sm font-medium text-white truncate">Admin</p>  
+        <p class="text-xs text-gray-500 truncate">admin@autoflow.com</p>  
+       </div>  
+      </div>  
+     </div>  
+    </aside><!-- Main Content -->  
+    <main class="flex-1 overflow-auto scrollbar-thin ml-64">  
+     <div class="p-8">  
+      <!-- Header -->  
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">  
+       <div>  
+        <h1 id="page-title" class="text-2xl font-bold text-white mb-1">Clientes</h1>  
+        <p class="text-gray-500 text-sm">Gerencie todos os clientes cadastrados</p>  
+       </div><button id="btn-new-client" class="btn-neon px-5 py-2.5 rounded-xl text-emerald-400 font-medium text-sm flex items-center gap-2 w-fit">  
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />  
+        </svg> Novo Cliente </button>  
+      </div><!-- Stats Card -->  
+      <div class="glass-card rounded-2xl p-6 mb-8">  
+       <div class="flex items-center gap-4">  
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center border border-emerald-500/30">  
+         <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />  
+         </svg>  
+        </div>  
+        <div>  
+         <p class="text-gray-400 text-sm">Total de Clientes</p>  
+         <p id="total-clients" class="text-3xl font-bold neon-green">0</p>  
+        </div>  
+       </div>  
+      </div><!-- Clients Grid -->  
+      <div id="clients-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">  
+       <!-- Empty State Card -->  
+       <div id="empty-card" class="glass-card glass-card-hover rounded-2xl p-6 cursor-pointer border-2 border-dashed border-white/10 flex flex-col items-center justify-center min-h-[200px]" onclick="openModal()">  
+        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 flex items-center justify-center mb-4 border border-white/10">  
+         <svg class="w-7 h-7 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />  
+         </svg>  
+        </div>  
+        <p class="text-gray-400 font-medium">Adicionar Novo Cliente</p>  
+        <p class="text-gray-600 text-sm mt-1">Clique para cadastrar</p>  
+       </div>  
+      </div>  
+     </div>  
+    </main>  
+   </div><!-- Modal -->  
+   <div id="modal" class="fixed inset-0 z-50 hidden">  
+    <div class="modal-backdrop absolute inset-0" onclick="closeModal()"></div>  
+    <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">  
+     <div class="glass-card rounded-2xl p-8 w-full max-w-md animate-fadeIn pointer-events-auto border border-white/10">  
+      <!-- Modal Header -->  
+      <div class="flex items-center justify-between mb-6">  
+       <h2 class="text-xl font-bold text-white">Novo Cliente</h2><button onclick="closeModal()" class="text-gray-500 hover:text-white transition-colors">  
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />  
+        </svg></button>  
+      </div><!-- Form -->  
+      <form id="client-form" class="space-y-5">  
+       <div>  
+        <label class="block text-sm font-medium text-gray-400 mb-2">Nome do Cliente *</label> <input type="text" id="client-name" required placeholder="Digite o nome completo" class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-gray-600 text-sm">  
+       </div>  
+       <div>  
+        <label class="block text-sm font-medium text-gray-400 mb-2">Serviço Realizado *</label> <select id="client-service" required class="input-field w-full px-4 py-3 rounded-xl text-white text-sm bg-transparent"> <option value="" class="bg-gray-900">Selecione o serviço</option> <option value="Lavagem Simples" class="bg-gray-900">Lavagem Simples</option> <option value="Lavagem Detalhada" class="bg-gray-900">Lavagem Detalhada</option> <option value="Lavagem Completa" class="bg-gray-900">Lavagem Completa</option> <option value="Polimento" class="bg-gray-900">Polimento</option> <option value="Vitrificação" class="bg-gray-900">Vitrificação</option> <option value="Restauração de Farol" class="bg-gray-900">Restauração de Farol</option> <option value="Restauração de Plástico" class="bg-gray-900">Restauração de Plástico</option> <option value="Proteção de Motor" class="bg-gray-900">Proteção de Motor</option> <option value="Polimento de Rodas" class="bg-gray-900">Polimento de Rodas</option> </select>  
+       </div>  
+       <div>  
+        <label class="block text-sm font-medium text-gray-400 mb-2">Valor (R$) *</label> <input type="number" id="client-value" required placeholder="0,00" step="0.01" min="0" class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-gray-600 text-sm">  
+       </div>  
+       <div>  
+        <label class="block text-sm font-medium text-gray-400 mb-2">Data de Atendimento *</label> <input type="date" id="client-date" required class="input-field w-full px-4 py-3 rounded-xl text-white text-sm">  
+       </div><button type="submit" id="submit-btn" class="btn-green-neon w-full py-3.5 rounded-xl text-emerald-400 font-semibold text-sm flex items-center justify-center gap-2 mt-6">  
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />  
+        </svg><span id="submit-text">Cadastrar Cliente</span> </button>  
+      </form>  
+     </div>  
+    </div>  
+   </div><!-- Toast -->  
+   <div id="toast" class="fixed bottom-6 right-6 z-50 hidden">  
+    <div class="glass-card rounded-xl px-5 py-3 flex items-center gap-3 animate-slideIn border border-emerald-500/30">  
+     <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">  
+      <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />  
+      </svg>  
+     </div><span id="toast-message" class="text-white text-sm font-medium">Cliente cadastrado!</span>  
+    </div>  
+   </div><!-- Delete Confirmation -->  
+   <div id="delete-modal" class="fixed inset-0 z-50 hidden">  
+    <div class="modal-backdrop absolute inset-0" onclick="closeDeleteModal()"></div>  
+    <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">  
+     <div class="glass-card rounded-2xl p-6 w-full max-w-sm animate-fadeIn pointer-events-auto border border-red-500/20">  
+      <div class="text-center">  
+       <div class="w-14 h-14 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-4">  
+        <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">  
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />  
+        </svg>  
+       </div>  
+       <h3 class="text-lg font-semibold text-white mb-2">Excluir Cliente?</h3>  
+       <p id="delete-client-name" class="text-gray-400 text-sm mb-6">Esta ação não pode ser desfeita.</p>  
+       <div class="flex gap-3">  
+        <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2.5 rounded-xl border border-white/10 text-gray-400 hover:text-white hover:border-white/20 transition-colors text-sm font-medium"> Cancelar </button> <button id="confirm-delete-btn" class="flex-1 px-4 py-2.5 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 transition-colors text-sm font-medium"> Excluir </button>  
+       </div>  
+      </div>  
+     </div>  
+    </div>  
+   </div>  
+  </div>  
+<script>  
+  // === Configuração inicial ===  
+  let clients = [];  
+  const clientsContainer = document.getElementById('clients-grid');  
+  const emptyState = document.getElementById('empty-card');  
+  const totalCounter = document.getElementById('total-clients');  
+  const form = document.getElementById('client-form');  
+  const modal = document.getElementById('modal');  
+  const btnNovoCliente = document.getElementById('btn-new-client');  
+  const closeModalButtons = document.querySelectorAll('[onclick="closeModal()"]');  
+  const toast = document.getElementById('toast');  
+  const toastMessage = document.getElementById('toast-message');  const clientName = document.getElementById('client-name');
+const clientService = document.getElementById('client-service');
+const clientValue = document.getElementById('client-value');
+const clientDate = document.getElementById('client-date');
+
+let editingIndex = null; // controla edição de cliente
+
+// === Modal ===
+function openModal() { modal.classList.remove('hidden'); }
+function closeModal() {
+modal.classList.add('hidden');
+editingIndex = null;
+form.reset();
 }
 
-.neon-text {
-text-shadow: 0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3);
-}
-
-.sidebar-item {
-transition: all 0.3s ease;
-border-left: 3px solid transparent;
-}
-
-.sidebar-item:hover {
-background: rgba(0, 255, 136, 0.1);
-border-left-color: rgba(0, 255, 136, 0.5);
-}
-
-.sidebar-item.active {
-background: rgba(0, 255, 136, 0.15);
-border-left-color: #00ff88;
-}
-
-.sidebar-item.active span {
-color: #00ff88;
-text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
-}
-
-.btn-neon {
-background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
-box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
-transition: all 0.3s ease;
-}
-
-.btn-neon:hover {
-transform: translateY(-2px);
-box-shadow: 0 6px 25px rgba(0, 255, 136, 0.5);
-}
-
-.status-pendente { background: rgba(255, 193, 7, 0.2); border-left: 4px solid #ffc107; }
-.status-confirmado { background: rgba(0, 255, 136, 0.15); border-left: 4px solid #00ff88; }
-.status-concluido { background: rgba(156, 163, 175, 0.2); border-left: 4px solid #9ca3af; }
-
-.modal-overlay {
-background: rgba(0, 0, 0, 0.8);
-backdrop-filter: blur(8px);
-}
-
-.input-dark {
-background: rgba(255, 255, 255, 0.05);
-border: 1px solid rgba(255, 255, 255, 0.1);
-transition: all 0.3s ease;
-}
-
-.input-dark:focus {
-border-color: #00ff88;
-box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
-outline: none;
-}
-
-.notification-pulse {
-animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-0%, 100% { opacity: 1; }
-50% { opacity: 0.6; }
-}
-
-.card-hover {
-transition: all 0.3s ease;
-}
-
-.card-hover:hover {
-transform: translateY(-4px);
-box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-}
-
-  </style>    
-  <style>body { box-sizing: border-box; }</style>    
- </head>    
- <body class="h-full text-white overflow-auto" style="background: linear-gradient(135deg, #0a0a0f 0%, #0d0d14 50%, #0a0a0f 100%);">    
-  <div class="flex h-full w-full">    
-   <aside class="w-64 backdrop-blur-xl border-r border-white/5 flex flex-col flex-shrink-0" style="background: rgba(0, 0, 0, 0.4);"><!-- Logo -->    
-    <div class="p-6 border-b border-white/5">    
-     <div class="flex items-center gap-3">    
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-400 flex items-center justify-center neon-glow">    
-       <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />    
-       </svg>    
-      </div>    
-      <div>    
-       <h1 class="font-bold text-white">AutoEstética</h1>    
-       <p class="text-xs text-gray-400">Sistema de Gestão</p>    
-      </div>    
-     </div>    
-    </div><!-- Navigation -->    
-    <nav class="flex-1 p-4 space-y-1"><a href="dashboard.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300">    
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />    
-      </svg><span class="font-medium">Dashboard</span> </a> <a href="clientes.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300">    
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />    
-      </svg><span class="font-medium">Clientes</span> </a> <a href="agendamentos.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg">    
-      <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />    
-      </svg><span class="font-medium">Agendamentos</span> </a> <a href="caixa.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300">    
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />    
-      </svg><span class="font-medium">Caixa/Financeiro</span> </a> <a href="produtos.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300">    
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />    
-      </svg><span class="font-medium">Produtos</span> </a> <a href="estoque.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300">    
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />    
-      </svg><span class="font-medium">Estoque</span> </a> <a href="relatorios.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300">    
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />    
-      </svg><span class="font-medium">Relatórios</span> </a> <a href="configuracoes.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300">    
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />    
-      </svg><span class="font-medium">Configurações</span> </a>    
-    </nav><!-- User Profile -->    
-    <div class="p-4 border-t border-white/5">    
-     <div class="flex items-center gap-3 px-4 py-3">    
-      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-400 flex items-center justify-center text-gray-900 font-bold">    
-       A    
-      </div>    
-      <div class="flex-1">    
-       <p class="font-medium text-sm">Admin</p>    
-       <p class="text-xs text-gray-400">admin@autostetica.com</p>    
-      </div>    
-     </div>    
-    </div>    
-   </aside><!-- Main Content -->    
-   <main class="flex-1 overflow-auto">    
-    <div class="p-8"><!-- Header -->    
-     <div class="mb-8 flex items-center justify-between">    
-      <h1 id="page-title" class="text-3xl font-bold neon-text">Agendamentos</h1><button id="btn-novo-agendamento" onclick="openModal(false)" class="btn-neon px-4 py-2.5 rounded-xl font-semibold text-gray-900 flex items-center justify-center gap-2 hover:shadow-lg transition-all">    
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />    
-       </svg><span class="text-sm">Novo Agendamento</span> </button>    
-     </div><!-- Search and Filters --> <!-- Agendamentos Grid (at the top) -->    
-     <div id="agendamentos-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-12"><!-- Cards will be rendered here -->    
-     </div>    
-     <div id="empty-state" class="hidden glass-card p-12 text-center">    
-      <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-gray-700/50 flex items-center justify-center">    
-       <svg class="w-10 h-10 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />    
-       </svg>    
-      </div>    
-      <h3 class="text-xl font-semibold text-gray-300 mb-2">Nenhum agendamento encontrado</h3>    
-      <p class="text-gray-500 mb-6">Comece adicionando seu primeiro agendamento</p>    
-     </div>    
-     <div class="glass-card p-6 mb-6">    
-      <div class="flex flex-col md:flex-row gap-4">    
-       <div class="flex-1 relative">    
-        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />    
-        </svg><input type="text" id="search-input" placeholder="Buscar por cliente, serviço..." class="w-full pl-12 pr-4 py-3 input-dark rounded-xl text-white placeholder-gray-500">    
-       </div>    
-       <div class="relative">    
-        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />    
-        </svg><input type="date" id="date-filter" class="pl-12 pr-4 py-3 input-dark rounded-xl text-white">    
-       </div><select id="status-filter" class="px-4 py-3 input-dark rounded-xl text-white"> <option value="">Todos os Status</option> <option value="pendente">Pendente</option> <option value="confirmado">Confirmado</option> <option value="concluido">Concluído</option> </select>    
-      </div>    
-     </div><!-- Stats Summary -->    
-     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">    
-      <div class="glass-card p-5">    
-       <div class="flex items-center justify-between">    
-        <div>    
-         <p class="text-gray-400 text-sm">Total</p>    
-         <p id="stat-total" class="text-2xl font-bold text-white">0</p>    
-        </div>    
-        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">    
-         <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />    
-         </svg>    
-        </div>    
-       </div>    
-      </div>    
-      <div class="glass-card p-5">    
-       <div class="flex items-center justify-between">    
-        <div>    
-         <p class="text-gray-400 text-sm">Pendentes</p>    
-         <p id="stat-pendentes" class="text-2xl font-bold text-amber-400">0</p>    
-        </div>    
-        <div class="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">    
-         <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />    
-         </svg>    
-        </div>    
-       </div>    
-      </div>    
-      <div class="glass-card p-5">    
-       <div class="flex items-center justify-between">    
-        <div>    
-         <p class="text-gray-400 text-sm">Confirmados</p>    
-         <p id="stat-confirmados" class="text-2xl font-bold text-emerald-400">0</p>    
-        </div>    
-        <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">    
-         <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />    
-         </svg>    
-        </div>    
-       </div>    
-      </div>    
-      <div class="glass-card p-5">    
-       <div class="flex items-center justify-between">    
-        <div>    
-         <p class="text-gray-400 text-sm">Concluídos</p>    
-         <p id="stat-concluidos" class="text-2xl font-bold text-gray-400">0</p>    
-        </div>    
-        <div class="w-12 h-12 rounded-xl bg-gray-500/20 flex items-center justify-center">    
-         <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />    
-         </svg>    
-        </div>    
-       </div>    
-      </div>    
-     </div><!-- Calendar and Booking Section -->    
-     <div class="glass-card p-6 mb-6">    
-      <div class="text-center mb-6">    
-       <h3 id="calendar-month" class="text-lg font-semibold text-white mb-1">Dezembro 2024</h3>    
-       <p class="text-xs text-gray-400">Visualize o calendário</p>    
-      </div>    
-      <div id="calendar-container" class="grid grid-cols-7 gap-2 text-center text-sm"><!-- Days will be rendered here -->    
-      </div>    
-     </div><!-- WhatsApp Notification -->    
-     <div class="mt-8 glass-card p-6 border border-emerald-500/20">    
-      <div class="flex flex-col md:flex-row items-center justify-between gap-4">    
-       <div class="flex items-center gap-4">    
-        <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">    
-         <svg class="w-7 h-7 text-emerald-400" viewbox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />    
-         </svg>    
-        </div>    
-        <div>    
-         <h3 class="font-semibold text-white">Integração WhatsApp Bot</h3>    
-         <p class="text-sm text-gray-400">Em breve: Agende e confirme via WhatsApp automaticamente</p>    
-        </div>    
-       </div><button class="px-5 py-2.5 rounded-xl border border-emerald-500/30 text-emerald-400 font-medium hover:bg-emerald-500/10 transition-colors flex items-center gap-2">    
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />    
-        </svg> Notificar quando disponível </button>    
-      </div>    
-     </div>    
-    </div>    
-   </main>    
-  </div><!-- Modal Novo/Editar Agendamento -->    
-  <div id="modal-agendamento" class="fixed inset-0 z-50 hidden">    
-   <div class="modal-overlay absolute inset-0" id="modal-overlay"></div>    
-   <div class="relative flex items-center justify-center min-h-full p-4">    
-    <div class="glass-card w-full max-w-lg p-8 relative"><button id="modal-close" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-700/50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-600/50 transition-colors">    
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />    
-      </svg></button>    
-     <h2 id="modal-title" class="text-2xl font-bold mb-6 neon-text">Novo Agendamento</h2>    
-     <form id="form-agendamento" class="space-y-5"><input type="hidden" id="agendamento-id">    
-      <div><label class="block text-sm font-medium text-gray-300 mb-2">Cliente *</label> <input type="text" id="input-cliente" placeholder="Nome do cliente" class="w-full px-4 py-3 input-dark rounded-xl text-white placeholder-gray-500" required>    
-      </div>    
-      <div><label class="block text-sm font-medium text-gray-300 mb-2">Serviço *</label> <select id="input-servico" class="w-full px-4 py-3 input-dark rounded-xl text-white" required> <option value="">Selecione o serviço</option> <option value="Lavagem Simples">Lavagem Simples</option> <option value="Lavagem Detalhada">Lavagem Detalhada</option> <option value="Polimento">Polimento</option> <option value="Cristalização">Cristalização</option> <option value="Vitrificação">Vitrificação</option> <option value="Higienização Interna">Higienização Interna</option> <option value="Limpeza de Motor">Limpeza de Motor</option> <option value="Proteção de Pintura">Proteção de Pintura</option> </select>    
-      </div>    
-      <div class="grid grid-cols-2 gap-4">    
-       <div><label class="block text-sm font-medium text-gray-300 mb-2">Data *</label> <input type="date" id="input-data" class="w-full px-4 py-3 input-dark rounded-xl text-white" required>    
-       </div>    
-       <div><label class="block text-sm font-medium text-gray-300 mb-2">Horário *</label> <input type="time" id="input-horario" class="w-full px-4 py-3 input-dark rounded-xl text-white" required>    
-       </div>    
-      </
+btnNovoCliente.addEventListener('click', ope
