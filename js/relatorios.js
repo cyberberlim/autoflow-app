@@ -1,19 +1,19 @@
 // =========================
-// DADOS INICIAIS (você pode puxar do SDK depois)
+// OBJETO DE DADOS (será atualizado pelo SDK)
 // =========================
 const dados = {
-  receitaTotal: 12000,
-  custoTotal: 5000,
-  lucroTotal: 7000,
-  margem: 58.3,
-  totalAgendamentos: 45,
-  pendentes: 10,
-  confirmados: 25,
-  concluidos: 10
+  receitaTotal: 0,
+  custoTotal: 0,
+  lucroTotal: 0,
+  margem: 0,
+  totalAgendamentos: 0,
+  pendentes: 0,
+  confirmados: 0,
+  concluidos: 0
 };
 
 // =========================
-// FUNÇÃO PARA ATUALIZAR OS CARDS
+// FUNÇÃO PARA ATUALIZAR OS CARDS NA TELA
 // =========================
 function atualizarCards() {
   document.getElementById('stat-receita-total').textContent = `R$ ${dados.receitaTotal}`;
@@ -25,6 +25,40 @@ function atualizarCards() {
   document.getElementById('stat-pendentes').textContent = dados.pendentes;
   document.getElementById('stat-confirmados').textContent = dados.confirmados;
   document.getElementById('stat-concluidos').textContent = dados.concluidos;
+}
+
+// =========================
+// FUNÇÃO PARA CARREGAR DADOS DO SDK
+// =========================
+async function carregarDados() {
+  try {
+    // Substitua esses métodos pelos do seu SDK real
+    const receitaTotal = await DataSDK.getReceitaTotal(); 
+    const custoTotal = await DataSDK.getCustoTotal();
+    const lucroTotal = receitaTotal - custoTotal;
+    const margem = receitaTotal > 0 ? ((lucroTotal / receitaTotal) * 100).toFixed(1) : 0;
+
+    const totalAgendamentos = await DataSDK.getTotalAgendamentos();
+    const pendentes = await DataSDK.getAgendamentosPorStatus('pendente');
+    const confirmados = await DataSDK.getAgendamentosPorStatus('confirmado');
+    const concluidos = await DataSDK.getAgendamentosPorStatus('concluido');
+
+    // Atualiza o objeto dados
+    dados.receitaTotal = receitaTotal;
+    dados.custoTotal = custoTotal;
+    dados.lucroTotal = lucroTotal;
+    dados.margem = margem;
+
+    dados.totalAgendamentos = totalAgendamentos;
+    dados.pendentes = pendentes;
+    dados.confirmados = confirmados;
+    dados.concluidos = concluidos;
+
+    // Atualiza os cards na tela
+    atualizarCards();
+  } catch (error) {
+    console.error("Erro ao carregar dados do SDK:", error);
+  }
 }
 
 // =========================
@@ -80,5 +114,5 @@ function exportarCSV() {
 // INICIALIZAÇÃO AO CARREGAR PÁGINA
 // =========================
 window.addEventListener("DOMContentLoaded", () => {
-  atualizarCards();
+  carregarDados(); // Busca os dados do SDK e atualiza a tela
 });
