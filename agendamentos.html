@@ -190,128 +190,109 @@
 
   </div>
 </div>
-
-  <!-- Modal -->
-  <div id="modal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
-    <div class="absolute inset-0 flex items-center justify-center p-4">
-      <div class="glass rounded-2xl p-8 w-full max-w-md">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-xl font-bold">Novo Agendamento</h2>
-          <button onclick="closeModal()" class="text-gray-500 hover:text-white">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-          </button>
-        </div>
-        <form class="space-y-5" onsubmit="salvarAgendamento(event)">
-          <select id="clienteSelect" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white bg-transparent">
-  <option value="">Selecione o Cliente</option>
-          </select>
-          <input type="text" placeholder="Serviço" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500">
-          <input type="date" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white">
-          <input type="time" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white">
-          <select class="input-field w-full px-4 py-3 rounded-xl text-sm text-white bg-transparent">
-            <option>Status</option>
-            <option>Pendente</option>
-            <option>Confirmado</option>
-            <option>Concluído</option>
-          </select>
-          <button type="submit" class="btn-neon w-full py-3.5 rounded-xl text-emerald-400 font-semibold text-sm flex items-center justify-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            Salvar Agendamento
-          </button>
-        </form>
+      <!-- Modal -->
+<div id="modal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
+  <div class="absolute inset-0 flex items-center justify-center p-4">
+    <div class="glass rounded-2xl p-8 w-full max-w-md">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold">Novo Agendamento</h2>
+        <button onclick="closeModal()" class="text-gray-500 hover:text-white">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
       </div>
+      <form class="space-y-5" onsubmit="salvarAgendamento(event)">
+        <select id="clienteSelect" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white bg-transparent">
+          <option value="">Selecione o Cliente</option>
+        </select>
+        <input type="text" id="servicoInput" placeholder="Serviço" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500">
+        <input type="date" id="dataInput" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white">
+        <input type="time" id="horaInput" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white">
+        <select id="statusSelect" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white bg-transparent">
+          <option value="">Status</option>
+          <option>Pendente</option>
+          <option>Confirmado</option>
+          <option>Concluído</option>
+        </select>
+        <button type="submit" class="btn-neon w-full py-3.5 rounded-xl text-emerald-400 font-semibold text-sm flex items-center justify-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          Salvar Agendamento
+        </button>
+      </form>
     </div>
   </div>
- <script>
+</div>
+
+<script>
   const modal = document.getElementById('modal');
+  const clienteSelect = document.getElementById("clienteSelect");
+  const servicoInput = document.getElementById("servicoInput");
+  const dataInput = document.getElementById("dataInput");
+  const horaInput = document.getElementById("horaInput");
+  const statusSelect = document.getElementById("statusSelect");
+  const agendasGrid = document.querySelector(".grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3.gap-6.mb-8");
 
-  function openModal() {
-    modal.classList.remove('hidden');
-  }
+  let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+  let clientes = ["João Silva", "Maria Souza", "Carlos Lima"];
 
-  function closeModal() {
-    modal.classList.add('hidden');
+  function openModal() { modal.classList.remove('hidden'); }
+  function closeModal() { modal.classList.add('hidden'); }
+
+  function carregarClientes() {
+    clienteSelect.innerHTML = `<option value="">Selecione o Cliente</option>`;
+    clientes.forEach(c => clienteSelect.innerHTML += `<option value="${c}">${c}</option>`);
   }
+  carregarClientes();
 
   function salvarAgendamento(event) {
     event.preventDefault();
-    alert("Agendamento salvo com sucesso!");
+    const cliente = clienteSelect.value;
+    const servico = servicoInput.value;
+    const data = dataInput.value;
+    const hora = horaInput.value;
+    const status = statusSelect.value;
+
+    if (!cliente || !servico || !data || !hora || !status) return alert("Preencha todos os campos!");
+
+    agendamentos.push({ cliente, servico, data, hora, status });
+    localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+    renderAgendamentos();
+    event.target.reset();
     closeModal();
   }
- </script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-<script>
-  lucide.createIcons();
+
+  function renderAgendamentos() {
+    agendasGrid.innerHTML = "";
+    if (agendamentos.length === 0) {
+      agendasGrid.innerHTML = `<div class="text-gray-400 col-span-full">Nenhum agendamento cadastrado</div>`;
+      return;
+    }
+
+    agendamentos.forEach((a, i) => {
+      const card = document.createElement("div");
+      card.className = "glass hover-glass rounded-2xl p-6 relative";
+      card.innerHTML = `
+        <h3 class="font-semibold text-white mb-2">${a.cliente}</h3>
+        <p class="text-gray-400 text-sm">Serviço: ${a.servico}</p>
+        <p class="text-gray-400 text-sm">Data: ${a.data} - ${a.hora}</p>
+        <span class="inline-block mt-3 px-3 py-1 text-xs rounded-full ${a.status === 'Pendente' ? 'bg-yellow-500/20 text-yellow-400' : a.status === 'Confirmado' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-green-500/20 text-green-400'}">${a.status}</span>
+        <button onclick="deletarAgendamento(${i})" class="absolute top-3 right-3 text-red-400 text-sm">Excluir</button>
+      `;
+      agendasGrid.appendChild(card);
+    });
+  }
+
+  function deletarAgendamento(index) {
+    if (!confirm("Deseja realmente excluir este agendamento?")) return;
+    agendamentos.splice(index, 1);
+    localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+    renderAgendamentos();
+  }
+
+  renderAgendamentos();
 </script>
-      <script>
-let dataAtual = new Date();
 
-function renderCalendario() {
-  const diasContainer = document.getElementById("diasCalendario");
-  const mesLabel = document.getElementById("mesAtual");
-
-  diasContainer.innerHTML = "";
-
-  const mes = dataAtual.getMonth();
-  const ano = dataAtual.getFullYear();
-
-  mesLabel.textContent = dataAtual.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
-
-  const primeiroDia = new Date(ano, mes, 1).getDay();
-  const totalDias = new Date(ano, mes + 1, 0).getDate();
-
-  for (let i = 0; i < primeiroDia; i++) {
-    diasContainer.innerHTML += `<div></div>`;
-  }
-
-  for (let dia = 1; dia <= totalDias; dia++) {
-    const hoje = new Date();
-    const isHoje = dia === hoje.getDate() && mes === hoje.getMonth() && ano === hoje.getFullYear();
-
-    diasContainer.innerHTML += `
-      <div class="p-3 rounded-lg cursor-pointer text-sm ${isHoje ? 'bg-emerald-500/20 text-emerald-400 font-bold' : 'hover:bg-white/5'}">
-        ${dia}
-      </div>
-    `;
-  }
-}
-
-function mudarMes(valor) {
-  dataAtual.setMonth(dataAtual.getMonth() + valor);
-  renderCalendario();
-}
-
-renderCalendario();
-      </script>
-      <script>
-let clientes = ["João Silva", "Maria Souza", "Carlos Lima"];
-
-function carregarClientes() {
-  const select = document.getElementById("clienteSelect");
-  select.innerHTML = `<option value="">Selecione o Cliente</option>`;
-  clientes.forEach(cliente => {
-    select.innerHTML += `<option value="${cliente}">${cliente}</option>`;
-  });
-}
-
-carregarClientes();
-      </script>
-      <script>
-let whatsappAtivo = false;
-
-function toggleWhatsApp() {
-  whatsappAtivo = !whatsappAtivo;
-  alert(whatsappAtivo ? "WhatsApp ativado!" : "WhatsApp desativado!");
-}
-
-function enviarWhatsApp() {
-  const numero = document.getElementById("numeroWhats").value;
-  if (!numero) return alert("Digite um número!");
-
-  const mensagem = encodeURIComponent("Olá! Este é um teste do AutoFlow Gestão.");
-  window.open(`https://wa.me/${numero}?text=${mensagem}`, "_blank");
-}
-      </script>
-</body>
-</html>
