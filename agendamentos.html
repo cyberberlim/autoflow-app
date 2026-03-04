@@ -38,12 +38,37 @@
         <p class="text-xs text-gray-500">Gestão Financeira</p>
       </div>
       <nav class="flex-1 py-4 overflow-y-auto">
-        <ul class="space-y-1 px-3">
-          <li><a href="#" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium">Agendamentos</a></li>
-          <li><a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white text-sm font-medium">Clientes</a></li>
-          <li><a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white text-sm font-medium">Financeiro</a></li>
-          <li><a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white text-sm font-medium">Relatórios</a></li>
-        </ul>
+  <ul class="space-y-1 px-3">
+
+    <li>
+      <a href="agendamentos.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium">
+        <i data-lucide="calendar-days" class="w-5 h-5"></i>
+        Agendamentos
+      </a>
+    </li>
+
+    <li>
+      <a href="clientes.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white text-sm font-medium">
+        <i data-lucide="users" class="w-5 h-5"></i>
+        Clientes
+      </a>
+    </li>
+
+    <li>
+      <a href="financeir.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white text-sm font-medium">
+        <i data-lucide="wallet" class="w-5 h-5"></i>
+        Financeiro
+      </a>
+    </li>
+
+    <li>
+      <a href="relatorios.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white text-sm font-medium">
+        <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+        Relatórios
+      </a>
+    </li>
+
+  </ul>
       </nav>
       <div class="p-4 border-t border-white/5 flex items-center gap-3">
         <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500/30 to-cyan-500/30 flex items-center justify-center">
@@ -114,11 +139,24 @@
         </div>
       </div>
 
-      <!-- Calendário -->
-      <div class="glass rounded-2xl p-6 mb-8">
-        <h2 class="text-lg font-semibold mb-4">Calendário</h2>
-        <input type="date" class="input-field px-4 py-3 rounded-xl text-sm text-white">
-      </div>
+      <!-- Calendário Moderno -->
+<div class="glass rounded-2xl p-6 mb-8">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-lg font-semibold">Calendário</h2>
+    <div class="flex items-center gap-2">
+      <button onclick="mudarMes(-1)" class="btn-neon px-3 py-1 rounded-lg text-sm">←</button>
+      <span id="mesAtual" class="text-sm text-emerald-400 font-medium"></span>
+      <button onclick="mudarMes(1)" class="btn-neon px-3 py-1 rounded-lg text-sm">→</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-7 gap-2 text-center text-xs text-gray-400 mb-2">
+    <div>Dom</div><div>Seg</div><div>Ter</div>
+    <div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+  </div>
+
+  <div id="diasCalendario" class="grid grid-cols-7 gap-2"></div>
+</div>
 
       <!-- Notificações -->
 <div class="glass rounded-2xl p-6">
@@ -165,7 +203,9 @@
           </button>
         </div>
         <form class="space-y-5" onsubmit="salvarAgendamento(event)">
-          <input type="text" placeholder="Cliente" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500">
+          <select id="clienteSelect" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white bg-transparent">
+  <option value="">Selecione o Cliente</option>
+          </select>
           <input type="text" placeholder="Serviço" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500">
           <input type="date" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white">
           <input type="time" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white">
@@ -204,5 +244,74 @@
 <script>
   lucide.createIcons();
 </script>
+      <script>
+let dataAtual = new Date();
+
+function renderCalendario() {
+  const diasContainer = document.getElementById("diasCalendario");
+  const mesLabel = document.getElementById("mesAtual");
+
+  diasContainer.innerHTML = "";
+
+  const mes = dataAtual.getMonth();
+  const ano = dataAtual.getFullYear();
+
+  mesLabel.textContent = dataAtual.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+
+  const primeiroDia = new Date(ano, mes, 1).getDay();
+  const totalDias = new Date(ano, mes + 1, 0).getDate();
+
+  for (let i = 0; i < primeiroDia; i++) {
+    diasContainer.innerHTML += `<div></div>`;
+  }
+
+  for (let dia = 1; dia <= totalDias; dia++) {
+    const hoje = new Date();
+    const isHoje = dia === hoje.getDate() && mes === hoje.getMonth() && ano === hoje.getFullYear();
+
+    diasContainer.innerHTML += `
+      <div class="p-3 rounded-lg cursor-pointer text-sm ${isHoje ? 'bg-emerald-500/20 text-emerald-400 font-bold' : 'hover:bg-white/5'}">
+        ${dia}
+      </div>
+    `;
+  }
+}
+
+function mudarMes(valor) {
+  dataAtual.setMonth(dataAtual.getMonth() + valor);
+  renderCalendario();
+}
+
+renderCalendario();
+      </script>
+      <script>
+let clientes = ["João Silva", "Maria Souza", "Carlos Lima"];
+
+function carregarClientes() {
+  const select = document.getElementById("clienteSelect");
+  select.innerHTML = `<option value="">Selecione o Cliente</option>`;
+  clientes.forEach(cliente => {
+    select.innerHTML += `<option value="${cliente}">${cliente}</option>`;
+  });
+}
+
+carregarClientes();
+      </script>
+      <script>
+let whatsappAtivo = false;
+
+function toggleWhatsApp() {
+  whatsappAtivo = !whatsappAtivo;
+  alert(whatsappAtivo ? "WhatsApp ativado!" : "WhatsApp desativado!");
+}
+
+function enviarWhatsApp() {
+  const numero = document.getElementById("numeroWhats").value;
+  if (!numero) return alert("Digite um número!");
+
+  const mensagem = encodeURIComponent("Olá! Este é um teste do AutoFlow Gestão.");
+  window.open(`https://wa.me/${numero}?text=${mensagem}`, "_blank");
+}
+      </script>
 </body>
 </html>
