@@ -314,33 +314,7 @@
    </div>  
   </div>  
 <script>  
-  // === Configuração inicial ===  
-  let clients = JSON.parse(localStorage.getItem("clientes")) || []; 
-  const clientsContainer = document.getElementById('clients-grid');  
-  const emptyState = document.getElementById('empty-card');  
-  const totalCounter = document.getElementById('total-clients');  
-  const form = document.getElementById('client-form');  
-  const modal = document.getElementById('modal');  
-  const btnNovoCliente = document.getElementById('btn-new-client');  
-  const closeModalButtons = document.querySelectorAll('[onclick="closeModal()"]');  
-  const toast = document.getElementById('toast');  
-  const toastMessage = document.getElementById('toast-message');  const clientName = document.getElementById('client-name');
-const clientService = document.getElementById('client-service');
-const clientValue = document.getElementById('client-value');
-const clientDate = document.getElementById('client-date');
 
-let editingIndex = null; // controla edição de cliente
-
-// === Modal ===
-function openModal() { modal.classList.remove('hidden'); }
-function closeModal() {
-modal.classList.add('hidden');
-editingIndex = null;
-form.reset();
-}
-
-btnNovoCliente.addEventListener('click', openModal);
- <script>
 let clients = JSON.parse(localStorage.getItem("clientes")) || [];
 
 const btnNovoCliente = document.getElementById("btn-new-client");
