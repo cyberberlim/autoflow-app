@@ -345,6 +345,25 @@
          </div>
         </div>
        </div>
+       <!-- Modal de Backup -->
+<div id="modal-backup" class="fixed inset-0 z-50 hidden">
+  <div class="modal-backdrop absolute inset-0" onclick="closeModalBackup()"></div>
+  <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+    <div class="glass-card rounded-2xl p-8 w-full max-w-md animate-fadeIn pointer-events-auto border border-white/10">
+      <h2 class="text-xl font-bold text-white mb-4">Backup de Dados</h2>
+      <p class="text-gray-400 text-sm mb-6">Clique em "Exportar" para salvar seus dados.</p>
+      <button onclick="downloadBackup()" class="btn-green-neon w-full py-2 rounded-lg text-white">💾 Exportar</button>
+      <button onclick="closeModalBackup()" class="btn-neon w-full py-2 rounded-lg text-emerald-400 mt-2">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts JS -->
+<script src="/js/storage.js"></script>
+<script src="/js/sidebar-e-botoes.js"></script>
+
+</body>
+      </html>
       </div><!-- Seção 5: Dados & Backup -->
       <div class="glass-card rounded-2xl p-8 mb-8">
        <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">💾 Dados &amp; Backup</h3>
