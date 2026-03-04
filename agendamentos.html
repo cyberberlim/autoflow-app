@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AUTOFLOW - Agendamentos</title>
   <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {  
       theme: {  
@@ -27,6 +27,7 @@
     .btn-neon:hover { background: linear-gradient(135deg, rgba(0,255,136,0.25), rgba(0,212,255,0.25)); border-color: rgba(0,255,136,0.5); box-shadow: 0 0 30px rgba(0,255,136,0.2); }
     .input-field { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s ease; }
     .input-field:focus { border-color: rgba(0,255,136,0.5); box-shadow: 0 0 20px rgba(0,255,136,0.1); outline: none; }
+    ::placeholder { color: #9ca3af; } /* placeholder igual clientes */
   </style>
 </head>
 <body class="h-full app-bg font-sans text-white">
@@ -35,40 +36,35 @@
     <aside class="w-64 h-full bg-black/40 border-r border-white/5 flex flex-col flex-shrink-0 fixed left-0 top-0 z-50">
       <div class="p-6 border-b border-white/5">
         <h1 class="text-lg font-bold text-white">AutoFlow Gestão</h1>
-        <p class="text-xs text-gray-500">Gestão Financeira</p>
+        <p class="text-xs text-gray-400">Gestão Financeira</p>
       </div>
       <nav class="flex-1 py-4 overflow-y-auto">
-  <ul class="space-y-1 px-3">
-
-    <li>
-      <a href="agendamentos.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium">
-        <i data-lucide="calendar-days" class="w-5 h-5"></i>
-        Agendamentos
-      </a>
-    </li>
-
-    <li>
-      <a href="clientes.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white text-sm font-medium">
-        <i data-lucide="users" class="w-5 h-5"></i>
-        Clientes
-      </a>
-    </li>
-
-    <li>
-      <a href="financeir.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white text-sm font-medium">
-        <i data-lucide="wallet" class="w-5 h-5"></i>
-        Financeiro
-      </a>
-    </li>
-
-    <li>
-      <a href="relatorios.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white text-sm font-medium">
-        <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
-        Relatórios
-      </a>
-    </li>
-
-  </ul>
+        <ul class="space-y-1 px-3">
+          <li>
+            <a href="agendamentos.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium">
+              <i data-lucide="calendar-days" class="w-5 h-5"></i>
+              Agendamentos
+            </a>
+          </li>
+          <li>
+            <a href="clientes.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white text-sm font-medium">
+              <i data-lucide="users" class="w-5 h-5"></i>
+              Clientes
+            </a>
+          </li>
+          <li>
+            <a href="financeir.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white text-sm font-medium">
+              <i data-lucide="wallet" class="w-5 h-5"></i>
+              Financeiro
+            </a>
+          </li>
+          <li>
+            <a href="relatorios.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white text-sm font-medium">
+              <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+              Relatórios
+            </a>
+          </li>
+        </ul>
       </nav>
       <div class="p-4 border-t border-white/5 flex items-center gap-3">
         <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500/30 to-cyan-500/30 flex items-center justify-center">
@@ -76,7 +72,7 @@
         </div>
         <div>
           <p class="text-sm font-medium text-white">Admin</p>
-          <p class="text-xs text-gray-500">admin@autoflow.com</p>
+          <p class="text-xs text-gray-400">admin@autoflow.com</p>
         </div>
       </div>
     </aside>
@@ -86,8 +82,8 @@
       <!-- Header -->
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
-          <h1 id="page-title" class="text-2xl font-bold text-white mb-1">Agendamentos</h1>
-          <p class="text-gray-500 text-sm">Gerencie seus horários e serviços</p>
+          <h1 id="page-title" class="text-2xl font-semibold text-white mb-1">Agendamentos</h1>
+          <p class="text-gray-400 text-sm">Gerencie seus horários e serviços</p>
         </div>
         <button onclick="openModal()" class="btn-neon px-5 py-2.5 rounded-xl text-emerald-400 font-medium text-sm flex items-center gap-2">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,7 +94,7 @@
 
       <!-- Filtros -->
       <div class="glass rounded-2xl p-6 mb-8 grid grid-cols-1 md:grid-cols-4 gap-4">
-        <input type="text" placeholder="Buscar cliente ou serviço" class="input-field px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500">
+        <input type="text" placeholder="Buscar cliente ou serviço" class="input-field px-4 py-3 rounded-xl text-sm text-white placeholder-gray-400">
         <input type="date" class="input-field px-4 py-3 rounded-xl text-sm text-white">
         <select class="input-field px-4 py-3 rounded-xl text-sm text-white bg-transparent">
           <option value="">Status</option>
@@ -112,19 +108,19 @@
       <!-- Estatísticas -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div class="glass rounded-2xl p-6 flex items-center gap-4">
-          <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center"><svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+          <div class="w-10 h-10 bg-emerald-500/30 rounded-lg flex items-center justify-center"><svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
           <div><p class="text-gray-400 text-sm">Total</p><p class="text-2xl font-bold text-emerald-400">12</p></div>
         </div>
         <div class="glass rounded-2xl p-6 flex items-center gap-4">
-          <div class="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center"><svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"/></svg></div>
+          <div class="w-10 h-10 bg-yellow-500/30 rounded-lg flex items-center justify-center"><svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"/></svg></div>
           <div><p class="text-gray-400 text-sm">Pendentes</p><p class="text-2xl font-bold text-yellow-400">4</p></div>
         </div>
         <div class="glass rounded-2xl p-6 flex items-center gap-4">
-          <div class="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center"><svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+          <div class="w-10 h-10 bg-cyan-500/30 rounded-lg flex items-center justify-center"><svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
           <div><p class="text-gray-400 text-sm">Confirmados</p><p class="text-2xl font-bold text-cyan-400">6</p></div>
         </div>
         <div class="glass rounded-2xl p-6 flex items-center gap-4">
-          <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center"><svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/></svg></div>
+          <div class="w-10 h-10 bg-green-500/30 rounded-lg flex items-center justify-center"><svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/></svg></div>
           <div><p class="text-gray-400 text-sm">Concluídos</p><p class="text-2xl font-bold text-green-400">2</p></div>
         </div>
       </div>
@@ -135,164 +131,188 @@
           <h3 class="font-semibold text-white mb-2">João Silva</h3>
           <p class="text-gray-400 text-sm">Serviço: Lavagem Completa</p>
           <p class="text-gray-400 text-sm">Data: 05/03/2026 - 14:00</p>
-          <span class="inline-block mt-3 px-3 py-1 text-xs rounded-full bg-yellow-500/20 text-yellow-400">Pendente</span>
+          <span class="inline-block mt-3 px-2 py-1 text-xs rounded-full bg-yellow-500/20 text-yellow-400">Pendente</span>
+        </div>
+      </div>
+      <!-- Calendário Moderno -->
+      <div class="glass rounded-2xl p-6 mb-8">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-lg font-semibold">Calendário</h2>
+          <div class="flex items-center gap-2">
+            <button onclick="mudarMes(-1)" class="btn-neon px-3 py-1 rounded-lg text-sm">←</button>
+            <span id="mesAtual" class="text-sm text-emerald-400 font-medium"></span>
+            <button onclick="mudarMes(1)" class="btn-neon px-3 py-1 rounded-lg text-sm">→</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-7 gap-2 text-center text-xs text-gray-400 mb-2">
+          <div>Dom</div><div>Seg</div><div>Ter</div>
+          <div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+        </div>
+
+        <div id="diasCalendario" class="grid grid-cols-7 gap-2"></div>
+      </div>
+
+      <!-- Notificações -->
+      <div class="glass rounded-2xl p-6 mb-8">
+        <h2 class="text-lg font-semibold mb-4">Notificações</h2>
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-400">
+              Enviar confirmação via WhatsApp
+            </span>
+            <button onclick="toggleWhatsApp()" 
+              class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm">
+              Ativar
+            </button>
+          </div>
+
+          <div>
+            <label class="text-sm text-gray-400">Número do WhatsApp</label>
+            <input id="numeroWhats" type="text" 
+              placeholder="5599999999999"
+              class="input-field w-full px-4 py-3 rounded-xl text-sm text-white mt-2">
+          </div>
+
+          <div>
+            <button onclick="enviarWhatsApp()" 
+              class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
+              Enviar Mensagem de Teste
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Calendário Moderno -->
-<div class="glass rounded-2xl p-6 mb-8">
-  <div class="flex items-center justify-between mb-6">
-    <h2 class="text-lg font-semibold">Calendário</h2>
-    <div class="flex items-center gap-2">
-      <button onclick="mudarMes(-1)" class="btn-neon px-3 py-1 rounded-lg text-sm">←</button>
-      <span id="mesAtual" class="text-sm text-emerald-400 font-medium"></span>
-      <button onclick="mudarMes(1)" class="btn-neon px-3 py-1 rounded-lg text-sm">→</button>
-    </div>
-  </div>
-
-  <div class="grid grid-cols-7 gap-2 text-center text-xs text-gray-400 mb-2">
-    <div>Dom</div><div>Seg</div><div>Ter</div>
-    <div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
-  </div>
-
-  <div id="diasCalendario" class="grid grid-cols-7 gap-2"></div>
-</div>
-
-      <!-- Notificações -->
-<div class="glass rounded-2xl p-6">
-  <h2 class="text-lg font-semibold mb-4">Notificações</h2>
-
-  <div class="flex flex-col gap-4">
-
-    <div class="flex items-center justify-between">
-      <span class="text-sm text-gray-400">
-        Enviar confirmação via WhatsApp
-      </span>
-      <button onclick="toggleWhatsApp()" 
-        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm">
-        Ativar
-      </button>
-    </div>
-
-    <div>
-      <label class="text-sm text-gray-400">Número do WhatsApp</label>
-      <input id="numeroWhats" type="text" 
-        placeholder="5599999999999"
-        class="input-field w-full px-4 py-3 rounded-xl text-sm text-white mt-2">
-    </div>
-
-    <div>
-      <button onclick="enviarWhatsApp()" 
-        class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
-        Enviar Mensagem de Teste
-      </button>
-    </div>
-
-  </div>
-</div>
-      <!-- Modal -->
-<div id="modal" class="fixed inset-0 z-50 hidden">
-  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
-  <div class="absolute inset-0 flex items-center justify-center p-4">
-    <div class="glass rounded-2xl p-8 w-full max-w-md">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-xl font-bold">Novo Agendamento</h2>
-        <button onclick="closeModal()" class="text-gray-500 hover:text-white">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
+      <!-- Modal Novo Agendamento -->
+      <div id="modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+          <div class="glass rounded-2xl p-8 w-full max-w-md">
+            <div class="flex items-center justify-between mb-6">
+              <h2 class="text-xl font-bold">Novo Agendamento</h2>
+              <button onclick="closeModal()" class="text-gray-500 hover:text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+            <form class="space-y-5" onsubmit="salvarAgendamento(event)">
+              <select id="clienteSelect" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white bg-transparent">
+                <option value="">Selecione o Cliente</option>
+              </select>
+              <input type="text" id="servicoInput" placeholder="Serviço" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-400">
+              <input type="date" id="dataInput" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white">
+              <input type="time" id="horaInput" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white">
+              <select id="statusSelect" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white bg-transparent">
+                <option value="">Status</option>
+                <option>Pendente</option>
+                <option>Confirmado</option>
+                <option>Concluído</option>
+              </select>
+              <button type="submit" class="btn-neon w-full py-3.5 rounded-xl text-emerald-400 font-semibold text-sm flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Salvar Agendamento
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
-      <form class="space-y-5" onsubmit="salvarAgendamento(event)">
-        <select id="clienteSelect" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white bg-transparent">
-          <option value="">Selecione o Cliente</option>
-        </select>
-        <input type="text" id="servicoInput" placeholder="Serviço" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500">
-        <input type="date" id="dataInput" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white">
-        <input type="time" id="horaInput" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white">
-        <select id="statusSelect" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white bg-transparent">
-          <option value="">Status</option>
-          <option>Pendente</option>
-          <option>Confirmado</option>
-          <option>Concluído</option>
-        </select>
-        <button type="submit" class="btn-neon w-full py-3.5 rounded-xl text-emerald-400 font-semibold text-sm flex items-center justify-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-          </svg>
-          Salvar Agendamento
-        </button>
-      </form>
-    </div>
+
+    </main>
   </div>
-</div>
 
-<script>
-  const modal = document.getElementById('modal');
-  const clienteSelect = document.getElementById("clienteSelect");
-  const servicoInput = document.getElementById("servicoInput");
-  const dataInput = document.getElementById("dataInput");
-  const horaInput = document.getElementById("horaInput");
-  const statusSelect = document.getElementById("statusSelect");
-  const agendasGrid = document.querySelector(".grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3.gap-6.mb-8");
+  <script>
+    const modal = document.getElementById('modal');
+    const clienteSelect = document.getElementById("clienteSelect");
+    const servicoInput = document.getElementById("servicoInput");
+    const dataInput = document.getElementById("dataInput");
+    const horaInput = document.getElementById("horaInput");
+    const statusSelect = document.getElementById("statusSelect");
+    const agendasGrid = document.querySelector(".grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3.gap-6.mb-8");
 
-  let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
-  let clientes = ["João Silva", "Maria Souza", "Carlos Lima"];
+    let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+    let clientes = ["João Silva", "Maria Souza", "Carlos Lima"];
 
-  function openModal() { modal.classList.remove('hidden'); }
-  function closeModal() { modal.classList.add('hidden'); }
+    function openModal() { modal.classList.remove('hidden'); }
+    function closeModal() { modal.classList.add('hidden'); }
 
-  function carregarClientes() {
-    clienteSelect.innerHTML = `<option value="">Selecione o Cliente</option>`;
-    clientes.forEach(c => clienteSelect.innerHTML += `<option value="${c}">${c}</option>`);
-  }
-  carregarClientes();
+    function carregarClientes() {
+      clienteSelect.innerHTML = `<option value="">Selecione o Cliente</option>`;
+      clientes.forEach(c => clienteSelect.innerHTML += `<option value="${c}">${c}</option>`);
+    }
+    carregarClientes();
 
-  function salvarAgendamento(event) {
-    event.preventDefault();
-    const cliente = clienteSelect.value;
-    const servico = servicoInput.value;
-    const data = dataInput.value;
-    const hora = horaInput.value;
-    const status = statusSelect.value;
+    function salvarAgendamento(event) {
+      event.preventDefault();
+      const cliente = clienteSelect.value;
+      const servico = servicoInput.value;
+      const data = dataInput.value;
+      const hora = horaInput.value;
+      const status = statusSelect.value;
 
-    if (!cliente || !servico || !data || !hora || !status) return alert("Preencha todos os campos!");
+      if (!cliente || !servico || !data || !hora || !status) return alert("Preencha todos os campos!");
 
-    agendamentos.push({ cliente, servico, data, hora, status });
-    localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-    renderAgendamentos();
-    event.target.reset();
-    closeModal();
-  }
-
-  function renderAgendamentos() {
-    agendasGrid.innerHTML = "";
-    if (agendamentos.length === 0) {
-      agendasGrid.innerHTML = `<div class="text-gray-400 col-span-full">Nenhum agendamento cadastrado</div>`;
-      return;
+      agendamentos.push({ cliente, servico, data, hora, status });
+      localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+      renderAgendamentos();
+      event.target.reset();
+      closeModal();
     }
 
-    agendamentos.forEach((a, i) => {
-      const card = document.createElement("div");
-      card.className = "glass hover-glass rounded-2xl p-6 relative";
-      card.innerHTML = `
-        <h3 class="font-semibold text-white mb-2">${a.cliente}</h3>
-        <p class="text-gray-400 text-sm">Serviço: ${a.servico}</p>
-        <p class="text-gray-400 text-sm">Data: ${a.data} - ${a.hora}</p>
-        <span class="inline-block mt-3 px-3 py-1 text-xs rounded-full ${a.status === 'Pendente' ? 'bg-yellow-500/20 text-yellow-400' : a.status === 'Confirmado' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-green-500/20 text-green-400'}">${a.status}</span>
-        <button onclick="deletarAgendamento(${i})" class="absolute top-3 right-3 text-red-400 text-sm">Excluir</button>
-      `;
-      agendasGrid.appendChild(card);
-    });
-  }
+    function renderAgendamentos() {
+      agendasGrid.innerHTML = "";
+      if (agendamentos.length === 0) {
+        agendasGrid.innerHTML = `<div class="text-gray-400 col-span-full">Nenhum agendamento cadastrado</div>`;
+        return;
+      }
 
-  function deletarAgendamento(index) {
-    if (!confirm("Deseja realmente excluir este agendamento?")) return;
-    agendamentos.splice(index, 1);
-    localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+      agendamentos.forEach((a, i) => {
+        const card = document.createElement("div");
+        card.className = "glass hover-glass rounded-2xl p-6 relative";
+        card.innerHTML = `
+          <h3 class="font-semibold text-white mb-2">${a.cliente}</h3>
+          <p class="text-gray-400 text-sm">Serviço: ${a.servico}</p>
+          <p class="text-gray-400 text-sm">Data: ${a.data} - ${a.hora}</p>
+          <span class="inline-block mt-3 px-2 py-1 text-xs rounded-full ${a.status === 'Pendente' ? 'bg-yellow-500/20 text-yellow-400' : a.status === 'Confirmado' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-green-500/20 text-green-400'}">${a.status}</span>
+          <button onclick="deletarAgendamento(${i})" class="absolute top-3 right-3 text-red-400 text-sm">Excluir</button>
+        `;
+        agendasGrid.appendChild(card);
+      });
+    }
+
+    function deletarAgendamento(index) {
+      if (!confirm("Deseja realmente excluir este agendamento?")) return;
+      agendamentos.splice(index, 1);
+      localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+      renderAgendamentos();
+    }
+
     renderAgendamentos();
-  }
 
-  renderAgendamentos();
-</script>
+    function toggleWhatsApp() { alert("WhatsApp ativado/desativado!"); }
+    function enviarWhatsApp() { alert("Mensagem de teste enviada!"); }
 
+    // Calendário simplificado
+    let dataAtual = new Date();
+    function mudarMes(delta) {
+      dataAtual.setMonth(dataAtual.getMonth() + delta);
+      atualizarMes();
+    }
+    function atualizarMes() {
+      const mesNome = dataAtual.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
+      document.getElementById("mesAtual").textContent = mesNome;
+      const diasContainer = document.getElementById("diasCalendario");
+      diasContainer.innerHTML = "";
+      const primeiroDia = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1).getDay();
+      const totalDias = new Date(dataAtual.getFullYear(), dataAtual.getMonth() + 1, 0).getDate();
+      for (let i = 0; i < primeiroDia; i++) diasContainer.innerHTML += `<div></div>`;
+      for (let d = 1; d <= totalDias; d++) diasContainer.innerHTML += `<div class="text-sm py-2">${d}</div>`;
+    }
+    atualizarMes();
+  </script>
+</body>
+                </html>
+
+      <!-- Calendário e Notificações e Modal permanecem iguais -->
