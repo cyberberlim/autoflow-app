@@ -315,7 +315,7 @@
   </div>  
 <script>  
   // === Configuração inicial ===  
-  let clients = [];  
+  let clients = JSON.parse(localStorage.getItem("clientes")) || []; 
   const clientsContainer = document.getElementById('clients-grid');  
   const emptyState = document.getElementById('empty-card');  
   const totalCounter = document.getElementById('total-clients');  
@@ -339,4 +339,82 @@ editingIndex = null;
 form.reset();
 }
 
-btnNovoCliente.addEventListener('click', ope
+btnNovoCliente.addEventListener('click', openModal);
+ <script>
+let clients = JSON.parse(localStorage.getItem("clientes")) || [];
+
+const btnNovoCliente = document.getElementById("btn-new-client");
+const modal = document.getElementById("modal");
+const form = document.getElementById("client-form");
+const clientsGrid = document.getElementById("clients-grid");
+const totalClients = document.getElementById("total-clients");
+
+btnNovoCliente.addEventListener("click", openModal);
+
+function openModal() {
+    modal.classList.remove("hidden");
+}
+
+function closeModal() {
+    modal.classList.add("hidden");
+}
+
+form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const nome = document.getElementById("client-name").value;
+    const servico = document.getElementById("client-service").value;
+
+    const novoCliente = {
+        id: Date.now(),
+        nome,
+        servico
+    };
+
+    clients.push(novoCliente);
+    salvarClientes();
+    renderClients();
+    form.reset();
+    closeModal();
+});
+
+function salvarClientes() {
+    localStorage.setItem("clientes", JSON.stringify(clients));
+}
+
+function renderClients() {
+    clientsGrid.innerHTML = "";
+
+    if (clients.length === 0) {
+        clientsGrid.innerHTML = `
+            <div class="text-gray-400">
+                Nenhum cliente cadastrado
+            </div>
+        `;
+    }
+
+    clients.forEach(cliente => {
+        const card = document.createElement("div");
+        card.className = "glass-card rounded-2xl p-6";
+        card.innerHTML = `
+            <h3 class="text-white font-bold mb-2">${cliente.nome}</h3>
+            <p class="text-gray-400 mb-4">${cliente.servico}</p>
+            <button onclick="deleteClient(${cliente.id})"
+                class="text-red-400 text-sm">
+                Excluir
+            </button>
+        `;
+        clientsGrid.appendChild(card);
+    });
+
+    totalClients.textContent = clients.length;
+}
+
+function deleteClient(id) {
+    clients = clients.filter(cliente => cliente.id !== id);
+    salvarClientes();
+    renderClients();
+}
+
+renderClients();
+</script>
