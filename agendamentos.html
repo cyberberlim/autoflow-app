@@ -1,124 +1,222 @@
-<!doctype html>
-<html lang="pt-BR" class="h-full">
- <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AUTOFLOW - Agendamentos </title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="/_sdk/element_sdk.js"></script>
-  <script src="/_sdk/data_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
-  <style>  
-    * { font-family: 'Inter', sans-serif; }  
-    ::-webkit-scrollbar { width: 6px; height: 6px; }  
-    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 3px; }  
-    ::-webkit-scrollbar-thumb { background: rgba(0,255,136,0.3); border-radius: 3px; }  
-    ::-webkit-scrollbar-thumb:hover { background: rgba(0,255,136,0.5); }  
-    .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; }  
-    .neon-glow { box-shadow: 0 0 20px rgba(0, 255, 136, 0.3), 0 0 40px rgba(0, 255, 136, 0.1); }  
-    .neon-text { text-shadow: 0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3); }  
-    .sidebar-item { transition: all 0.3s ease; border-left: 3px solid transparent; }  
-    .sidebar-item:hover { background: rgba(0, 255, 136, 0.1); border-left-color: rgba(0, 255, 136, 0.5); }  
-    .sidebar-item.active { background: rgba(0, 255, 136, 0.15); border-left-color: #00ff88; }  
-    .sidebar-item.active span { color: #00ff88; text-shadow: 0 0 10px rgba(0, 255, 136, 0.5); }  
-    .btn-neon { background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%); box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4); transition: all 0.3s ease; }  
-    .btn-neon:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(0, 255, 136, 0.5); }  
-    .status-pendente { background: rgba(255, 193, 7, 0.2); border-left: 4px solid #ffc107; }  
-    .status-confirmado { background: rgba(0, 255, 136, 0.15); border-left: 4px solid #00ff88; }  
-    .status-concluido { background: rgba(156, 163, 175, 0.2); border-left: 4px solid #9ca3af; }  
-    .modal-overlay { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); }  
-    .input-dark { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }  
-    .input-dark:focus { border-color: #00ff88; box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1); outline: none; }  
-    .notification-pulse { animation: pulse 2s infinite; }  
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }  
-    .card-hover { transition: all 0.3s ease; }  
-    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); }  
-  </style>  
-</head>  
-<body class="h-full text-white overflow-auto" style="background: linear-gradient(135deg, #0a0a0f 0%, #0d0d14 50%, #0a0a0f 100%);">    <!-- Modal Novo/Editar Agendamento -->    <div id="modal-agendamento" class="fixed inset-0 z-50 hidden">  
-    <div class="modal-overlay absolute inset-0" id="modal-overlay"></div>  
-    <div class="relative flex items-center justify-center min-h-full p-4">  
-      <div class="glass-card w-full max-w-lg p-8 relative">  
-        <button id="modal-close" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-700/50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-600/50 transition-colors">  
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">  
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />  
-          </svg>  
-        </button>  
-        <h2 id="modal-title" class="text-2xl font-bold mb-6 neon-text">Novo Agendamento</h2>  
-        <form id="form-agendamento" class="space-y-5">  
-          <input type="hidden" id="agendamento-id">  
-          <div>  
-            <label class="block text-sm font-medium text-gray-300 mb-2">Cliente *</label>  
-            <input type="text" id="input-cliente" placeholder="Nome do cliente" class="w-full px-4 py-3 input-dark rounded-xl text-white placeholder-gray-500" required>  
-          </div>  
-          <div>  
-            <label class="block text-sm font-medium text-gray-300 mb-2">Serviço *</label>  
-            <select id="input-servico" class="w-full px-4 py-3 input-dark rounded-xl text-white" required>  
-              <option value="">Selecione o serviço</option>  
-              <option value="Lavagem Simples">Lavagem Simples</option>  
-              <option value="Lavagem Detalhada">Lavagem Detalhada</option>  
-              <option value="Polimento">Polimento</option>  
-              <option value="Cristalização">Cristalização</option>  
-              <option value="Vitrificação">Vitrificação</option>  
-              <option value="Higienização Interna">Higienização Interna</option>  
-              <option value="Limpeza de Motor">Limpeza de Motor</option>  
-              <option value="Proteção de Pintura">Proteção de Pintura</option>  
-            </select>  
-          </div>  
-          <div class="grid grid-cols-2 gap-4">  
-            <div>  
-              <label class="block text-sm font-medium text-gray-300 mb-2">Data *</label>  
-              <input type="date" id="input-data" class="w-full px-4 py-3 input-dark rounded-xl text-white" required>  
-            </div>  
-            <div>  
-              <label class="block text-sm font-medium text-gray-300 mb-2">Horário *</label>  
-              <input type="time" id="input-horario" class="w-full px-4 py-3 input-dark rounded-xl text-white" required>  
-            </div>  
-          </div>  
-          <div>  
-            <label class="block text-sm font-medium text-gray-300 mb-2">Status</label>  
-            <select id="input-status" class="w-full px-4 py-3 input-dark rounded-xl text-white">  
-              <option value="pendente">Pendente</option>  
-              <option value="confirmado">Confirmado</option>  
-              <option value="concluido">Concluído</option>  
-            </select>  
-          </div>  
-          <div class="flex justify-end">  
-            <button type="submit" class="btn-neon px-6 py-3 rounded-xl font-semibold text-gray-900">Salvar</button>  
-          </div>  
-        </form>  
-      </div>  
-    </div>  
-  </div>    <script>  
-    // Corrigir viewBox em todos os SVGs  
-    document.querySelectorAll('svg').forEach(svg => {  
-      if (svg.hasAttribute('viewbox')) {  
-        svg.setAttribute('viewBox', svg.getAttribute('viewbox'));  
-        svg.removeAttribute('viewbox');  
-      }  
-    });  
-  
-    // Verificação dos SDKs  
-    ['/_sdk/element_sdk.js', '/_sdk/data_sdk.js'].forEach(file => {  
-      fetch(file)  
-        .then(res => { if (!res.ok) console.error(`Arquivo ${file} não encontrado no servidor.`); })  
-        .catch(() => console.error(`Erro ao verificar ${file}.`));  
-    });  
-  
-    // Funções de modal  
-    function openModal(editMode) {  
-      const modal = document.getElementById('modal-agendamento');  
-      const title = document.getElementById('modal-title');  
-      title.textContent = editMode ? 'Editar Agendamento' : 'Novo Agendamento';  
-      modal.classList.remove('hidden');  
-    }  
-  
-    function closeModal() {  
-      document.getElementById('modal-agendamento').classList.add('hidden');  
-    }  
-  
-    document.getElementById('modal-close').addEventListener('click', closeModal);  
-    document.getElementById('modal-overlay').addEventListener('click', closeModal);  
-  </script> 
-</body>  
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agendamentos – Estética Automotiva</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #0a0a0f 0%, #0d0d14 50%, #0a0a0f 100%);
+  color: #ffffff;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.header h1 {
+  font-size: 28px;
+  color: #00ff88;
+  text-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+}
+.header p {
+  color: #9ca3af;
+  font-size: 16px;
+}
+.notification {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+.notification span {
+  color: #00d4ff;
+  font-size: 20px;
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+.filters input, .filters select {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 10px 12px;
+  border-radius: 6px;
+}
+.filters input:focus, .filters select:focus {
+  border: 1px solid rgba(0, 255, 136, 0.5);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+  outline: none;
+}
+.btn-neon {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 212, 255, 0.15));
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  color: #00ff88;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn-neon:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.25), rgba(0, 212, 255, 0.25));
+  border: 1px solid rgba(0, 255, 136, 0.5);
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  transition: 0.3s;
+}
+.card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.card h3 {
+  margin: 0 0 10px;
+  color: #ffffff;
+}
+.card p {
+  margin: 5px 0;
+  color: #9ca3af;
+}
+.status {
+  font-weight: bold;
+}
+.status.confirmado { color: #00ff88; }
+.status.pendente { color: #facc15; }
+.status.concluido { color: #9ca3af; }
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+.card-actions i {
+  cursor: pointer;
+  transition: 0.3s;
+}
+.card-actions i:hover {
+  color: #00d4ff;
+}
+.alerts {
+  margin-top: 40px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 15px 20px;
+  border-radius: 8px;
+}
+.alerts p {
+  color: #00d4ff;
+}
+.whatsapp-area {
+  margin-top: 30px;
+  text-align: center;
+}
+.whatsapp-btn {
+  display: inline-block;
+  background: rgba(0, 255, 136, 0.15);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  color: #00ff88;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+.whatsapp-btn:hover {
+  background: rgba(0, 255, 136, 0.25);
+  border: 1px solid rgba(0, 255, 136, 0.5);
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Agendamentos – Estética Automotiva</h1>
+    <p>Gerencie todos os agendamentos da sua estética automotiva em um único lugar.</p>
+  </div>
+
+  <div class="notification">
+    <span>🔔</span> Você tem 1 agendamento amanhã
+  </div>
+
+  <div class="filters">
+    <input type="text" placeholder="Buscar cliente...">
+    <select>
+      <option>Filtrar por serviço</option>
+      <option>Lavagem Detalhada</option>
+      <option>Polimento</option>
+      <option>Higienização</option>
+    </select>
+    <input type="date">
+    <button class="btn-neon">+ Novo Agendamento</button>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <h3>João Silva</h3>
+      <p>Serviço: Lavagem Detalhada</p>
+      <p>Data: 05/03/2026 - 10h00</p>
+      <p class="status confirmado">Status: Confirmado</p>
+      <div class="card-actions">
+        <i>✏️</i>
+        <i>🗑️</i>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Maria Souza</h3>
+      <p>Serviço: Polimento</p>
+      <p>Data: 06/03/2026 - 14h00</p>
+      <p class="status pendente">Status: Pendente</p>
+      <div class="card-actions">
+        <i>✏️</i>
+        <i>🗑️</i>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Carlos Lima</h3>
+      <p>Serviço: Higienização</p>
+      <p>Data: 03/03/2026 - 09h00</p>
+      <p class="status concluido">Status: Concluído</p>
+      <div class="card-actions">
+        <i>✏️</i>
+        <i>🗑️</i>
+      </div>
+    </div>
+  </div>
+
+  <div class="alerts">
+    <p>⚡ Lembrete: Agendamento com João amanhã às 10h – Lavagem Detalhada</p>
+  </div>
+
+  <div class="whatsapp-area">
+    <a href="#" class="whatsapp-btn">📱 Agende via WhatsApp</a>
+  </div>
+</div>
+</body>
 </html>
+```
