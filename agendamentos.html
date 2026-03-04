@@ -121,12 +121,37 @@
       </div>
 
       <!-- Notificações -->
-      <div class="glass rounded-2xl p-6">
-        <h2 class="text-lg font-semibold mb-4">Notificações</h2>
-        <p class="text-gray-400 text-sm">Integração futura com WhatsApp para lembretes automáticos.</p>
-      </div>
-    </main>
+<div class="glass rounded-2xl p-6">
+  <h2 class="text-lg font-semibold mb-4">Notificações</h2>
+
+  <div class="flex flex-col gap-4">
+
+    <div class="flex items-center justify-between">
+      <span class="text-sm text-gray-400">
+        Enviar confirmação via WhatsApp
+      </span>
+      <button onclick="toggleWhatsApp()" 
+        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm">
+        Ativar
+      </button>
+    </div>
+
+    <div>
+      <label class="text-sm text-gray-400">Número do WhatsApp</label>
+      <input id="numeroWhats" type="text" 
+        placeholder="5599999999999"
+        class="input-field w-full px-4 py-3 rounded-xl text-sm text-white mt-2">
+    </div>
+
+    <div>
+      <button onclick="enviarWhatsApp()" 
+        class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
+        Enviar Mensagem de Teste
+      </button>
+    </div>
+
   </div>
+</div>
 
   <!-- Modal -->
   <div id="modal" class="fixed inset-0 z-50 hidden">
@@ -175,5 +200,9 @@
     closeModal();
   }
  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+</script>
 </body>
 </html>
