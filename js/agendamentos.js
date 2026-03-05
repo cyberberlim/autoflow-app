@@ -1,15 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
+
   const btnNovo = document.getElementById("new-appointment-btn");
   const modal = document.getElementById("modal");
   const form = document.getElementById("appointment-form");
   const container = document.getElementById("appointments-list");
   const emptyState = document.getElementById("empty-state");
+
   const deleteModal = document.getElementById("delete-modal");
-  const confirmDeleteBtn = document.getElementById("confirm-delete-btn");
+  const confirmDeleteBtn = document.getElementById("confirm-delete");
+  const cancelDeleteBtn = document.getElementById("cancel-delete");
 
   let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
-  let indexToDelete = null;
-  let indexToEdit = null;
+  let deleteIndex = null;
 
   function salvar() {
     localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
@@ -20,21 +22,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (agendamentos.length === 0) {
       emptyState.style.display = "block";
-      updateCounters();
+      document.getElementById("total-appointments").textContent = 0;
+      document.getElementById("pending-count").textContent = 0;
+      document.getElementById("confirmed-count").textContent = 0;
+      document.getElementById("completed-count").textContent = 0;
       return;
     }
 
     emptyState.style.display = "none";
-    updateCounters();
+
+    document.getElementById("total-appointments").textContent = agendamentos.length;
+    document.getElementById("pending-count").textContent =
+      agendamentos.filter(a => a.status.toLowerCase() === "pendente").length;
+    document.getElementById("confirmed-count").textContent =
+      agendamentos.filter(a => a.status.toLowerCase() === "confirmado").length;
+    document.getElementById("completed-count").textContent =
+      agendamentos.filter(a => a.status.toLowerCase() === "concluido").length;
 
     agendamentos.forEach((a, index) => {
       let statusClass = "";
-      if (a.status === "pendente") statusClass = "bg-yellow-500/20 text-yellow-400";
-      if (a.status === "confirmado") statusClass = "bg-blue-500/20 text-blue-400";
-      if (a.status === "concluido") statusClass = "bg-green-500/20 text-green-400";
+      if (a.status.toLowerCase() === "pendente") statusClass = "status-pendente";
+      if (a.status.toLowerCase() === "confirmado") statusClass = "status-confirmado";
+      if (a.status.toLowerCase() === "concluido") statusClass = "status-concluido";
 
       const card = document.createElement("div");
       card.className = "appointment-card flex justify-between items-center text-white max-w-md mx-auto p-4 rounded-2xl border border-white/10";
+
       card.innerHTML = `
         <div>
           <h3 class="font-semibold text-sm">${a.nome}</h3>
@@ -43,57 +56,46 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
         <div class="flex items-center gap-3">
           <span class="px-2 py-1 rounded-full text-xs ${statusClass}">${a.status}</span>
-          <button data-index="${index}" class="btn-edit text-cyan-400 hover:text-cyan-300 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5m-7-7l7 7" />
-            </svg>
-          </button>
-          <button data-index="${index}" class="btn-delete text-red-400 hover:text-red-300 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6" />
-            </svg>
-          </button>
+          <button data-index="${index}" class="btn-edit text-cyan-400 hover:text-cyan-300 transition-colors" title="Editar">✏</button>
+          <button data-index="${index}" class="btn-delete text-red-400 hover:text-red-300 transition-colors" title="Excluir">🗑</button>
         </div>
       `;
+
       container.appendChild(card);
     });
 
-    // Edit buttons
-    document.querySelectorAll(".btn-edit").forEach(btn => {
-      btn.addEventListener("click", function () {
-        indexToEdit = this.getAttribute("data-index");
-        const a = agendamentos[indexToEdit];
-        document.getElementById("client-name").value = a.nome;
-        document.getElementById("service").value = a.servico;
-        document.getElementById("date").value = a.data;
-        document.getElementById("time").value = a.hora;
-        document.getElementById("status").value = a.status;
-        modal.classList.remove("hidden");
-      });
-    });
-
-    // Delete buttons
+    // Botões de excluir
     document.querySelectorAll(".btn-delete").forEach(btn => {
       btn.addEventListener("click", function () {
-        indexToDelete = this.getAttribute("data-index");
-        deleteModal.classList.remove("hidden");
+        deleteIndex = this.getAttribute("data-index");
+        deleteModal.classList.remove("hidden"); // mostra o modal de confirmação
+      });
+    });
+
+    // Botões de editar (apenas exemplo simples, você pode expandir)
+    document.querySelectorAll(".btn-edit").forEach(btn => {
+      btn.addEventListener("click", function () {
+        const i = this.getAttribute("data-index");
+        const ag = agendamentos[i];
+        document.getElementById("client-name").value = ag.nome;
+        document.getElementById("service").value = ag.servico;
+        document.getElementById("date").value = ag.data;
+        document.getElementById("time").value = ag.hora;
+        document.getElementById("status").value = ag.status;
+        modal.classList.remove("hidden");
+
+        // Remove o agendamento antigo ao salvar novamente
+        agendamentos.splice(i, 1);
       });
     });
   }
 
-  function updateCounters() {
-    document.getElementById("total-appointments").textContent = agendamentos.length;
-    document.getElementById("pending-count").textContent = agendamentos.filter(a => a.status === "pendente").length;
-    document.getElementById("confirmed-count").textContent = agendamentos.filter(a => a.status === "confirmado").length;
-    document.getElementById("completed-count").textContent = agendamentos.filter(a => a.status === "concluido").length;
-  }
-
+  // Novo agendamento
   btnNovo.addEventListener("click", function () {
-    indexToEdit = null;
-    form.reset();
     modal.classList.remove("hidden");
   });
 
+  // Formulário
   form.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -103,30 +105,33 @@ document.addEventListener("DOMContentLoaded", function () {
     const hora = document.getElementById("time").value;
     const status = document.getElementById("status").value;
 
-    if (indexToEdit !== null) {
-      agendamentos[indexToEdit] = { nome, servico, data, hora, status };
-    } else {
-      agendamentos.push({ nome, servico, data, hora, status });
-    }
-
+    agendamentos.push({ nome, servico, data, hora, status });
     salvar();
     renderizar();
-    modal.classList.add("hidden");
+
     form.reset();
+    modal.classList.add("hidden");
   });
 
-  // Close modals
-  window.closeModal = () => modal.classList.add("hidden");
-  window.closeDeleteModal = () => deleteModal.classList.add("hidden");
+  // Fechar modal
+  window.closeModal = function () {
+    modal.classList.add("hidden");
+  };
 
+  // Modal de exclusão
   confirmDeleteBtn.addEventListener("click", () => {
-    if (indexToDelete !== null) {
-      agendamentos.splice(indexToDelete, 1);
+    if (deleteIndex !== null) {
+      agendamentos.splice(deleteIndex, 1);
       salvar();
       renderizar();
-      deleteModal.classList.add("hidden");
-      indexToDelete = null;
+      deleteIndex = null;
     }
+    deleteModal.classList.add("hidden");
+  });
+
+  cancelDeleteBtn.addEventListener("click", () => {
+    deleteIndex = null;
+    deleteModal.classList.add("hidden");
   });
 
   renderizar();
