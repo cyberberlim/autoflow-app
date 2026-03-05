@@ -357,77 +357,13 @@ select option {
        </div>  
       </div>  
      </div>  
-    </main>  
+    </main>
+  </div>
+</div>
 
-<!-- Botão para abrir o modal -->
-<button id="btn-new-agendamento" class="btn bg-emerald-500 text-white p-2 rounded">Novo Agendamento</button>
-
-<!-- Modal -->
-<div id="modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-  <div class="bg-white rounded-xl p-6 relative w-96">
-    <button class="btn-close absolute top-2 right-2 text-red-500 font-bold">X</button>
-    <h2 class="text-xl font-bold mb-4">Novo Agendamento</h2>
-    <form>
-      <input type="text" placeholder="Cliente" required class="mb-2 w-full p-2 border rounded"/>
-      <input type="text" placeholder="Serviço" required class="mb-2 w-full p-2 border rounded"/>
-      <input type="date" required class="mb-2 w-full p-2 border rounded"/>
-      <input type="time" required class="mb-2 w-full p-2 border rounded"/>
-      <select class="mb-2 w-full p-2 border rounded">
-        <option value="Pendente">Pendente</option>
-        <option value="Confirmado">Confirmado</option>
-
-<script>
-  // ----- Modal -----
-  const modal = document.getElementById('modal');
-  const btnNew = document.getElementById('btn-new-agendamento');
-  const form = modal.querySelector('form');
-  const btnClose = modal.querySelector('.btn-close');
-
-  btnNew.addEventListener('click', () => modal.classList.remove('hidden'));
-  btnClose.addEventListener('click', () => modal.classList.add('hidden'));
-
-  function closeModal() { modal.classList.add('hidden'); }
-
-  // ----- Agendamentos -----
-  let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
-
-  const agendamentosContainer = document.getElementById('agendamentos-container');
-  const emptyState = document.getElementById('empty-state');
-
-  function atualizarCards(lista = agendamentos) {
-    agendamentosContainer.innerHTML = '';
-    if (lista.length === 0) {
-      emptyState.classList.remove('hidden');
-    } else {
-      emptyState.classList.add('hidden');
-      lista.forEach((a, index) => {
-        const card = document.createElement('div');
-        card.className = 'glass-card glass-card-hover rounded-2xl p-5 relative bg-gray-800';
-        card.innerHTML = `
-          <button onclick="deletarAgendamento(${index})" class="absolute top-2 right-2 text-red-400 hover:text-red-600 text-sm font-bold">X</button>
-          <p class="font-semibold text-white mb-1">${a.cliente}</p>
-          <p class="text-gray-400 text-sm mb-1">${a.servico}</p>
-          <p class="text-gray-400 text-sm mb-1">${a.data} ${a.hora}</p>
-          <span class="text-sm px-2 py-1 rounded-xl ${
-            a.status === 'Pendente' ? 'bg-yellow-400 text-black' : a.status === 'Confirmado' ? 'bg-blue-500 text-white' : 'bg-green-500 text-white'
-          }">${a.status}</span>
-        `;
-        agendamentosContainer.appendChild(card);
-      });
-    }
-    atualizarStats();
-    atualizarCalendario();
-  }
-
-  function deletarAgendamento(index) {
-    if (confirm('Deseja realmente apagar este agendamento?')) {
-      agendamentos.splice(index, 1);
-      localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
-      filtrar();
-    }
-  }
- <script src="js/storage.js"></script>
+<script src="js/storage.js"></script>
 <script src="js/sidebar-e-botoes.js"></script>
 <script src="js/agendamentos.js"></script>
+
 </body>
 </html>
