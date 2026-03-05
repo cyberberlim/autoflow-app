@@ -359,13 +359,18 @@ select option {
      </div>  
     </main>  
 <script>
- // ----- Modal -----
+  // ----- Modal -----
   const modal = document.getElementById('modal');
   const btnNew = document.getElementById('btn-new-agendamento');
   const form = modal.querySelector('form');
+  const btnClose = modal.querySelector('.btn-close');
 
   btnNew.addEventListener('click', () => modal.classList.remove('hidden'));
-  function closeModal() { modal.classList.add('hidden'); }
+  btnClose.addEventListener('click', () => modal.classList.add('hidden'));
+
+  function closeModal() {
+    modal.classList.add('hidden');
+  }
 
   // ----- Agendamentos -----
   let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
@@ -373,13 +378,13 @@ select option {
   const agendamentosContainer = document.getElementById('agendamentos-container');
   const emptyState = document.getElementById('empty-state');
 
-  function atualizarCards() {
+  function atualizarCards(lista = agendamentos) {
     agendamentosContainer.innerHTML = '';
-    if (agendamentos.length === 0) {
+    if (lista.length === 0) {
       emptyState.classList.remove('hidden');
     } else {
       emptyState.classList.add('hidden');
-      agendamentos.forEach((a, index) => {
+      lista.forEach((a, index) => {
         const card = document.createElement('div');
         card.className = 'glass-card glass-card-hover rounded-2xl p-5 relative';
         card.innerHTML = `
@@ -402,7 +407,7 @@ select option {
     if (confirm('Deseja realmente apagar este agendamento?')) {
       agendamentos.splice(index, 1);
       localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
-      atualizarCards();
+      filtrar(); // Atualiza a lista com filtros aplicados
     }
   }
 
@@ -432,22 +437,19 @@ select option {
   }
 
   // ----- Filtros -----
-  document.getElementById('search-input').addEventListener('input', e => {
-    filtrar();
-  });
-  document.getElementById('date-filter').addEventListener('input', e => {
-    filtrar();
-  });
-  document.getElementById('status-filter').addEventListener('change', e => {
-    filtrar();
-  });
+  const searchInput = document.getElementById('search-input');
+  const dateFilter = document.getElementById('date-filter');
+  const statusFilter = document.getElementById('status-filter');
+
+  searchInput.addEventListener('input', filtrar);
+  dateFilter.addEventListener('input', filtrar);
+  statusFilter.addEventListener('change', filtrar);
 
   function filtrar() {
-    const search = document.getElementById('search-input').value.toLowerCase();
-    const date = document.getElementById('date-filter').value;
-    const status = document.getElementById('status-filter').value;
+    const search = searchInput.value.toLowerCase();
+    const date = dateFilter.value;
+    const status = statusFilter.value;
 
-    agendamentosContainer.innerHTML = '';
     const filtrados = agendamentos.filter(a => {
       return (
         (!search || a.cliente.toLowerCase().includes(search) || a.servico.toLowerCase().includes(search)) &&
@@ -456,33 +458,13 @@ select option {
       );
     });
 
-    if (filtrados.length === 0) {
-      emptyState.classList.remove('hidden');
-    } else {
-      emptyState.classList.add('hidden');
-      filtrados.forEach((a, index) => {
-        const card = document.createElement('div');
-        card.className = 'glass-card glass-card-hover rounded-2xl p-5 relative';
-        card.innerHTML = `
-          <button onclick="deletarAgendamento(${index})" class="absolute top-2 right-2 text-red-400 hover:text-red-600 text-sm font-bold">X</button>
-          <p class="font-semibold text-white mb-1">${a.cliente}</p>
-          <p class="text-gray-400 text-sm mb-1">${a.servico}</p>
-          <p class="text-gray-400 text-sm mb-1">${a.data} ${a.hora}</p>
-          <span class="text-sm px-2 py-1 rounded-xl ${
-            a.status === 'Pendente' ? 'status-pendente' : a.status === 'Confirmado' ? 'status-confirmado' : 'status-concluido'
-          }">${a.status}</span>
-        `;
-        agendamentosContainer.appendChild(card);
-      });
-    }
-    atualizarStats();
-    atualizarCalendario();
+    atualizarCards(filtrados);
   }
 
   function clearFilters() {
-    document.getElementById('search-input').value = '';
-    document.getElementById('date-filter').value = '';
-    document.getElementById('status-filter').value = '';
+    searchInput.value = '';
+    dateFilter.value = '';
+    statusFilter.value = '';
     atualizarCards();
   }
 
@@ -519,7 +501,7 @@ select option {
       const div = document.createElement('div');
       div.className = 'p-2 rounded-lg text-sm cursor-pointer';
       const dataString = `${anoAtual}-${String(mesAtual+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
-      
+
       // Destacar dias com agendamento
       if (agendamentos.some(a => a.data === dataString)) {
         div.classList.add('bg-emerald-500/30', 'text-white', 'font-semibold');
@@ -536,8 +518,6 @@ select option {
     }
   }
 
-  // Inicializar
+  // ----- Inicializar -----
   atualizarCards();
 </script>
-</body>
-</html>
