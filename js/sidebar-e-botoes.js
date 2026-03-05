@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Converte onclick para addEventListener, mantendo funcionalidade
-  document.querySelectorAll('button, [onclick]').forEach(btn => {
     const original = btn.getAttribute('onclick');
     if(original && !btn.dataset.listenerAdded) {
       btn.addEventListener('click', function(event){
