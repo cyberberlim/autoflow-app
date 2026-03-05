@@ -1,37 +1,27 @@
-// storage.js
 const Storage = {
-  salvar: (chave, dados) => localStorage.setItem(chave, JSON.stringify(dados)),
-  carregar: (chave) => JSON.parse(localStorage.getItem(chave)) || [],
-  limpar: (chave) => localStorage.removeItem(chave),
-};
+  salvar(chave, dados) {
+    localStorage.setItem(chave, JSON.stringify(dados));
+  },
 
-const dados = {
-  agendamentos: Storage.carregar("agendamentos"),
-  caixa: Storage.carregar("caixa"),
-  estoque: Storage.carregar("estoque"),
-  produtos: Storage.carregar("produtos"),
-  relatorios: Storage.carregar("relatorios"),
-  configuracoes: Storage.carregar("configuracoes"),
-};
+  carregar(chave) {
+    return JSON.parse(localStorage.getItem(chave)) || [];
+  },
 
-function adicionar(chave, item) {
-  if (!dados[chave]) dados[chave] = [];
-  dados[chave].push(item);
-  Storage.salvar(chave, dados[chave]);
-}
+  adicionar(chave, item) {
+    const lista = this.carregar(chave);
+    lista.push(item);
+    this.salvar(chave, lista);
+  },
 
-function deletar(chave, index) {
-  if (!dados[chave]) return;
-  dados[chave].splice(index, 1);
-  Storage.salvar(chave, dados[chave]);
-}
+  deletar(chave, index) {
+    const lista = this.carregar(chave);
+    lista.splice(index, 1);
+    this.salvar(chave, lista);
+  },
 
-function atualizar(chave, index, item) {
-  if (!dados[chave]) return;
-  dados[chave][index] = item;
-  Storage.salvar(chave, dados[chave]);
-}
-
-function getDados(chave) {
-  return dados[chave] || [];
-                      }
+  atualizar(chave, index, item) {
+    const lista = this.carregar(chave);
+    lista[index] = item;
+    this.salvar(chave, lista);
+  }
+};                      }
