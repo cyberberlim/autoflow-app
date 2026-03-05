@@ -34,25 +34,23 @@ document.addEventListener("DOMContentLoaded", function () {
       if (a.status === "concluido") statusClass = "bg-green-500/20 text-green-400";
 
       const card = document.createElement("div");
-      card.className = "appointment-card flex justify-between items-center text-white max-w-md mx-auto p-4 rounded-2xl border border-white/10";
-      card.innerHTML = `
-        <div>
-          <h3 class="font-semibold text-sm">${a.nome}</h3>
-          <p class="text-xs text-gray-400">${a.servico}</p>
-          <p class="text-xs text-gray-500">${a.data} - ${a.hora}</p>
-        </div>
-        <div class="flex items-center gap-3">
-          <span class="px-2 py-1 rounded-full text-xs ${statusClass}">${a.status}</span>
-          <button data-index="${index}" class="btn-edit text-cyan-400 hover:text-cyan-300 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5m-7-7l7 7" />
-            </svg>
-          </button>
-          <button data-index="${index}" class="btn-delete text-red-400 hover:text-red-300 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6" />
-            </svg>
-          </button>
+card.className = "appointment-card flex justify-between items-center text-white w-full max-w-sm p-3 rounded-xl border border-white/10 mb-2 shadow-sm";
+card.innerHTML = `
+  <div class="flex flex-col gap-1">
+    <h3 class="font-semibold text-sm truncate">${a.nome}</h3>
+    <p class="text-xs text-gray-400 truncate">${a.servico}</p>
+    <p class="text-xs text-gray-500">${a.data} - ${a.hora}</p>
+  </div>
+  <div class="flex items-center gap-2">
+    <span class="px-2 py-0.5 rounded-full text-[10px] ${statusClass}">${a.status}</span>
+    <button data-index="${index}" class="btn-edit text-cyan-400 hover:text-cyan-300 transition-colors">
+      ✏
+    </button>
+    <button data-index="${index}" class="btn-delete text-red-400 hover:text-red-300 transition-colors">
+      🗑
+    </button>
+  </div>
+`;
         </div>
       `;
       container.appendChild(card);
