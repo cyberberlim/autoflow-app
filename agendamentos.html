@@ -462,6 +462,158 @@ select option {
   }
 
   function clearFilters() {
+<!-- Botão para abrir o modal -->
+<button id="btn-new-agendamento" class="btn bg-emerald-500 text-white p-2 rounded">Novo Agendamento</button>
+
+<!-- Modal -->
+<div id="modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-6 relative w-96">
+    <button class="btn-close absolute top-2 right-2 text-red-500 font-bold">X</button>
+    <h2 class="text-xl font-bold mb-4">Novo Agendamento</h2>
+    <form>
+      <input type="text" placeholder="Cliente" required class="mb-2 w-full p-2 border rounded"/>
+      <input type="text" placeholder="Serviço" required class="mb-2 w-full p-2 border rounded"/>
+      <input type="date" required class="mb-2 w-full p-2 border rounded"/>
+      <input type="time" required class="mb-2 w-full p-2 border rounded"/>
+      <select class="mb-2 w-full p-2 border rounded">
+        <option value="Pendente">Pendente</option>
+        <option value="Confirmado">Confirmado</option>
+        <option value="Concluído">Concluído</option>
+      </select>
+      <button type="submit" class="bg-emerald-500 text-white p-2 rounded w-full">Salvar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Filtros -->
+<div class="mt-4 mb-4">
+  <input id="search-input" placeholder="Buscar..." class="p-2 border rounded"/>
+  <input id="date-filter" type="date" class="p-2 border rounded"/>
+  <select id="status-filter" class="p-2 border rounded">
+    <option value="">Todos</option>
+    <option value="Pendente">Pendente</option>
+    <option value="Confirmado">Confirmado</option>
+    <option value="Concluído">Concluído</option>
+  </select>
+  <button onclick="clearFilters()" class="bg-gray-300 p-2 rounded">Limpar Filtros</button>
+</div>
+
+<!-- Container de cards -->
+<div id="agendamentos-container" class="grid gap-4"></div>
+<p id="empty-state" class="hidden text-gray-400">Nenhum agendamento encontrado</p>
+
+<!-- Calendário -->
+<div class="mt-6">
+  <div class="flex justify-between items-center mb-2">
+    <button onclick="mudarMes(-1)">◀</button>
+    <span id="mesAtual" class="font-bold"></span>
+    <button onclick="mudarMes(1)">▶</button>
+  </div>
+  <div id="diasCalendario" class="grid grid-cols-7 gap-1"></div>
+</div>
+
+<script>
+  // ----- Modal -----
+  const modal = document.getElementById('modal');
+  const btnNew = document.getElementById('btn-new-agendamento');
+  const form = modal.querySelector('form');
+  const btnClose = modal.querySelector('.btn-close');
+
+  btnNew.addEventListener('click', () => modal.classList.remove('hidden'));
+  btnClose.addEventListener('click', () => modal.classList.add('hidden'));
+
+  function closeModal() { modal.classList.add('hidden'); }
+
+  // ----- Agendamentos -----
+  let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+
+  const agendamentosContainer = document.getElementById('agendamentos-container');
+  const emptyState = document.getElementById('empty-state');
+
+  function atualizarCards(lista = agendamentos) {
+    agendamentosContainer.innerHTML = '';
+    if (lista.length === 0) {
+      emptyState.classList.remove('hidden');
+    } else {
+      emptyState.classList.add('hidden');
+      lista.forEach((a, index) => {
+        const card = document.createElement('div');
+        card.className = 'glass-card glass-card-hover rounded-2xl p-5 relative bg-gray-800';
+        card.innerHTML = `
+          <button onclick="deletarAgendamento(${index})" class="absolute top-2 right-2 text-red-400 hover:text-red-600 text-sm font-bold">X</button>
+          <p class="font-semibold text-white mb-1">${a.cliente}</p>
+          <p class="text-gray-400 text-sm mb-1">${a.servico}</p>
+          <p class="text-gray-400 text-sm mb-1">${a.data} ${a.hora}</p>
+          <span class="text-sm px-2 py-1 rounded-xl ${
+            a.status === 'Pendente' ? 'bg-yellow-400 text-black' : a.status === 'Confirmado' ? 'bg-blue-500 text-white' : 'bg-green-500 text-white'
+          }">${a.status}</span>
+        `;
+        agendamentosContainer.appendChild(card);
+      });
+    }
+    atualizarStats();
+    atualizarCalendario();
+  }
+
+  function deletarAgendamento(index) {
+    if (confirm('Deseja realmente apagar este agendamento?')) {
+      agendamentos.splice(index, 1);
+      localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+      filtrar();
+    }
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const inputs = form.querySelectorAll('input, select');
+    const novo = {
+      cliente: inputs[0].value,
+      servico: inputs[1].value,
+      data: inputs[2].value,
+      hora: inputs[3].value,
+      status: inputs[4].value || 'Pendente'
+    };
+    agendamentos.push(novo);
+    localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+    form.reset();
+    closeModal();
+    atualizarCards();
+  });
+
+  // ----- Estatísticas -----
+  function atualizarStats() {
+    document.getElementById('stat-total')?.innerText = agendamentos.length;
+    document.getElementById('stat-pendentes')?.innerText = agendamentos.filter(a => a.status === 'Pendente').length;
+    document.getElementById('stat-confirmados')?.innerText = agendamentos.filter(a => a.status === 'Confirmado').length;
+    document.getElementById('stat-concluidos')?.innerText = agendamentos.filter(a => a.status === 'Concluído').length;
+  }
+
+  // ----- Filtros -----
+  const searchInput = document.getElementById('search-input');
+  const dateFilter = document.getElementById('date-filter');
+  const statusFilter = document.getElementById('status-filter');
+
+  searchInput.addEventListener('input', filtrar);
+  dateFilter.addEventListener('input', filtrar);
+  statusFilter.addEventListener('change', filtrar);
+
+  function filtrar() {
+    const search = searchInput.value.toLowerCase();
+    const date = dateFilter.value;
+    const status = statusFilter.value;
+
+    const filtrados = agendamentos.filter(a => {
+      return (
+        (!search || a.cliente.toLowerCase().includes(search) || a.servico.toLowerCase().includes(search)) &&
+        (!date || a.data === date) &&
+        (!status || a.status === status)
+      );
+    });
+
+    atualizarCards(filtrados);
+  }
+
+  function clearFilters() {
     searchInput.value = '';
     dateFilter.value = '';
     statusFilter.value = '';
@@ -488,10 +640,9 @@ select option {
     mesAtualSpan.innerText = nomesMeses[mesAtual] + ' ' + anoAtual;
 
     diasCalendario.innerHTML = '';
-    const primeiroDia = new Date(anoAtual, mesAtual, 1).getDay(); // Domingo = 0
+    const primeiroDia = new Date(anoAtual, mesAtual, 1).getDay();
     const ultimoDia = new Date(anoAtual, mesAtual + 1, 0).getDate();
 
-    // Espaços antes do primeiro dia
     for(let i=0;i<primeiroDia;i++){
       const div = document.createElement('div');
       diasCalendario.appendChild(div);
@@ -502,14 +653,12 @@ select option {
       div.className = 'p-2 rounded-lg text-sm cursor-pointer';
       const dataString = `${anoAtual}-${String(mesAtual+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
 
-      // Destacar dias com agendamento
       if (agendamentos.some(a => a.data === dataString)) {
         div.classList.add('bg-emerald-500/30', 'text-white', 'font-semibold');
       } else {
         div.classList.add('text-gray-400');
       }
 
-      // Destacar hoje
       const hojeStr = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}-${String(hoje.getDate()).padStart(2,'0')}`;
       if (dataString === hojeStr) div.classList.add('border', 'border-emerald-400');
 
@@ -518,6 +667,7 @@ select option {
     }
   }
 
-  // ----- Inicializar -----
+  // Inicializar
   atualizarCards();
+  atualizarCalendario();
 </script>
