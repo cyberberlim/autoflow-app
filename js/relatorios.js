@@ -29,19 +29,21 @@ function atualizarCards() {
 
 // =========================
 // FUNÇÃO PARA CARREGAR DADOS DO SDK
-// =========================
-async function carregarDados() {
-  try {
-    // Substitua esses métodos pelos do seu SDK real
-    const receitaTotal = await DataSDK.getReceitaTotal(); 
-    const custoTotal = await DataSDK.getCustoTotal();
-    const lucroTotal = receitaTotal - custoTotal;
-    const margem = receitaTotal > 0 ? ((lucroTotal / receitaTotal) * 100).toFixed(1) : 0;
+function carregarDados() {
+  const agendamentos = Storage.carregar("agendamentos");
 
-    const totalAgendamentos = await DataSDK.getTotalAgendamentos();
-    const pendentes = await DataSDK.getAgendamentosPorStatus('pendente');
-    const confirmados = await DataSDK.getAgendamentosPorStatus('confirmado');
-    const concluidos = await DataSDK.getAgendamentosPorStatus('concluido');
+  dados.totalAgendamentos = agendamentos.length;
+  dados.pendentes = agendamentos.filter(a => a.status === "Pendente").length;
+  dados.confirmados = agendamentos.filter(a => a.status === "Confirmado").length;
+  dados.concluidos = agendamentos.filter(a => a.status === "Concluído").length;
+
+  dados.receitaTotal = 0;
+  dados.custoTotal = 0;
+  dados.lucroTotal = 0;
+  dados.margem = 0;
+
+  atualizarCards();
+}
 
     // Atualiza o objeto dados
     dados.receitaTotal = receitaTotal;
