@@ -359,59 +359,6 @@ select option {
      </div>  
     </main>  
 
-  }
-
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const inputs = form.querySelectorAll('input, select');
-    const novo = {
-      cliente: inputs[0].value,
-      servico: inputs[1].value,
-      data: inputs[2].value,
-      hora: inputs[3].value,
-      status: inputs[4].value || 'Pendente'
-    };
-    agendamentos.push(novo);
-    localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
-    form.reset();
-    closeModal();
-    atualizarCards();
-  });
-
-  // ----- Estatísticas -----
-  function atualizarStats() {
-    document.getElementById('stat-total').innerText = agendamentos.length;
-    document.getElementById('stat-pendentes').innerText = agendamentos.filter(a => a.status === 'Pendente').length;
-    document.getElementById('stat-confirmados').innerText = agendamentos.filter(a => a.status === 'Confirmado').length;
-    document.getElementById('stat-concluidos').innerText = agendamentos.filter(a => a.status === 'Concluído').length;
-  }
-
-  // ----- Filtros -----
-  const searchInput = document.getElementById('search-input');
-  const dateFilter = document.getElementById('date-filter');
-  const statusFilter = document.getElementById('status-filter');
-
-  searchInput.addEventListener('input', filtrar);
-  dateFilter.addEventListener('input', filtrar);
-  statusFilter.addEventListener('change', filtrar);
-
-  function filtrar() {
-    const search = searchInput.value.toLowerCase();
-    const date = dateFilter.value;
-    const status = statusFilter.value;
-
-    const filtrados = agendamentos.filter(a => {
-      return (
-        (!search || a.cliente.toLowerCase().includes(search) || a.servico.toLowerCase().includes(search)) &&
-        (!date || a.data === date) &&
-        (!status || a.status === status)
-      );
-    });
-
-    atualizarCards(filtrados);
-  }
-
-  function clearFilters() {
 <!-- Botão para abrir o modal -->
 <button id="btn-new-agendamento" class="btn bg-emerald-500 text-white p-2 rounded">Novo Agendamento</button>
 
