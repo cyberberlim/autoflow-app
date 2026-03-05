@@ -369,30 +369,100 @@ select option {
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
-        <form class="space-y-5">
-          <input type="text" placeholder="Cliente" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500">
-          <input type="text" placeholder="Serviço" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500">
-          <input type="date" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white">
-          <input type="time" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white">
-          <select class="input-field w-full px-4 py-3 rounded-xl text-sm text-white bg-transparent">
-            <option>Status</option>
-            <option>Pendente</option>
-            <option>Confirmado</option>
-            <option>Concluído</option>
-          </select>
-          <button type="submit" class="btn-neon w-full py-3.5 rounded-xl text-emerald-400 font-semibold text-sm flex items-center justify-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            Salvar Agendamento
-          </button>
-        </form>
+      <form id="form-agendamento" class="space-y-5">
+  <input id="cliente" type="text" placeholder="Cliente" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500">
+  <input id="servico" type="text" placeholder="Serviço" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500">
+  <input id="data" type="date" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white">
+  <input id="hora" type="time" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white">
+  <select id="status" class="input-field w-full px-4 py-3 rounded-xl text-sm text-white bg-transparent">
+    <option value="">Status</option>
+    <option value="Pendente">Pendente</option>
+    <option value="Confirmado">Confirmado</option>
+    <option value="Concluído">Concluído</option>
+  </select>
+  <button type="submit" class="btn-neon w-full py-3.5 rounded-xl text-emerald-400 font-semibold text-sm flex items-center justify-center gap-2">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+    </svg>
+    Salvar Agendamento
+  </button>
+      </form>
       </div>
     </div>
   </div>
+<script>
+  const modal = document.getElementById('modal');
+  const formAgendamento = document.getElementById('form-agendamento');
+  const container = document.getElementById('agendamentos-container');
 
-  <script>
-    const modal = document.getElementById('modal');
-    function openModal() { modal.classList.remove('hidden'); }
-    function closeModal() { modal.classList.add('hidden'); }
-  </script>
+  function openModal() { modal.classList.remove('hidden'); }
+  function closeModal() { modal.classList.add('hidden'); }
+
+  document.getElementById('btn-new-agendamento').addEventListener('click', openModal);
+
+  // Fecha modal clicando no backdrop
+  modal.querySelector('.modal-backdrop').addEventListener('click', closeModal);
+
+  // Função para salvar agendamento
+  function salvarAgendamento(cliente, servico, data, hora, status) {
+    let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+    agendamentos.push({ cliente, servico, data, hora, status });
+    localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+    listarAgendamentos();
+  }
+
+  // Função para listar agendamentos
+  function listarAgendamentos() {
+    container.innerHTML = '';
+    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+    
+    if (agendamentos.length === 0) {
+      document.getElementById('empty-state').classList.remove('hidden');
+    } else {
+      document.getElementById('empty-state').classList.add('hidden');
+      agendamentos.forEach((ag, i) => {
+        const card = document.createElement('div');
+        card.className = 'glass-card rounded-2xl p-5';
+        card.innerHTML = `
+          <p class="font-bold text-white">${ag.cliente} - ${ag.servico}</p>
+          <p class="text-gray-400">${ag.data} ${ag.hora} - ${ag.status}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Atualiza estatísticas
+    const total = agendamentos.length;
+    const pendentes = agendamentos.filter(a => a.status === 'Pendente').length;
+    const confirmados = agendamentos.filter(a => a.status === 'Confirmado').length;
+    const concluidos = agendamentos.filter(a => a.status === 'Concluído').length;
+
+    document.getElementById('stat-total').innerText = total;
+    document.getElementById('stat-pendentes').innerText = pendentes;
+    document.getElementById('stat-confirmados').innerText = confirmados;
+    document.getElementById('stat-concluidos').innerText = concluidos;
+  }
+
+  // Ao enviar o form
+  formAgendamento.addEventListener('submit', (e) => {
+    e.preventDefault(); // Evita recarregar a página
+    const cliente = document.getElementById('cliente').value.trim();
+    const servico = document.getElementById('servico').value.trim();
+    const data = document.getElementById('data').value;
+    const hora = document.getElementById('hora').value;
+    const status = document.getElementById('status').value;
+
+    if (!cliente || !servico || !data || !hora || !status) {
+      alert('Preencha todos os campos!');
+      return;
+    }
+
+    salvarAgendamento(cliente, servico, data, hora, status);
+    closeModal();
+    formAgendamento.reset();
+  });
+
+  listarAgendamentos(); // Lista ao carregar a página
+</script>
 </body>
 </html>
