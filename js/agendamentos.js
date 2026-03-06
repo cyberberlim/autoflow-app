@@ -43,7 +43,6 @@ container.innerHTML = ""
 
 if(agendamentos.length === 0){
 emptyState.style.display = "block"
-atualizarContadores()
 return
 }
 
@@ -53,20 +52,23 @@ agendamentos
 .sort((a,b)=> new Date(a.data) - new Date(b.data))
 .forEach((a,index)=>{
 
-let statusClass=""
+let statusColor = "text-yellow-400"
 
-if(a.status.toLowerCase()==="pendente") statusClass="bg-yellow-500/20 text-yellow-400"
-if(a.status.toLowerCase()==="confirmado") statusClass="bg-green-500/20 text-green-400"
-if(a.status.toLowerCase()==="concluido") statusClass="bg-blue-500/20 text-blue-400"
+if(a.status === "confirmado") statusColor = "text-green-400"
+if(a.status === "concluido") statusColor = "text-cyan-400"
 
+const inicial = a.nome.charAt(0).toUpperCase()
 
 const card = document.createElement("div")
 
-card.className = "bg-darkcard border border-white/5 rounded-2xl p-4 flex flex-col items-center text-center hover:border-autoflow/40 transition"
+card.className = "appointment-card animate-slideIn"
+
 card.innerHTML = `
 
-<div class="w-14 h-14 rounded-full bg-autoflow/20 flex items-center justify-center text-white font-semibold text-lg">
-${a.nome.charAt(0)}
+<div class="flex flex-col items-center text-center gap-2">
+
+<div class="avatar-circle">
+${inicial}
 </div>
 
 <h3 class="text-white font-semibold text-sm">
@@ -81,13 +83,13 @@ ${a.servico}
 ${a.data} • ${a.hora}
 </p>
 
-<span class="px-2 py-1 text-xs rounded-full ${statusClass}">
+<span class="${statusColor} text-xs font-medium">
 ${a.status}
 </span>
 
 <div class="flex gap-2 mt-2">
 
-<button class="btn-edit bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 p-2 rounded-lg transition"
+<button class="btn-edit bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 p-2 rounded-lg"
 data-index="${index}">
 
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +107,7 @@ d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 
 
 </button>
 
-<button class="btn-delete bg-red-500/20 hover:bg-red-500/30 text-red-400 p-2 rounded-lg transition"
+<button class="btn-delete bg-red-500/20 hover:bg-red-500/30 text-red-400 p-2 rounded-lg"
 data-index="${index}">
 
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -123,6 +125,22 @@ d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6
 
 </button>
 
+<a href="https://wa.me/?text=Olá ${a.nome}" target="_blank"
+class="whatsapp-btn">
+
+<svg xmlns="http://www.w3.org/2000/svg"
+class="w-4 h-4 text-white"
+fill="currentColor"
+viewBox="0 0 24 24">
+
+<path d="M20.52 3.48A11.94 11.94 0 0012 0C5.37 0 0 5.37 0 12a11.9 11.9 0 001.64 6L0 24l6.24-1.63A11.95 11.95 0 0012 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.21-3.48-8.52z"/>
+
+</svg>
+
+</a>
+
+</div>
+
 </div>
 `
 
@@ -130,13 +148,10 @@ container.appendChild(card)
 
 })
 
-
 ativarEventos()
-
 atualizarContadores()
 
-}
-
+  }
 
 
 function ativarEventos(){
