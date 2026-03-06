@@ -8,7 +8,7 @@ const emptyState = document.getElementById("empty-state")
 
 const deleteModal = document.getElementById("delete-modal")
 const confirmDeleteBtn = document.getElementById("confirm-delete-btn")
-const cancelDeleteBtn = document.getElementById("cancel-delete")
+
 
 let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || []
 let editIndex = null
@@ -18,51 +18,7 @@ let deleteIndex = null
 function salvar(){
 localStorage.setItem("agendamentos", JSON.stringify(agendamentos))
 }
-  function render(){
-
-container.innerHTML = ""
-
-if(agendamentos.length === 0){
-emptyState.style.display = "block"
-return
-}
-
-emptyState.style.display = "none"
-
-agendamentos.forEach((agendamento, index)=>{
-
-const card = document.createElement("div")
-
-card.className = "appointment-card animate-slideIn"
-
-card.innerHTML = `
-<div class="flex flex-col gap-2">
-
-<div class="text-white font-semibold">
-${agendamento.nome}
-</div>
-
-<div class="text-gray-400 text-sm">
-${agendamento.servico}
-</div>
-
-<div class="text-gray-500 text-xs">
-${agendamento.data} • ${agendamento.hora}
-</div>
-
-<div class="text-emerald-400 text-xs">
-${agendamento.status}
-</div>
-
-</div>
-`
-
-container.appendChild(card)
-
-})
-
-  }
-
+  
 
 function atualizarContadores(){
 
@@ -285,12 +241,7 @@ deleteModal.classList.add("hidden")
 
 
 
-cancelDeleteBtn.onclick = ()=>{
 
-deleteIndex=null
-deleteModal.classList.add("hidden")
-
-}
 
 
 
