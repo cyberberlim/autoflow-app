@@ -175,3 +175,43 @@ body {
   height: 1.25rem;
   stroke: currentColor;
 }
+.appointment-card{
+background: rgba(255,255,255,0.03);
+border:1px solid rgba(255,255,255,0.08);
+border-radius:16px;
+padding:16px;
+transition:all .25s ease;
+backdrop-filter:blur(20px);
+}
+
+.appointment-card:hover{
+transform:translateY(-4px);
+border-color:rgba(0,255,136,0.4);
+box-shadow:0 10px 30px rgba(0,255,136,0.15);
+}
+
+.avatar-circle{
+width:48px;
+height:48px;
+border-radius:50%;
+background:linear-gradient(135deg,#00ff88,#00d4ff);
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:600;
+color:#000;
+font-size:18px;
+}
+
+.whatsapp-btn{
+background:#25D366;
+padding:6px;
+border-radius:8px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.whatsapp-btn:hover{
+background:#1ebe5d;
+}
