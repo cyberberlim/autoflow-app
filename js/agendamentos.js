@@ -1,61 +1,89 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
-  const btnNovo = document.getElementById("new-appointment-btn");
-  const modal = document.getElementById("modal");
-  const form = document.getElementById("appointment-form");
-  const container = document.getElementById("appointments-list");
-  const emptyState = document.getElementById("empty-state");
+const btnNovo = document.getElementById("new-appointment-btn")
+const modal = document.getElementById("modal")
+const form = document.getElementById("appointment-form")
+const container = document.getElementById("appointments-list")
+const emptyState = document.getElementById("empty-state")
 
-  const deleteModal = document.getElementById("delete-modal");
-  const confirmDeleteBtn = document.getElementById("confirm-delete");
-  const cancelDeleteBtn = document.getElementById("cancel-delete");
+const deleteModal = document.getElementById("delete-modal")
+const confirmDeleteBtn = document.getElementById("confirm-delete")
+const cancelDeleteBtn = document.getElementById("cancel-delete")
 
-  let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
-  let deleteIndex = null;
+let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || []
+let editIndex = null
+let deleteIndex = null
 
-  function salvar() {
-    localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-  }
 
-  function renderizar() {
-    container.innerHTML = "";
+function salvar(){
+localStorage.setItem("agendamentos", JSON.stringify(agendamentos))
+}
 
-    if (agendamentos.length === 0) {
-      emptyState.style.display = "block";
-      document.getElementById("total-appointments").textContent = 0;
-      document.getElementById("pending-count").textContent = 0;
-      document.getElementById("confirmed-count").textContent = 0;
-      document.getElementById("completed-count").textContent = 0;
-      return;
-    }
 
-    emptyState.style.display = "none";
+function atualizarContadores(){
 
-    document.getElementById("total-appointments").textContent = agendamentos.length;
-    document.getElementById("pending-count").textContent =
-      agendamentos.filter(a => a.status.toLowerCase() === "pendente").length;
-    document.getElementById("confirmed-count").textContent =
-      agendamentos.filter(a => a.status.toLowerCase() === "confirmado").length;
-    document.getElementById("completed-count").textContent =
-      agendamentos.filter(a => a.status.toLowerCase() === "concluido").length;
+document.getElementById("total-appointments").textContent = agendamentos.length
 
-    agendamentos.forEach((a, index) => {
-      let statusClass = "";
-      if (a.status.toLowerCase() === "pendente") statusClass = "status-pendente";
-      if (a.status.toLowerCase() === "confirmado") statusClass = "status-confirmado";
-      if (a.status.toLowerCase() === "concluido") statusClass = "status-concluido";
+document.getElementById("pending-count").textContent =
+agendamentos.filter(a => a.status.toLowerCase() === "pendente").length
 
-      const card = document.createElement("div");
-card.className = "appointment-card flex justify-between items-center";
+document.getElementById("confirmed-count").textContent =
+agendamentos.filter(a => a.status.toLowerCase() === "confirmado").length
+
+document.getElementById("completed-count").textContent =
+agendamentos.filter(a => a.status.toLowerCase() === "concluido").length
+
+}
+
+
+
+function renderizar(){
+
+container.innerHTML = ""
+
+if(agendamentos.length === 0){
+emptyState.style.display = "block"
+atualizarContadores()
+return
+}
+
+emptyState.style.display = "none"
+
+agendamentos
+.sort((a,b)=> new Date(a.data) - new Date(b.data))
+.forEach((a,index)=>{
+
+let statusClass=""
+
+if(a.status.toLowerCase()==="pendente") statusClass="bg-yellow-500/20 text-yellow-400"
+if(a.status.toLowerCase()==="confirmado") statusClass="bg-green-500/20 text-green-400"
+if(a.status.toLowerCase()==="concluido") statusClass="bg-blue-500/20 text-blue-400"
+
+
+const card = document.createElement("div")
+
+card.className =
+"flex items-center justify-between bg-darkcard border border-white/5 rounded-xl p-4 mb-3 hover:border-autoflow/30 transition-all duration-300"
+
+
 card.innerHTML = `
 
-<div class="flex items-center justify-between bg-darkcard border border-white/5 rounded-xl p-4 hover:border-autoflow/30 transition-all">
+<div class="flex flex-col gap-1">
 
-<div class="flex flex-col">
-<h3 class="text-white font-semibold text-sm">${a.nome}</h3>
-<p class="text-gray-400 text-xs">${a.servico}</p>
-<p class="text-gray-500 text-xs">${a.data} • ${a.hora}</p>
+<h3 class="text-white font-semibold text-sm">
+${a.nome}
+</h3>
+
+<p class="text-gray-400 text-xs">
+${a.servico}
+</p>
+
+<p class="text-gray-500 text-xs">
+${a.data} • ${a.hora}
+</p>
+
 </div>
+
 
 <div class="flex items-center gap-2">
 
@@ -63,110 +91,179 @@ card.innerHTML = `
 ${a.status}
 </span>
 
-<button class="btn-edit bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 p-2 rounded-lg transition-all" data-index="${index}">
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-<path d="M15.502 1.94a.5.5 0 0 1 0 .706l-1.793 1.793-2.647-2.647L12.855.999a.5.5 0 0 1 .707 0l1.94 1.94z"/>
-<path d="M1 13.5V16h2.5l7.373-7.373-2.5-2.5L1 13.5z"/>
+
+<button class="btn-edit bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 p-2 rounded-lg transition"
+data-index="${index}">
+
+<svg xmlns="http://www.w3.org/2000/svg"
+class="w-4 h-4"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z"/>
+
 </svg>
+
 </button>
 
-<button class="btn-delete bg-red-500/20 hover:bg-red-500/30 text-red-400 p-2 rounded-lg transition-all" data-index="${index}">
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-<path d="M5.5 5.5v7M10.5 5.5v7"/>
-<path d="M14 3H2"/>
-<path d="M6 3V2h4v1"/>
-<path d="M4.5 3h7l-.5 11h-6z"/>
+
+<button class="btn-delete bg-red-500/20 hover:bg-red-500/30 text-red-400 p-2 rounded-lg transition"
+data-index="${index}">
+
+<svg xmlns="http://www.w3.org/2000/svg"
+class="w-4 h-4"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m-7 0h10"/>
+
 </svg>
+
 </button>
-
 </div>
 
-</div>
+`
+
+container.appendChild(card)
+
+})
 
 
-`;
-      
+ativarEventos()
 
-      container.appendChild(card);
-    });
+atualizarContadores()
 
-    // Botões de excluir
-    document.querySelectorAll(".btn-delete").forEach(btn => {
-      btn.addEventListener("click", function () {
-        deleteIndex = this.getAttribute("data-index");
-        deleteModal.classList.remove("hidden"); // mostra o modal de confirmação
-      });
-    });
+}
 
-    // Botões de editar (apenas exemplo simples, você pode expandir)
-    document.querySelectorAll(".btn-edit").forEach(btn => {
-      btn.addEventListener("click", function () {
-        const i = this.getAttribute("data-index");
-        const ag = agendamentos[i];
-        document.getElementById("client-name").value = ag.nome;
-        document.getElementById("service").value = ag.servico;
-        document.getElementById("date").value = ag.data;
-        document.getElementById("time").value = ag.hora;
-        document.getElementById("status").value = ag.status;
-        modal.classList.remove("hidden");
 
-        // Remove o agendamento antigo ao salvar novamente
-        agendamentos.splice(i, 1);
-      });
-    });
-  }
 
-  // Novo agendamento
-  btnNovo.addEventListener("click", function () {
-    modal.classList.remove("hidden");
-  });
+function ativarEventos(){
 
-  // Formulário
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
+document.querySelectorAll(".btn-delete").forEach(btn=>{
 
-    const nome = document.getElementById("client-name").value;
-    const servico = document.getElementById("service").value;
-    const data = document.getElementById("date").value;
-    const hora = document.getElementById("time").value;
-    const status = document.getElementById("status").value;
+btn.onclick = function(){
 
-    agendamentos.push({ nome, servico, data, hora, status });
-    salvar();
-    renderizar();
+deleteIndex = this.dataset.index
 
-    form.reset();
-    modal.classList.add("hidden");
-  });
+deleteModal.classList.remove("hidden")
 
-  // Fechar modal
-  window.closeModal = function () {
-    modal.classList.add("hidden");
-  };
+}
 
-// Modal de exclusão
-confirmDeleteBtn.onclick = function () {
+})
 
-  if (deleteIndex !== null) {
 
-    agendamentos.splice(deleteIndex, 1);
+document.querySelectorAll(".btn-edit").forEach(btn=>{
 
-    salvar();
-    renderizar();
+btn.onclick = function(){
 
-    deleteIndex = null;
+editIndex = this.dataset.index
 
-    deleteModal.classList.add("hidden");
+const ag = agendamentos[editIndex]
 
-  }
+document.getElementById("client-name").value = ag.nome
+document.getElementById("service").value = ag.servico
+document.getElementById("date").value = ag.data
+document.getElementById("time").value = ag.hora
+document.getElementById("status").value = ag.status
 
-};
+modal.classList.remove("hidden")
 
-cancelDeleteBtn.addEventListener("click", () => {
-  deleteIndex = null;
-  deleteModal.classList.add("hidden");
-});
+}
 
-renderizar();
+})
 
-});
+}
+
+
+
+btnNovo.onclick = ()=>{
+
+editIndex = null
+form.reset()
+
+modal.classList.remove("hidden")
+
+}
+
+
+
+form.addEventListener("submit",(e)=>{
+
+e.preventDefault()
+
+const nome = document.getElementById("client-name").value
+const servico = document.getElementById("service").value
+const data = document.getElementById("date").value
+const hora = document.getElementById("time").value
+const status = document.getElementById("status").value
+
+
+const novo = {nome,servico,data,hora,status}
+
+
+if(editIndex!==null){
+
+agendamentos[editIndex] = novo
+
+}else{
+
+agendamentos.push(novo)
+
+}
+
+salvar()
+renderizar()
+
+modal.classList.add("hidden")
+
+})
+
+
+
+confirmDeleteBtn.onclick = ()=>{
+
+if(deleteIndex!==null){
+
+agendamentos.splice(deleteIndex,1)
+
+salvar()
+renderizar()
+
+deleteIndex=null
+
+}
+
+deleteModal.classList.add("hidden")
+
+}
+
+
+
+cancelDeleteBtn.onclick = ()=>{
+
+deleteIndex=null
+deleteModal.classList.add("hidden")
+
+}
+
+
+
+window.closeModal = ()=>{
+
+modal.classList.add("hidden")
+
+}
+
+
+
+renderizar()
+
+})
