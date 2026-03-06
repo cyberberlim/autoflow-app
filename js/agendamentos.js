@@ -47,29 +47,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const card = document.createElement("div");
 card.className = "flex justify-between items-center bg-darkcard p-4 rounded-xl border border-white/5 hover:border-autoflow/30 transition-all";
-
 card.innerHTML = `
-<div>
-  <h3 class="font-semibold text-sm">${a.nome}</h3>
-  <p class="text-xs text-gray-400">${a.servico}</p>
-  <p class="text-xs text-gray-500">${a.data} - ${a.hora}</p>
+
+<div class="flex items-center justify-between bg-darkcard border border-white/5 rounded-xl p-4 hover:border-autoflow/30 transition-all">
+
+<div class="flex flex-col">
+<h3 class="text-white font-semibold text-sm">${a.nome}</h3>
+<p class="text-gray-400 text-xs">${a.servico}</p>
+<p class="text-gray-500 text-xs">${a.data} • ${a.hora}</p>
 </div>
 
-<div class="flex items-center gap-3">
+<div class="flex items-center gap-2">
 
-<span class="px-2 py-1 rounded-full text-xs ${statusClass}">
+<span class="px-2 py-1 text-xs rounded-full ${statusClass}">
 ${a.status}
 </span>
 
-<button class="btn-edit text-cyan-400 hover:text-cyan-300" data-index="${index}" title="Editar">
-<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+<button class="btn-edit bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 p-2 rounded-lg transition-all" data-index="${index}">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 <path d="M15.502 1.94a.5.5 0 0 1 0 .706l-1.793 1.793-2.647-2.647L12.855.999a.5.5 0 0 1 .707 0l1.94 1.94z"/>
 <path d="M1 13.5V16h2.5l7.373-7.373-2.5-2.5L1 13.5z"/>
 </svg>
 </button>
 
-<button class="btn-delete text-red-400 hover:text-red-300" data-index="${index}" title="Excluir">
-<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+<button class="btn-delete bg-red-500/20 hover:bg-red-500/30 text-red-400 p-2 rounded-lg transition-all" data-index="${index}">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 <path d="M5.5 5.5v7M10.5 5.5v7"/>
 <path d="M14 3H2"/>
 <path d="M6 3V2h4v1"/>
@@ -78,6 +80,10 @@ ${a.status}
 </button>
 
 </div>
+
+</div>
+
+
 `;
       
 
