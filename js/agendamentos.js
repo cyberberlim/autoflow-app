@@ -63,10 +63,12 @@ if(a.status.toLowerCase()==="concluido") statusClass="bg-blue-500/20 text-blue-4
 const card = document.createElement("div")
 
 card.className =
-"flex items-center justify-between bg-darkcard border border-white/10 rounded-xl p-4 hover:border-autoflow/40 transition-all duration-300 shadow-sm"
+"bg-darkcard border border-white/5 rounded-2xl p-4 flex flex-col items-center text-center gap-2 hover:border-autoflow/30 transition-all duration-300";
 card.innerHTML = `
 
-<div class="flex flex-col gap-1">
+<div class="w-14 h-14 rounded-full bg-autoflow/20 flex items-center justify-center text-white font-semibold text-lg">
+${a.nome.charAt(0)}
+</div>
 
 <h3 class="text-white font-semibold text-sm">
 ${a.nome}
@@ -80,15 +82,11 @@ ${a.servico}
 ${a.data} • ${a.hora}
 </p>
 
-</div>
-
-
-<div class="flex items-center gap-2">
-
 <span class="px-2 py-1 text-xs rounded-full ${statusClass}">
 ${a.status}
 </span>
 
+<div class="flex gap-2 mt-2">
 
 <button class="btn-edit bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 p-2 rounded-lg transition"
 data-index="${index}">
@@ -108,7 +106,6 @@ d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 
 
 </button>
 
-
 <button class="btn-delete bg-red-500/20 hover:bg-red-500/30 text-red-400 p-2 rounded-lg transition"
 data-index="${index}">
 
@@ -126,8 +123,8 @@ d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6
 </svg>
 
 </button>
-</div>
 
+</div>
 `
 
 container.appendChild(card)
