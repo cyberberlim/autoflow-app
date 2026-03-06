@@ -7,7 +7,7 @@ const container = document.getElementById("appointments-list")
 const emptyState = document.getElementById("empty-state")
 
 const deleteModal = document.getElementById("delete-modal")
-const confirmDeleteBtn = document.getElementById("confirm-delete")
+const confirmDeleteBtn = document.getElementById("confirm-delete-btn")
 const cancelDeleteBtn = document.getElementById("cancel-delete")
 
 let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || []
@@ -261,6 +261,10 @@ window.closeModal = ()=>{
 modal.classList.add("hidden")
 
 }
+  window.closeDeleteModal = () => {
+  deleteIndex = null
+  deleteModal.classList.add("hidden")
+    }
 
 
 
