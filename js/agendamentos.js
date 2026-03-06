@@ -63,9 +63,7 @@ if(a.status.toLowerCase()==="concluido") statusClass="bg-blue-500/20 text-blue-4
 const card = document.createElement("div")
 
 card.className =
-"flex items-center justify-between bg-darkcard border border-white/5 rounded-xl p-4 mb-3 hover:border-autoflow/30 transition-all duration-300"
-
-
+"flex items-center justify-between bg-darkcard border border-white/10 rounded-xl p-4 hover:border-autoflow/40 transition-all duration-300 shadow-sm"
 card.innerHTML = `
 
 <div class="flex flex-col gap-1">
