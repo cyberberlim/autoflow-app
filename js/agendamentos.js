@@ -138,8 +138,8 @@ ${a.status}
     modal.classList.add("hidden");
   };
 
-  // Modal de exclusão
-  confirmDeleteBtn.onclick = function () {
+// Modal de exclusão
+confirmDeleteBtn.onclick = function () {
 
   if (deleteIndex !== null) {
 
@@ -160,7 +160,7 @@ cancelDeleteBtn.addEventListener("click", () => {
   deleteIndex = null;
   deleteModal.classList.add("hidden");
 });
-  });
 
-  renderizar();
+renderizar();
+
 });
