@@ -62,8 +62,7 @@ if(a.status.toLowerCase()==="concluido") statusClass="bg-blue-500/20 text-blue-4
 
 const card = document.createElement("div")
 
-card.className =
-"bg-darkcard border border-white/5 rounded-2xl p-4 flex flex-col items-center text-center gap-2 hover:border-autoflow/30 transition-all duration-300";
+card.className = "bg-darkcard border border-white/5 rounded-2xl p-4 flex flex-col items-center text-center hover:border-autoflow/40 transition"
 card.innerHTML = `
 
 <div class="w-14 h-14 rounded-full bg-autoflow/20 flex items-center justify-center text-white font-semibold text-lg">
@@ -200,11 +199,9 @@ const data = document.getElementById("date").value
 const hora = document.getElementById("time").value
 const status = document.getElementById("status").value
 
-
 const novo = {nome,servico,data,hora,status}
 
-
-if(editIndex!==null){
+if(editIndex !== null){
 
 agendamentos[editIndex] = novo
 
@@ -217,10 +214,12 @@ agendamentos.push(novo)
 salvar()
 renderizar()
 
+form.reset()
+editIndex = null
+
 modal.classList.add("hidden")
 
 })
-
 
 
 confirmDeleteBtn.onclick = ()=>{
