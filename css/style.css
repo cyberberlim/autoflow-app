@@ -215,3 +215,26 @@ justify-content:center;
 .whatsapp-btn:hover{
 background:#1ebe5d;
 }
+/* ================= WhatsApp Float Button ================= */
+
+.whatsapp-float{
+position:fixed;
+bottom:25px;
+right:25px;
+width:60px;
+height:60px;
+border-radius:50%;
+background:#25D366;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+z-index:999;
+box-shadow:0 0 20px rgba(37,211,102,0.7);
+transition:all .3s ease;
+}
+
+.whatsapp-float:hover{
+transform:scale(1.08);
+box-shadow:0 0 35px rgba(37,211,102,1);
+}
