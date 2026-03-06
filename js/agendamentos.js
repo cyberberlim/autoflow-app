@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (a.status.toLowerCase() === "concluido") statusClass = "status-concluido";
 
       const card = document.createElement("div");
-card.className = "flex justify-between items-center bg-darkcard p-4 rounded-xl border border-white/5 hover:border-autoflow/30 transition-all";
+card.className = "appointment-card flex justify-between items-center";
 card.innerHTML = `
 
 <div class="flex items-center justify-between bg-darkcard border border-white/5 rounded-xl p-4 hover:border-autoflow/30 transition-all">
